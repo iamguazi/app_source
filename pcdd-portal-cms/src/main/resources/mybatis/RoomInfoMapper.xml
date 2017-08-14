@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.roominfo.dao.RoomInfoDao">
+
+   <resultMap id="roomInfoResultMap" type="com.ffcs.icity.mvc.backstage.roominfo.entity.RoomInfo">
+          <result property="id" column="ID"/>
+          <result property="imGourpId" column="IM_GOURP_ID"/>
+          <result property="gameType" column="GAME_TYPE"/>
+          <result property="areaId" column="AREA_ID"/>
+          <result property="roomName" column="ROOM_NAME"/>
+          <result property="roomPhoto" column="ROOM_PHOTO"/>
+          <result property="rebotMaxCount" column="REBOT_MAX_COUNT"/>
+          <result property="rebotMinCount" column="REBOT_MIN_COUNT"/>
+          <result property="peopleMaxCount" column="PEOPLE_MAX_COUNT"/>
+          <result property="perMaxPoint" column="PER_MAX_POINT"/>
+          <result property="perMinPoint" column="PER_MIN_POINT"/>
+          <result property="allMaxPoint" column="ALL_MAX_POINT"/>
+          <result property="status" column="STATUS"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="areaTypeName" column="AREA_TYPE_NAME"/>
+          <result property="realUser" column="REAL_USER"/>
+          <result property="robot" column="ROBOT"/>
+          <result property="minPeopleCount" column="MIN_PEOPLE_COUNT"/>
+          <result property="password" column="PASSWORD"/>
+   </resultMap>
+   
+   	<sql id="roomInfoColumns">
+	    <![CDATA[
+		ID,IM_GOURP_ID,GAME_TYPE,AREA_ID,ROOM_NAME,ROOM_PHOTO,REBOT_MAX_COUNT,REBOT_MIN_COUNT,PEOPLE_MAX_COUNT,PER_MAX_POINT,PER_MIN_POINT,ALL_MAX_POINT,STATUS,CREATE_TIME,MIN_PEOPLE_COUNT,PASSWORD
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="roomInfoResultMap">
+		select <include refid="roomInfoColumns" />
+        from ROOM_INFO
+		<where>
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(imGourpId)">
+				  and IM_GOURP_ID = #{imGourpId}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(gameType)">
+				  and GAME_TYPE = #{gameType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(areaId)">
+				  and AREA_ID = #{areaId}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(roomName)">
+				  and ROOM_NAME like concat('%',#{roomName},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and STATUS = #{status}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				  and CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				  and CREATE_TIME <![CDATA[<]]> str_to_date(#{createTimeEnd},'%Y-%m-%d')
+			      </if>
+		</where>
+		order by ID desc
+	</select>
+
+	<select id="queryRoomInfoItem"  parameterType="map"  resultType="map">
+		select ID as id,AREA_ID areaId,ROOM_NAME as roomName
+        from ROOM_INFO
+		<where>
+			      <if test="@Ognl@isNotEmpty(areaId)">
+				  and AREA_ID = #{areaId}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and STATUS = #{status}
+			      </if>
+		</where>
+		order by ID desc
+	</select>
+
+
+	<select id="queryRoomIndex"  parameterType="map"  resultMap="roomInfoResultMap">
+		SELECT 
+			  ri.*,
+			  ga.AREA_NAME as AREA_TYPE_NAME,
+			  (SELECT 
+			    COUNT(*) 
+			  FROM
+			    ROOM_USER_INFO rui_tem,
+			    USER_INFO ui_tem 
+			  WHERE rui_tem.`ROOM_ID` = ri.ID 
+			    AND rui_tem.`USER_ID` = ui_tem.`ID` 
+			    AND ui_tem.`USER_TYPE` = 1) AS REAL_USER,
+			  
+			  (SELECT 
+			    COUNT(*) 
+			  FROM
+			    ROOM_USER_INFO rui_tem,
+			    USER_INFO ui_tem 
+			  WHERE rui_tem.`ROOM_ID` = ri.ID 
+			    AND rui_tem.`USER_ID` = ui_tem.`ID` 
+			    AND ui_tem.`USER_TYPE` = 2) AS ROBOT 
+			FROM
+			  ROOM_INFO ri,GAME_AREA ga
+			  WHERE ri.`AREA_ID`=ga.`ID`
+			      <if test="@Ognl@isNotEmpty(areaType)">
+				  and ga.AREA_TYPE = #{areaType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and ri.ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(imGourpId)">
+				  and ri.IM_GOURP_ID = #{imGourpId}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(gameType)">
+				  and ri.GAME_TYPE = #{gameType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(areaId)">
+				  and ri.AREA_ID = #{areaId}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(roomName)">
+				  and ri.ROOM_NAME like concat('%',#{roomName},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and ri.STATUS = #{status}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				  and ri.CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				  and ri.CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY),'%Y-%m-%d')
+			      </if>
+		order by ID desc
+	</select>
+	
+	<select id="get" parameterType="long" resultMap="roomInfoResultMap">		
+		select <include refid="roomInfoColumns" />
+	    <![CDATA[
+		    from ROOM_INFO where ID = #{id} 
+	    ]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.roominfo.entity.RoomInfo" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  ROOM_INFO (
+        	IM_GOURP_ID ,
+        	GAME_TYPE ,
+        	AREA_ID ,
+        	ROOM_NAME ,
+        	ROOM_PHOTO ,
+        	REBOT_MAX_COUNT ,
+        	REBOT_MIN_COUNT ,
+        	PEOPLE_MAX_COUNT ,
+        	PER_MAX_POINT ,
+        	PER_MIN_POINT ,
+        	ALL_MAX_POINT ,
+        	STATUS ,
+        	CREATE_TIME,
+        	MIN_PEOPLE_COUNT,
+        	PASSWORD 
+        ) values (
+        	#{imGourpId},
+        	#{gameType},
+        	#{areaId},
+        	#{roomName},
+        	#{roomPhoto},
+        	#{rebotMaxCount},
+        	#{rebotMinCount},
+        	#{peopleMaxCount},
+        	#{perMaxPoint},
+        	#{perMinPoint},
+        	#{allMaxPoint},
+        	#{status},
+        	now(),
+        	#{minPeopleCount},
+        	#{password}
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.roominfo.entity.RoomInfo">
+	<![CDATA[
+		update ROOM_INFO set 
+	       IM_GOURP_ID = #{imGourpId},
+	       GAME_TYPE = #{gameType},
+	       AREA_ID = #{areaId},
+	       ROOM_NAME = #{roomName},
+	       ROOM_PHOTO = #{roomPhoto},
+	       REBOT_MAX_COUNT = #{rebotMaxCount},
+	       REBOT_MIN_COUNT = #{rebotMinCount},
+	       PEOPLE_MAX_COUNT = #{peopleMaxCount},
+	       PER_MAX_POINT = #{perMaxPoint},
+	       PER_MIN_POINT = #{perMinPoint},
+	       ALL_MAX_POINT = #{allMaxPoint},
+	       STATUS = #{status},
+	       MIN_PEOPLE_COUNT = #{minPeopleCount},
+	       PASSWORD = #{password}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	<update id="updateStatus" parameterType="map" >
+		update ROOM_INFO set 
+	       STATUS = #{status}
+		where  ID in <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from ROOM_INFO where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from ROOM_INFO where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

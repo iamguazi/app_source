@@ -1,0 +1,425 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>主页</title>
+
+    <!-- Bootstrap -->
+    <link href="<@full_path path='bootstrap-3.3.5/dist/css/bootstrap.min.css'/>" rel="stylesheet">
+    <link href="<@full_path path='css/vim_main.css'/>" rel="stylesheet">
+	
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    
+    
+  </head>
+  <body>
+       <div class="container" style="width:100%;">
+<!-- 新增或修改页 s-->
+			<div id="editor" class="modal fade" tabindex="-1" 
+			   aria-labelledby="editorLabel" aria-hidden="true">
+			   <div class="modal-dialog">
+			      <div class="modal-content">
+			         <div class="alert alert-info">
+			            <button type="button" class="close" 
+			               data-dismiss="modal" aria-hidden="true">
+			                  &times;
+			            </button>
+			            <h3 class="modal-title " id="editorLabel" >
+					               新增
+		                </h3>
+			         </div>
+			      <div class="modal-body">
+			       <!--添加的内容-->
+			          <form class="form-horizontal sh-validate" id="form">
+			     		   <div class="form-group">
+						      <label for="firstname" class="col-sm-3 control-label">管理员名字</label>
+						      <div class="col-sm-9">
+						         <input type="text" required class="form-control" id="managerName" data-bind="textinput:model.formEntity.managerName"
+							            placeholder="请输入名字">
+						      </div>
+						   </div>
+						   <div class="form-group">
+						      <label for="lastname" class="col-sm-3 control-label">密码</label>
+						      <div class="col-sm-9">
+						         <input type="text" class="form-control" id="managerPasswd" data-bind="textinput:model.formEntity.managerPasswd"
+							            placeholder="请输入密码">
+						      </div>
+						   </div>
+						   
+						 <div class="form-group">
+						  <label for="lastname" class="col-sm-3 control-label">图片</label>
+						    <div class="col-sm-9">
+						    <!--要存储的图片地址-->
+						    <input data-bind="textinput:model.formEntity.bannerImgurl" id="bannerImgurl" name="bannerImgurl" type="hidden"/>
+						      <div class="pic" >
+							    <div style="display:inline" id="productPhotoPics" data-bind="foreach: {data: model.formEntity.bannerImgurl(), as: 'item'}">
+								  <span ><img  data-bind="attr:{src:$root.fmt.imgUrl(item)}" /><em><a href="javascript:void(0)"><img src="<@full_path path='img/vim/close.png' />" width="20" height="20" id="close" data-bind="click:$root.removeImg.bind($root,1,$index())"/></a></em></span>
+								</div>
+								<span data-bind="visible:model.formEntity.bannerImgurl().length < 5" >
+								  <div id="thinThumPhotoPics" class="addPic">
+								    <input type="file" onchange="viewModel.upload(this, 'backstage/productInfo/',1)" accept=".jpg,.jpeg,.bmp,.png" id="file_sequence_id_1" class="fileInput" />
+								  </div>
+								</span>
+						      </div>
+						    </div>
+						</div>
+			          </form>
+		         </div>
+				 <div class="modal-footer" style="border-top:0;">
+				     <div class="row"  >
+						 <div class="col-lg-2 col-md-2 col-sm-3  col-xs-4 col-lg-offset-4 col-md-offset-4 col-sm-offset-3 col-xs-offset-2" >
+					       <button type="button" class="btn btn-default center-block" data-dismiss="modal">关闭</button>
+					     </div>
+						 <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4 " >
+						   <button type="button" class="btn btn-primary center-block" data-bind="click: $root.beforeSubmit.bind($root)">提交</button>
+						 </div>
+					 </div>
+				 </div>
+		     </div><!-- /.modal-content -->
+		   </div><!-- /.modal -->
+		 </div>								
+		<!-- 新增或修改数据e -->					
+								
+								
+								<!-- 查询页面 s-->
+										<div class="modal fade" id="search" tabindex="-1" 
+										   aria-labelledby="searchLabel" aria-hidden="true">
+										   <div class="modal-dialog">
+										      <div class="modal-content">
+										         <div class="alert alert-info">
+										            <button type="button" class="close" 
+										               data-dismiss="modal" aria-hidden="true">
+										                  &times;
+										            </button>
+										            <h3 class="modal-title " id="searchLabel" >
+										               查询
+										            </h3>
+										         </div>
+										         <div class="modal-body">
+										            <!--添加的内容-->
+										            <form class="form-horizontal sh-validate" >
+																	   <div class="form-group">
+																	      <label for="firstname" class="col-sm-2 control-label">名字</label>
+																	      <div class="col-sm-10">
+																	         <input type="text" class="form-control" id="firstname" 
+																	            placeholder="请输入名字">
+																	      </div>
+																	   </div>
+																	   <div class="form-group">
+																	      <label for="lastname" class="col-sm-2 control-label">姓</label>
+																	      <div class="col-sm-10">
+																	         <input type="text" class="form-control" id="lastname" 
+																	            placeholder="请输入姓">
+																	      </div>
+																	   </div>
+																	   
+																</form>
+										         </div>
+										         <div class="modal-footer" style="border-top:0;">
+										         
+										         	 <div class="row"  >
+																	<div class="col-lg-2 col-md-2 col-sm-3  col-xs-4 col-lg-offset-4 col-md-offset-4 col-sm-offset-3 col-xs-offset-2" >
+			
+																			<button type="button" class="btn btn-default center-block" 
+										              			 data-dismiss="modal">关闭
+										            			</button>
+			
+																	</div>
+																	<div class="col-lg-2 col-md-2 col-sm-3 col-xs-4 " >
+																			<button type="button" class="btn btn-primary center-block">
+										              			 查询
+										            			</button>
+																	</div>
+																</div>
+										            
+										            
+										         </div>
+										      </div><!-- /.modal-content -->
+										</div><!-- /.modal -->
+										</div>								
+								<!-- 查询页面e -->
+								
+								
+								
+								<!-- 二次确认页面 s-->
+										<div class="modal fade" id="delete" tabindex="-1" 
+										   aria-labelledby="deleteLabel" aria-hidden="true">
+										   <div class="modal-dialog">
+										      <div class="modal-content">
+										         <div class="alert alert-info">
+										            <button type="button" class="close" 
+										               data-dismiss="modal" aria-hidden="true">
+										                  &times;
+										            </button>
+										            <h3 class="modal-title " id="deleteLabel" >
+										               删除
+										            </h3>
+										         </div>
+										         <div class="modal-body">
+										            <!--添加的内容-->
+										            已选中: <span style="color:#286090;font-size:18px;font-weight:bold;">1</span> 条记录，确定要删除？
+										         </div>
+										         <div class="modal-footer" style="border-top:0;">
+										         
+										         	 <div class="row"  >
+																	<div class="col-lg-2 col-md-2 col-sm-3  col-xs-4 col-lg-offset-4 col-md-offset-4 col-sm-offset-3 col-xs-offset-2" >
+			
+																			<button type="button" class="btn btn-default center-block" 
+										              			 data-dismiss="modal">关闭
+										            			</button>
+			
+																	</div>
+																	<div class="col-lg-2 col-md-2 col-sm-3 col-xs-4 " >
+																			<button type="button" class="btn btn-primary center-block">
+										              			 删除
+										            			</button>
+																	</div>
+																</div>
+										            
+										            
+										         </div>
+										      </div><!-- /.modal-content -->
+										</div><!-- /.modal -->
+										</div>								
+								<!-- 二次确认页面e -->
+								
+								
+								
+								
+								<!-- 提示页面 s-->
+										<div class="modal fade" id="alert" tabindex="-1" 
+										   aria-labelledby="alertLabel" aria-hidden="true">
+										   <div class="modal-dialog">
+										      
+										         <div class="alert alert-danger">
+																   <a href="#" class="close" data-dismiss="modal">
+																      &times;
+																   </a>
+																   <strong>警告！</strong>您的网络连接有问题。
+															</div>
+										     
+											</div><!-- /.modal -->
+										</div>								
+								<!-- 提示e -->
+								
+								
+			<div class="row" style="background-color:#f1f4fb;">
+				<!--栏目路径-->
+				
+				
+				<div class="col-md-12" >
+			  	<h3>系统记录 &gt; <small>充值记录</small></h3> 
+			  </div>
+		  </div>		  
+			
+		  <div class="row">
+		  	<!--标题-->
+		  	<div class="col-md-12" >
+		  		
+				</div>
+		  </div>
+		  
+		  
+		  
+		  <div class="row">
+		  	<div class="col-md-12" >
+		  		<h3>
+						<!-- 按钮触发查询框 -->
+						<button class="btn btn-primary pull-right" data-toggle="modal" 
+						   data-target="#search"  style="margin:10px;">
+						   查询
+						</button>
+						
+						<!-- 按钮触发新增框 -->
+						<button class="btn btn-primary pull-right" data-toggle="modal" 
+						   data-target="#editor" style="margin:10px;">
+						   新增
+						</button>
+						
+						<!-- 按钮触发删除框 -->
+						<button class="btn btn-primary pull-right" data-toggle="modal" 
+						   data-target="#delete" style="margin:10px;">
+						   删除
+						</button>
+						
+						<!-- 按钮触发提示框 -->
+						<button class="btn btn-primary pull-right" data-toggle="modal" 
+						   data-target="#alert" style="margin:10px;">
+						   提示
+						</button>
+					</h3>
+				</div>
+		  </div>
+		  
+		  
+			<div class="row"  >
+				<div class="col-md-12" >
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th class="c_align" width="8%">
+									<label class="check_box_all " for="checkbox" id="check_all" data-bind="click: $root.clickCheckall.bind($root)">
+			    					<input type="checkbox" id="checkbox" class="chk_all" />
+			    				</label>
+								</th>
+								<th width="12%">编号</th>
+								<th width="10%">产品</th>
+								<th width="25%">交付时间</th>
+								<th width="25%">状态</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="border_none not_show c_align">
+										<label class="check_box db-checkbox-selected"  data-bind="attr: { id: 'chk' + $index(),for: 'checkbox_a' + $index()},click: $root.clickCheckbox.bind($root,$index(),item)">
+											<input type="checkbox" class="chk_1" data-bind="attr: { id: 'checkbox_a' + $index() }" />
+										</label>
+								</td>
+								<td>1</td>
+								<td>TB - Monthly</td>
+								<td>01/04/2012</td>
+								<td>Default</td>
+							</tr>
+							<tr>
+								<td class="border_none not_show c_align">
+										<label class="check_box db-checkbox-selected"  data-bind="attr: { id: 'chk' + $index(),for: 'checkbox_a' + $index()},click: $root.clickCheckbox.bind($root,$index(),item)">
+											<input type="checkbox" class="chk_1" data-bind="attr: { id: 'checkbox_a' + $index() }" />
+										</label>
+								</td>
+								<td>
+									1
+								</td>
+								<td>
+									TB - Monthly
+								</td>
+								<td>
+									01/04/2012
+								</td>
+								<td>
+									Approved
+								</td>
+							</tr>
+							<tr>
+								<td class="border_none not_show c_align">
+										<label class="check_box db-checkbox-selected"  data-bind="attr: { id: 'chk' + $index(),for: 'checkbox_a' + $index()},click: $root.clickCheckbox.bind($root,$index(),item)">
+											<input type="checkbox" class="chk_1" data-bind="attr: { id: 'checkbox_a' + $index() }" />
+										</label>
+								</td>
+								<td>
+									2
+								</td>
+								<td>
+									TB - Monthly
+								</td>
+								<td>
+									02/04/2012
+								</td>
+								<td>
+									Declined
+								</td>
+							</tr>
+							<tr>
+								<td class="border_none not_show c_align">
+										<label class="check_box db-checkbox-selected"  data-bind="attr: { id: 'chk' + $index(),for: 'checkbox_a' + $index()},click: $root.clickCheckbox.bind($root,$index(),item)">
+											<input type="checkbox" class="chk_1" data-bind="attr: { id: 'checkbox_a' + $index() }" />
+										</label>
+								</td>
+								<td>
+									3
+								</td>
+								<td>
+									TB - Monthly
+								</td>
+								<td>
+									03/04/2012
+								</td>
+								<td>
+									Pending
+								</td>
+							</tr>
+							<tr >
+								<td class="border_none not_show c_align">
+										<label class="check_box db-checkbox-selected"  data-bind="attr: { id: 'chk' + $index(),for: 'checkbox_a' + $index()},click: $root.clickCheckbox.bind($root,$index(),item)">
+											<input type="checkbox" class="chk_1" data-bind="attr: { id: 'checkbox_a' + $index() }" />
+										</label>
+								</td>
+								<td>
+									4
+								</td>
+								<td>
+									TB - Monthly
+								</td>
+								<td>
+									04/04/2012
+								</td>
+								<td>
+									Call in to confirm
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				
+			
+				<div class="row" style="margin-top:20px;margin-bottom:20px;" >
+					<div class="col-md-4 col-sm-4 col-xs-4 col-lg-4"  >
+						<h5>总共<i id="totalCount" style="color:red">30</i>记录,当前<i style="color:red">1</i>/<i style="color:red">3</i>页,
+							每页
+							<select >
+				         <option>10</option>
+				         <option>30</option>
+				         <option>50</option>
+				         
+      		   </select>
+           显记录示
+          </h5>
+					</div>
+					<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6"  >
+							<ul class="pagination center-block" style="margin:0;">
+							<li>
+								 <a href="#">&lt;&lt;</a>
+							</li>
+							<li>
+								 <a href="#">&lt;</a>
+							</li>
+							<li class="active">
+								 <a href="#">1</a>
+							</li>
+							<li>
+								 <a href="#">2</a>
+							</li>
+							<li>
+								 <a href="#">3</a>
+							</li>
+							<li>
+								 <a href="#">4</a>
+							</li>
+							<li>
+								 <a href="#">5</a>
+							</li>
+							<li>
+								 <a href="#">&gt;</a>
+							</li>
+							
+							<li>
+								 <a href="#">&gt;&gt;</a>
+							</li>
+						</ul>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-2 col-lg-2" >
+							<div class="input-group pull-right" style="cursor:pointer;">
+				         <input type="text" class="form-control">
+				         <span class="input-group-addon btn btn-primary">Go</span>
+				      </div>
+					</div>
+	</div>	
+			
+		</div>
+	</div>
+</div>	
+
+  </body>
+</html>

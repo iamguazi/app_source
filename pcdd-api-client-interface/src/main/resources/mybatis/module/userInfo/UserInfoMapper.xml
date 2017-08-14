@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.userInfo.dao.IUserInfoDao">
+
+    <resultMap id="UserInfoRM" type="com.ffcs.icity.api.module.userInfo.entity.UserInfo">
+        <result property="id" column="ID"/>
+        <result property="account" column="ACCOUNT"/>
+        <result property="password" column="PASSWORD"/>
+        <result property="userPhoto" column="USER_PHOTO"/>
+        <result property="nickName" column="NICK_NAME"/>
+        <result property="sex" column="SEX"/>
+        <result property="mobile" column="MOBILE"/>
+        <result property="point" column="POINT"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="bandId" column="BAND_ID"/>
+        <result property="bandType" column="BAND_TYPE"/>
+        <result property="registrationId" column="REGISTRATION_ID"/>
+        <result property="code" column="CODE"/>
+        <result property="status" column="STATUS"/>
+        <result property="imAccount" column="IM_ACCOUNT"/>
+        <result property="level" column="LEVEL"/>
+        <result property="userType" column="USER_TYPE"/>
+        <result property="loginTime" column="LOGIN_TIME"/>
+        <result property="personalSign" column="PERSONAL_SIGN"/>
+        
+        <result property="withdrawalsPassword" column="WITHDRAWALS_PASSWORD"/>
+        <result property="realName" column="REAL_NAME"/>
+        <result property="bankName" column="BANK_NAME"/>
+        <result property="bankNo" column="BANK_NO"/>
+        <result property="openCardAddress" column="OPEN_CARD_ADDRESS"/>
+        <result property="allPoint" column="ALL_POINT"/>
+        <result property="ipAddr" column="IP_ADDR"/>
+        
+        
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        USER_INFO.ID  ,USER_INFO.ACCOUNT  ,USER_INFO.PASSWORD  ,USER_INFO.USER_PHOTO  ,USER_INFO.NICK_NAME  ,USER_INFO.SEX  ,USER_INFO.MOBILE  ,USER_INFO.POINT  
+        ,USER_INFO.CREATE_TIME  ,USER_INFO.BAND_ID  ,USER_INFO.BAND_TYPE   ,USER_INFO.REGISTRATION_ID  ,USER_INFO.CODE  ,USER_INFO.STATUS  ,USER_INFO.IM_ACCOUNT  
+        ,USER_INFO.LEVEL  ,USER_INFO.USER_TYPE  ,USER_INFO.LOGIN_TIME  ,USER_INFO.PERSONAL_SIGN  
+        ,USER_INFO.WITHDRAWALS_PASSWORD ,USER_INFO.REAL_NAME ,USER_INFO.BANK_NAME,USER_INFO.BANK_NO ,USER_INFO.OPEN_CARD_ADDRESS ,USER_INFO.ALL_POINT
+	</sql>
+    <insert id="insertUserInfo" parameterType="com.ffcs.icity.api.module.userInfo.entity.UserInfo" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO USER_INFO (
+        	ID  
+        	 <if test="account !=null">,ACCOUNT  </if>
+        	 <if test="password !=null">,PASSWORD  </if>
+        	 <if test="userPhoto !=null">,USER_PHOTO  </if>
+        	 <if test="nickName !=null">,NICK_NAME  </if>
+        	 <if test="sex !=null">,SEX  </if>
+        	 <if test="mobile !=null">,MOBILE  </if>
+        	 <if test="point !=null">,POINT  </if>
+        	,CREATE_TIME
+        	 <if test="bandId !=null">,BAND_ID  </if>
+        	 <if test="bandType !=null">,BAND_TYPE  </if>
+        	 <if test="registrationId !=null">,REGISTRATION_ID  </if>
+        	 <if test="code !=null">,CODE  </if>
+        	 <if test="status !=null">,STATUS  </if>
+        	 <if test="imAccount !=null">,IM_ACCOUNT  </if>
+        	 <if test="level !=null">,LEVEL  </if>
+        	 <if test="userType !=null">,USER_TYPE  </if>
+        	 <if test="ipAddr !=null">,IP_ADDR  </if>
+        	,LOGIN_TIME
+        ) VALUES (
+        	null  
+        	 <if test="account !=null">,#{account}  </if>
+        	 <if test="password !=null">,#{password}  </if>
+        	 <if test="userPhoto !=null">,#{userPhoto}  </if>
+        	 <if test="nickName !=null">,#{nickName}  </if>
+        	 <if test="sex !=null">,#{sex}  </if>
+        	 <if test="mobile !=null">,#{mobile}  </if>
+        	 <if test="point !=null">,#{point}  </if>
+        	 , sysdate()
+        	 <if test="bandId !=null">,#{bandId}  </if>
+        	 <if test="bandType !=null">,#{bandType}  </if>
+        	 <if test="bandMobile !=null">,#{bandMobile}  </if>
+        	 <if test="registrationId !=null">,#{registrationId}  </if>
+        	 <if test="code !=null">,#{code}  </if>
+        	 <if test="status !=null">,#{status}  </if>
+        	 <if test="imAccount !=null">,#{imAccount}  </if>
+        	 <if test="level !=null">,#{level}  </if>
+        	 <if test="userType !=null">,#{userType}  </if>
+        	 <if test="ipAddr !=null">,#{ipAddr}  </if>
+        	 , sysdate()
+        )
+        
+    </insert>
+
+    <update id="updateUserInfo"  parameterType="com.ffcs.icity.api.module.userInfo.entity.UserInfo">
+        UPDATE USER_INFO SET
+	        ID =  #{id} 
+	      	  <if test="account !=null">,ACCOUNT = #{account} </if>
+	      	  <if test="password !=null">,PASSWORD = #{password} </if>
+	      	  <if test="userPhoto !=null">,USER_PHOTO = #{userPhoto} </if>
+	      	  <if test="nickName !=null">,NICK_NAME = #{nickName} </if>
+	      	  <if test="sex !=null">,SEX = #{sex} </if>
+	      	  <if test="mobile !=null">,MOBILE = #{mobile} </if>
+	      	  <if test="point !=null">,POINT = #{point} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+	      	  <if test="bandId !=null">,BAND_ID = #{bandId} </if>
+	      	  <if test="bandType !=null">,BAND_TYPE = #{bandType} </if>
+	      	  <if test="registrationId !=null">,REGISTRATION_ID = #{registrationId} </if>
+	      	  <if test="code !=null">,CODE = #{code} </if>
+	      	  <if test="status !=null">,STATUS = #{status} </if>
+	      	  <if test="imAccount !=null">,IM_ACCOUNT = #{imAccount} </if>
+	      	  <if test="level !=null">,LEVEL = #{level} </if>
+	      	  <if test="userType !=null">,USER_TYPE = #{userType} </if>
+	      	  <if test="loginTime !=null">,LOGIN_TIME = #{loginTime} </if>
+	      	  <if test="personalSign !=null">,PERSONAL_SIGN = #{personalSign} </if>
+	      	   <if test="withdrawalsPassword !=null">,WITHDRAWALS_PASSWORD = #{withdrawalsPassword} </if>
+	      	  <if test="realName !=null">,REAL_NAME = #{realName} </if>
+	      	  <if test="bankName !=null">,BANK_NAME = #{bankName} </if>
+	      	  <if test="bankNo !=null">,BANK_NO = #{bankNo} </if>
+	      	  <if test="openCardAddress !=null">,OPEN_CARD_ADDRESS = #{openCardAddress} </if>
+        	  <if test="allPoint !=null">,ALL_POINT = #{allPoint} </if>
+        
+        WHERE 
+	     	   ID = #{id}
+    </update>
+    
+    
+    <update id="updateUserInfoByPoint"  parameterType="com.ffcs.icity.api.module.userInfo.entity.UserInfo">
+        UPDATE USER_INFO SET
+	        POINT =POINT+ #{point}
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteUserInfo" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM USER_INFO WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getUserInfoById" resultMap="UserInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM USER_INFO 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+    
+    <select id="getUserInfoByAccount" resultMap="UserInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM USER_INFO 
+	        WHERE 
+		        ACCOUNT =#{account} 
+	    ]]>
+    </select>
+    
+     <select id="getUserInfoByParams" resultType="int">
+	    SELECT COUNT(1)
+	    <![CDATA[
+	        FROM USER_INFO 
+	        WHERE 
+		         MOBILE =#{account}
+	    ]]>
+    </select>
+    
+	<select id="getUserInfoByBand" resultMap="UserInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM USER_INFO 
+	        WHERE 
+		         BAND_ID =#{bandId} 
+		         AND BAND_TYPE = #{bandType}
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="account !=null">
+			     	and	<![CDATA[ ACCOUNT =#{account} ]]>	
+			     </if>
+			     <if test="password !=null">
+			     	and	<![CDATA[ PASSWORD =#{password} ]]>	
+			     </if>
+			     <if test="userPhoto !=null">
+			     	and	<![CDATA[ USER_PHOTO =#{userPhoto} ]]>	
+			     </if>
+			     <if test="nickName !=null">
+			     	and	<![CDATA[ NICK_NAME =#{nickName} ]]>	
+			     </if>
+		         <if test="sex !=null">
+		            and <![CDATA[ SEX = #{sex}  ]]>
+		         </if>
+			     <if test="mobile !=null">
+			     	and	<![CDATA[ MOBILE =#{mobile} ]]>	
+			     </if>
+		         <if test="point !=null">
+		            and <![CDATA[ POINT = #{point}  ]]>
+		         </if>
+		         
+			     <if test="bandId !=null">
+			     	and	<![CDATA[ BAND_ID =#{bandId} ]]>	
+			     </if>
+		         <if test="bandType !=null">
+		            and <![CDATA[ BAND_TYPE = #{bandType}  ]]>
+		         </if>
+			     <if test="registrationId !=null">
+			     	and	<![CDATA[ REGISTRATION_ID =#{registrationId} ]]>	
+			     </if>
+			     <if test="code !=null">
+			     	and	<![CDATA[ CODE =#{code} ]]>	
+			     </if>
+		         <if test="status !=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+			     <if test="imAccount !=null">
+			     	and	<![CDATA[ IM_ACCOUNT =#{imAccount} ]]>	
+			     </if>
+		         <if test="level !=null">
+		            and <![CDATA[ LEVEL = #{level}  ]]>
+		         </if>
+		         <if test="userType !=null">
+		            and <![CDATA[ USER_TYPE = #{userType}  ]]>
+		         </if>
+		         
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM USER_INFO <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="UserInfoRM">
+    	 SELECT <include refid="allFields"/> FROM USER_INFO	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="UserInfoRM">
+    	SELECT <include refid="allFields"/> FROM USER_INFO 
+		<include refid="findPage"/>	
+		
+		<if test="start !=null and pageSize !=null">
+			 LIMIT #{start}  ,#{pageSize}  	
+		 </if>	
+    </select>
+    
+ 
+	<select id="getUserCount" resultType="int">
+        SELECT count(*) FROM USER_INFO  
+    </select>
+</mapper>
+

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.payListConfig.dao.IPayListConfigDao">
+
+    <resultMap id="PayListConfigRM" type="com.ffcs.icity.api.module.payListConfig.entity.PayListConfig">
+        <result property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="remarks" column="REMARKS"/>
+        <result property="type" column="TYPE"/>
+        <result property="status" column="STATUS"/>
+        <result property="payOrder" column="PAY_ORDER"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="typeKey" column="TYPE_KEY"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        PAY_LIST_CONFIG.ID  ,PAY_LIST_CONFIG.NAME  ,PAY_LIST_CONFIG.REMARKS  ,PAY_LIST_CONFIG.TYPE  ,PAY_LIST_CONFIG.STATUS  ,PAY_LIST_CONFIG.PAY_ORDER  ,PAY_LIST_CONFIG.CREATE_TIME  ,PAY_LIST_CONFIG.TYPE_KEY  
+	</sql>
+    <insert id="insertPayListConfig" parameterType="com.ffcs.icity.api.module.payListConfig.entity.PayListConfig" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO PAY_LIST_CONFIG (
+        	ID  
+        	 <if test="name !=null">,NAME  </if>
+        	 <if test="remarks !=null">,REMARKS  </if>
+        	 <if test="type !=null">,TYPE  </if>
+        	 <if test="status !=null">,STATUS  </if>
+        	 <if test="payOrder !=null">,PAY_ORDER  </if>
+        	,CREATE_TIME
+        	 <if test="typeKey !=null">,TYPE_KEY  </if>
+        ) VALUES (
+        	null  
+        	 <if test="name !=null">,#{name}  </if>
+        	 <if test="remarks !=null">,#{remarks}  </if>
+        	 <if test="type !=null">,#{type}  </if>
+        	 <if test="status !=null">,#{status}  </if>
+        	 <if test="payOrder !=null">,#{payOrder}  </if>
+        	 , sysdate()
+        	 <if test="typeKey !=null">,#{typeKey}  </if>
+        )
+        
+    </insert>
+
+    <update id="updatePayListConfig"  parameterType="com.ffcs.icity.api.module.payListConfig.entity.PayListConfig">
+        UPDATE PAY_LIST_CONFIG SET
+	        ID =  #{id} 
+	      	  <if test="name !=null">,NAME = #{name} </if>
+	      	  <if test="remarks !=null">,REMARKS = #{remarks} </if>
+	      	  <if test="type !=null">,TYPE = #{type} </if>
+	      	  <if test="status !=null">,STATUS = #{status} </if>
+	      	  <if test="payOrder !=null">,PAY_ORDER = #{payOrder} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+	      	  <if test="typeKey !=null">,TYPE_KEY = #{typeKey} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deletePayListConfig" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM PAY_LIST_CONFIG WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getPayListConfigById" resultMap="PayListConfigRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM PAY_LIST_CONFIG 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="name !=null">
+			     	and	<![CDATA[ NAME =#{name} ]]>	
+			     </if>
+			     <if test="remarks !=null">
+			     	and	<![CDATA[ REMARKS =#{remarks} ]]>	
+			     </if>
+		         <if test="type !=null">
+		            and <![CDATA[ TYPE = #{type}  ]]>
+		         </if>
+		         <if test="status !=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+		         <if test="payOrder !=null">
+		            and <![CDATA[ PAY_ORDER = #{payOrder}  ]]>
+		         </if>
+		         
+			     <if test="typeKey !=null">
+			     	and	<![CDATA[ TYPE_KEY =#{typeKey} ]]>	
+			     </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM PAY_LIST_CONFIG <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="PayListConfigRM">
+    	 SELECT <include refid="allFields"/> FROM PAY_LIST_CONFIG	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="PayListConfigRM">
+    	SELECT <include refid="allFields"/> FROM PAY_LIST_CONFIG 
+		<include refid="findPage"/>	
+		 ORDER BY PAY_ORDER DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

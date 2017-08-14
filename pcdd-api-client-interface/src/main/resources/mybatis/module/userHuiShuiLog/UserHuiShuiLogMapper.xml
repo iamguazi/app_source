@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.userHuiShuiLog.dao.IUserHuiShuiLogDao">
+
+    <resultMap id="UserHuiShuiLogRM" type="com.ffcs.icity.api.module.userHuiShuiLog.entity.UserHuiShuiLog">
+        <result property="id" column="ID"/>
+        <result property="type" column="TYPE"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="point" column="POINT"/>
+        <result property="bili" column="BILI"/>
+        <result property="huiShuiPoint" column="HUI_SHUI_POINT"/>
+        <result property="status" column="STATUS"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="zuhePoint" column="ZUHE_POINT"/>
+        <result property="pointNum" column="POINT_NUM"/>
+        <result property="getPoint" column="GET_POINT"/>
+        <result property="xhibitPoint" column="XHIBIT_POINT"/>
+        
+    </resultMap>
+    
+    
+     <resultMap id="HuiShuiVoRM" type="com.ffcs.icity.api.module.userHuiShuiLog.entity.HuiShuiVoLog">
+        <result property="userId" column="ID"/>
+        <result property="point" column="point"/>
+        <result property="zuhePoint" column="zuhe_point"/>
+        <result property="pointNum" column="point_num"/>
+        <result property="getPoint" column="get_point"/>
+        <result property="addPoint" column="add_point"/>
+        
+    </resultMap>
+    
+    
+    <resultMap id="TuiJianVoRM" type="com.ffcs.icity.api.module.userHuiShuiLog.entity.TuiJianVoLog">
+        <result property="userId" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="point" column="point"/>
+        <result property="zuhePoint" column="zuhe_point"/>
+        <result property="pointNum" column="point_num"/>
+        <result property="getPoint" column="get_point"/>
+        <result property="addPoint" column="add_point"/>
+        
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        USER_HUI_SHUI_LOG.ID  ,USER_HUI_SHUI_LOG.TYPE  ,USER_HUI_SHUI_LOG.USER_ID  ,USER_HUI_SHUI_LOG.POINT  ,USER_HUI_SHUI_LOG.BILI  ,USER_HUI_SHUI_LOG.HUI_SHUI_POINT 
+         ,USER_HUI_SHUI_LOG.STATUS  ,USER_HUI_SHUI_LOG.CREATE_TIME  ,USER_HUI_SHUI_LOG.ZUHE_POINT
+	</sql>
+    <insert id="insertUserHuiShuiLog" parameterType="com.ffcs.icity.api.module.userHuiShuiLog.entity.UserHuiShuiLog" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO USER_HUI_SHUI_LOG (
+        	ID  
+        	 <if test="type !=null">,TYPE  </if>
+        	 <if test="userId !=null">,USER_ID  </if>
+        	 <if test="point !=null">,POINT  </if>
+        	 <if test="bili !=null">,BILI  </if>
+        	 <if test="huiShuiPoint !=null">,HUI_SHUI_POINT  </if>
+        	 <if test="status !=null">,STATUS  </if>
+        	 <if test="zuhePoint !=null">,ZUHE_POINT  </if>
+        	 <if test="pointNum !=null">,POINT_NUM  </if>
+        	 <if test="getPoint !=null">,GET_POINT  </if>
+        	 <if test="xhibitPoint !=null">,XHIBIT_POINT  </if>
+        	 
+        	,CREATE_TIME
+        ) VALUES (
+        	null  
+        	 <if test="type !=null">,#{type}  </if>
+        	 <if test="userId !=null">,#{userId}  </if>
+        	 <if test="point !=null">,#{point}  </if>
+        	 <if test="bili !=null">,#{bili}  </if>
+        	 <if test="huiShuiPoint !=null">,#{huiShuiPoint}  </if>
+        	 <if test="status !=null">,#{status}  </if>
+        	 <if test="zuhePoint !=null">,#{zuhePoint}  </if>
+        	 <if test="pointNum !=null">,#{pointNum}  </if>
+        	 <if test="getPoint !=null">,#{getPoint}  </if>
+        	 <if test="xhibitPoint !=null">,#{xhibitPoint}  </if>
+        	 
+        	 , sysdate()
+        )
+        
+    </insert>
+
+    <update id="updateUserHuiShuiLog"  parameterType="com.ffcs.icity.api.module.userHuiShuiLog.entity.UserHuiShuiLog">
+        UPDATE USER_HUI_SHUI_LOG SET
+	        ID =  #{id} 
+	      	  <if test="type !=null">,TYPE = #{type} </if>
+	      	  <if test="userId !=null">,USER_ID = #{userId} </if>
+	      	  <if test="point !=null">,POINT = #{point} </if>
+	      	  <if test="bili !=null">,BILI = #{bili} </if>
+	      	  <if test="huiShuiPoint !=null">,HUI_SHUI_POINT = #{huiShuiPoint} </if>
+	      	  <if test="status !=null">,STATUS = #{status} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteUserHuiShuiLog" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM USER_HUI_SHUI_LOG WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getUserHuiShuiLogById" resultMap="UserHuiShuiLogRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM USER_HUI_SHUI_LOG 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+		         <if test="type !=null">
+		            and <![CDATA[ TYPE = #{type}  ]]>
+		         </if>
+		         <if test="userId !=null">
+		            and <![CDATA[ USER_ID = #{userId}  ]]>
+		         </if>
+		         <if test="point !=null">
+		            and <![CDATA[ POINT = #{point}  ]]>
+		         </if>
+		         <if test="bili !=null">
+		            and <![CDATA[ BILI = #{bili}  ]]>
+		         </if>
+		         <if test="huiShuiPoint !=null">
+		            and <![CDATA[ HUI_SHUI_POINT = #{huiShuiPoint}  ]]>
+		         </if>
+		         <if test="status !=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+		         
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM USER_HUI_SHUI_LOG <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="UserHuiShuiLogRM">
+    	 SELECT <include refid="allFields"/> FROM USER_HUI_SHUI_LOG	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="UserHuiShuiLogRM">
+    	SELECT <include refid="allFields"/> FROM USER_HUI_SHUI_LOG 
+		<include refid="findPage"/>	
+		 ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+    
+    <select id="getUserList" resultMap="HuiShuiVoRM">
+    	SELECT ID,add_point,get_point,point_num,(a.add_point-a.get_point)point
+    	,(
+			SELECT IFNULL(SUM(USER_CHOICE_LOG.`POINT`) ,0)
+			FROM USER_CHOICE_LOG WHERE USER_CHOICE_LOG.USER_ID=a.ID 
+			AND  DATE_FORMAT( USER_CHOICE_LOG.`CREATE_TIME`,'%Y-%m-%d')= DATE_SUB(CURDATE(),INTERVAL 1 DAY)  
+			AND  USER_CHOICE_LOG.`CHOICE_NAME` NOT IN('大','小','单','双')
+			<if test="areaId ==1">
+				AND USER_CHOICE_LOG.`AREA_ID` IN(1,4)
+			 </if>
+			 <if test="areaId ==2">
+				 AND USER_CHOICE_LOG.`AREA_ID` IN(2,5)
+			 </if>
+			 <if test="areaId ==3">
+				 AND USER_CHOICE_LOG.`AREA_ID` IN(3,6)
+			 </if>
+		)zuhe_point
+    	FROM 
+		(SELECT
+		  USER_INFO.`ID`
+		   ,COUNT(USER_CHOICE_LOG.`ID`) point_num
+		  ,(IFNULL(SUM(USER_CHOICE_LOG.`POINT`),0)) AS add_point
+		  ,(IFNULL(SUM(USER_CHOICE_LOG.`GET_POINT`),0)) AS get_point
+		FROM USER_INFO,USER_CHOICE_LOG
+		WHERE USER_CHOICE_LOG.`USER_ID`=USER_INFO.`ID` 
+		AND  DATE_FORMAT( USER_CHOICE_LOG.`CREATE_TIME`,'%Y-%m-%d')= DATE_SUB(CURDATE(),INTERVAL 1 DAY) 
+		<if test="areaId ==1">
+			 AND USER_CHOICE_LOG.`AREA_ID` IN(1,4)
+		 </if>
+		 <if test="areaId ==2">
+			 AND USER_CHOICE_LOG.`AREA_ID` IN(2,5)
+		 </if>
+		 <if test="areaId ==3">
+			 AND USER_CHOICE_LOG.`AREA_ID` IN(3,6)
+		 </if>
+		GROUP BY  USER_CHOICE_LOG.`USER_ID`
+		)a
+		WHERE <![CDATA[( a.add_point-a.get_point)>#{startPoint}  ]]> 
+		 AND <![CDATA[  a.point_num>10 ]]> 
+		ORDER BY  a.add_point DESC
+    </select>
+ 
+ 
+ 	
+    <select id="getUserListByCode" resultMap="TuiJianVoRM">
+    	SELECT ID,CODE,add_point,get_point,point_num,(a.add_point-a.get_point)POINT
+    	,(
+			SELECT IFNULL(SUM(USER_CHOICE_LOG.`POINT`) ,0)
+			FROM USER_CHOICE_LOG WHERE USER_CHOICE_LOG.USER_ID=a.ID 
+			AND  DATE_FORMAT( USER_CHOICE_LOG.`CREATE_TIME`,'%Y-%m-%d')= DATE_SUB(CURDATE(),INTERVAL 1 DAY)  
+			AND  USER_CHOICE_LOG.`CHOICE_NAME` NOT IN('大','小','单','双')
+			 
+		)zuhe_point
+    	FROM 
+		(SELECT
+		  USER_INFO.`ID`
+		  ,USER_INFO.`CODE`
+		   ,COUNT(USER_CHOICE_LOG.`ID`) point_num
+		  ,(IFNULL(SUM(USER_CHOICE_LOG.`POINT`),0)) AS add_point
+		  ,(IFNULL(SUM(USER_CHOICE_LOG.`GET_POINT`),0)) AS get_point
+		FROM USER_INFO,USER_CHOICE_LOG
+		WHERE USER_CHOICE_LOG.`USER_ID`=USER_INFO.`ID` 
+		AND  DATE_FORMAT( USER_CHOICE_LOG.`CREATE_TIME`,'%Y-%m-%d')= DATE_SUB(CURDATE(),INTERVAL 1 DAY) 
+		 AND USER_INFO.`CODE` IS NOT NULL
+		GROUP BY  USER_CHOICE_LOG.`USER_ID`
+		)a
+		WHERE a.add_point>#{startPoint}
+		 AND a.point_num>#{num}
+		ORDER BY  a.add_point DESC
+    </select>
+ 
+	
+	<select id="getHuishuiCount" resultType="int">
+    	SELECT COUNT(1) 
+		FROM USER_HUI_SHUI_LOG
+		WHERE   DATE_FORMAT( USER_HUI_SHUI_LOG.`CREATE_TIME`,'%Y-%m-%d')= CURDATE()
+		 and <![CDATA[ TYPE = #{type}  ]]>
+    </select>
+</mapper>
+

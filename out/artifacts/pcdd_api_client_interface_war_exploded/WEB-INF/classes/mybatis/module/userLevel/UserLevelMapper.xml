@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.userLevel.dao.IUserLevelDao">
+
+    <resultMap id="UserLevelRM" type="com.ffcs.icity.api.module.userLevel.entity.UserLevel">
+        <result property="id" column="ID"/>
+        <result property="levelName" column="LEVEL_NAME"/>
+        <result property="rechargeFee" column="RECHARGE_FEE"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="levelIcon" column="LEVEL_ICON"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        USER_LEVEL.ID  ,USER_LEVEL.LEVEL_NAME  ,USER_LEVEL.RECHARGE_FEE  ,USER_LEVEL.CREATE_TIME  ,USER_LEVEL.LEVEL_ICON  
+	</sql>
+    <insert id="insertUserLevel" parameterType="com.ffcs.icity.api.module.userLevel.entity.UserLevel" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO USER_LEVEL (
+        	ID  
+        	 <if test="levelName !=null">,LEVEL_NAME  </if>
+        	 <if test="rechargeFee !=null">,RECHARGE_FEE  </if>
+        	,CREATE_TIME
+        	 <if test="levelIcon !=null">,LEVEL_ICON  </if>
+        ) VALUES (
+        	null  
+        	 <if test="levelName !=null">,#{levelName}  </if>
+        	 <if test="rechargeFee !=null">,#{rechargeFee}  </if>
+        	 , sysdate()
+        	 <if test="levelIcon !=null">,#{levelIcon}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateUserLevel"  parameterType="com.ffcs.icity.api.module.userLevel.entity.UserLevel">
+        UPDATE USER_LEVEL SET
+	        ID =  #{id} 
+	      	  <if test="levelName !=null">,LEVEL_NAME = #{levelName} </if>
+	      	  <if test="rechargeFee !=null">,RECHARGE_FEE = #{rechargeFee} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+	      	  <if test="levelIcon !=null">,LEVEL_ICON = #{levelIcon} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteUserLevel" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM USER_LEVEL WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getUserLevelById" resultMap="UserLevelRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM USER_LEVEL 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+    
+    
+    <select id="getUserLevelByPoint" resultMap="UserLevelRM">
+	    SELECT <include refid="allFields"/>
+	        FROM USER_LEVEL 
+	        WHERE 
+		       <![CDATA[ RECHARGE_FEE  <= #{rechargeFee}  ]]>
+		       
+		       ORDER BY  RECHARGE_FEE DESC
+		       LIMIT 0,1
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="levelName !=null">
+			     	and	<![CDATA[ LEVEL_NAME =#{levelName} ]]>	
+			     </if>
+		         <if test="rechargeFee !=null">
+		            and <![CDATA[ RECHARGE_FEE = #{rechargeFee}  ]]>
+		         </if>
+		         
+			     <if test="levelIcon !=null">
+			     	and	<![CDATA[ LEVEL_ICON =#{levelIcon} ]]>	
+			     </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM USER_LEVEL <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="UserLevelRM">
+    	 SELECT <include refid="allFields"/> FROM USER_LEVEL	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="UserLevelRM">
+    	SELECT <include refid="allFields"/> FROM USER_LEVEL 
+		<include refid="findPage"/>	
+		 ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

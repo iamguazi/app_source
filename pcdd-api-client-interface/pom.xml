@@ -1,0 +1,432 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.ffcs.icity</groupId>
+    <artifactId>pcdd-api-client-interface</artifactId>
+    <version>1.0.0</version>
+    <packaging>war</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>com.hjb</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>1.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/alipay-sdk-java-1.1.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey</groupId>
+            <artifactId>jersey-bom</artifactId>
+            <type>pom</type>
+            <scope>import</scope>
+            <version>2.15</version>
+        </dependency>
+        <dependency>
+            <groupId>com.belerweb</groupId>
+            <artifactId>pinyin4j</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
+        <!-- 腾讯云begin -->
+        <dependency>
+            <groupId>com.hjb</groupId>
+            <artifactId>tls_sig_api</artifactId>
+            <version>1.0</version>
+
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/tls_sig_api-1.0.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hjb</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>152</version>
+
+
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/bcprov-jdk15on-152.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hjb</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>152</version>
+
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/bcpkix-jdk15on-152.jar</systemPath>
+        </dependency>
+
+        <!-- 极光推送begin -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.jpush.api</groupId>
+            <artifactId>jpush-client</artifactId>
+            <version>3.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.0.1</version>
+
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/poi-ooxml-3.0.1.jar</systemPath>
+        </dependency>
+        <!-- 极光推送end -->
+
+        <dependency>
+            <groupId>com.hjb</groupId>
+            <artifactId>backport-util-concurrent</artifactId>
+            <version>3.1</version>
+
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/backport-util-concurrent-3.1.jar</systemPath>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.3.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.com.guju</groupId>
+            <artifactId>CCP_REST_SMS_SDK_JAVA_v2.6.3r</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <!--加入jersey依赖包-->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>2.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>2.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+            <version>2.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+        <!--加入mail依赖包-->
+
+        <dependency>
+            <groupId>com.hjb</groupId>
+            <artifactId>taobao-sdk-java-auto_1455552377940</artifactId>
+            <version>20160607</version>
+
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/taobao-sdk-java-auto_1455552377940-20160607.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <!-- LOGGING begin -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+        <!-- common-logging 实际调用slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.7.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- java.util.logging 实际调用slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>1.7.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- log4j 实际调用slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>1.7.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.9</version>
+        </dependency>
+        <!-- LOGGING end -->
+
+        <dependency>
+            <groupId>com.ffcs.icity</groupId>
+            <artifactId>icity-api-core</artifactId>
+            <version>1.3.0-beta</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ffcs.icity</groupId>
+            <artifactId>icity-log</artifactId>
+            <version>1.0.1-beta</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ffcs.icity</groupId>
+            <artifactId>icity-log-config</artifactId>
+            <version>1.0.0-beta</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ffcs.icity</groupId>
+            <artifactId>icity-commons</artifactId>
+            <version>2.5.1-20140327</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- DB -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>0.2.11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.30</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>1.1.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-context</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-core</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-tx</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-jdbc</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>3.1.3.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- DB end -->
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Base64 -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <!-- json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20090211</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.7.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- compiler插件, 设定JDK版本 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <showWarnings>true</showWarnings>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <!-- 打包源代码 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- tomcat插件 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>tomcat-maven-plugin</artifactId>
+                <version>1.1</version>
+                <configuration>
+                    <uriEncoding>UTF-8</uriEncoding>
+                    <update>true</update>
+                </configuration>
+            </plugin>
+            <!-- jetty插件, 设定context path与spring profile -->
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>8.1.13.v20130916</version>
+                <configuration>
+                    <!-- 启动热部署 -->
+                    <reload>automatic</reload>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>spring.profiles.active</name>
+                            <value>development</value>
+                        </systemProperty>
+                    </systemProperties>
+                    <useTestClasspath>true</useTestClasspath>
+                    <webAppConfig>
+                        <contextPath>/${project.artifactId}</contextPath>
+                    </webAppConfig>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.ffcs.icity</groupId>
+                <artifactId>icity-maven-plugin</artifactId>
+                <version>1.0.0-beta</version>
+                <configuration>
+                    <jdbcURL>jdbc:mysql://localhost:3306/test</jdbcURL>
+                    <jdbcUserName>root</jdbcUserName>
+                    <jdbcPassword>123456</jdbcPassword>
+                    <basePackage>com.ffcs.icity.mvc.demo</basePackage>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+            </plugin>
+        </plugins>
+
+    </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <maven.tomcat.url>http://127.0.0.1:28888/manager</maven.tomcat.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <maven.tomcat.url>http://127.0.0.1:28888/manager</maven.tomcat.url>
+            </properties>
+        </profile>
+    </profiles>
+    <distributionManagement>
+        <!--<repository>-->
+        <!--<id>releases</id>-->
+        <!--<name>Nexus Release Repository</name>-->
+        <!--<url>http://112.74.90.81:8081/nexus/content/repositories/releases/</url>-->
+        <!--</repository>-->
+        <!--<snapshotRepository>-->
+        <!--<id>snapshots</id>-->
+        <!--<name>Nexus Snapshot Repository</name>-->
+        <!--<url>http://112.74.90.81:8081/nexus/content/repositories/snapshots/</url>-->
+        <!--</snapshotRepository>-->
+    </distributionManagement>
+
+</project>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.messageLogs.dao.IMessageLogsDao">
+
+    <resultMap id="MessageLogsRM" type="com.ffcs.icity.api.module.messageLogs.entity.MessageLogs">
+        <result property="id" column="ID"/>
+        <result property="phone" column="PHONE"/>
+        <result property="code" column="CODE"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="status" column="STATUS"/>
+        <result property="smsMessageSid" column="SMS_MESSAGE_SID"/>
+        <result property="message" column="MESSAGE"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        ID  ,PHONE  ,CODE  ,CREATE_TIME  ,STATUS  ,SMS_MESSAGE_SID,  MESSAGE
+	</sql>
+    <insert id="insertMessageLogs" parameterType="com.ffcs.icity.api.module.messageLogs.entity.MessageLogs" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO MESSAGE_LOGS (
+        	ID  
+        	 <if test="phone!=null">,PHONE  </if>
+        	 <if test="code!=null">,CODE  </if>
+        	,CREATE_TIME
+        	 <if test="status!=null">,STATUS  </if>
+        	 <if test="smsMessageSid!=null">,SMS_MESSAGE_SID  </if>
+        	 <if test="message!=null">,MESSAGE  </if>
+        ) VALUES (
+        	null  
+        	 <if test="phone!=null">,#{phone}  </if>
+        	 <if test="code!=null">,#{code}  </if>
+        	 , sysdate()
+        	 <if test="status!=null">,#{status}  </if>
+        	 <if test="message!=null">,#{message}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateMessageLogs"  parameterType="com.ffcs.icity.api.module.messageLogs.entity.MessageLogs">
+        UPDATE MESSAGE_LOGS SET
+	        ID =  #{id} 
+	      	  <if test="phone!=null">,PHONE = #{phone} </if>
+	      	  <if test="code!=null">,CODE = #{code} </if>
+	      	  <if test="createTime!=null">,CREATE_TIME = #{createTime} </if>
+	      	  <if test="status!=null">,STATUS = #{status} </if>
+	      	  <if test="smsMessageSid!=null">,SMS_MESSAGE_SID = #{smsMessageSid} </if>
+	      	  <if test="message!=null">,MESSAGE = #{message} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteMessageLogs" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM MESSAGE_LOGS WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getMessageLogsById" resultMap="MessageLogsRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM MESSAGE_LOGS 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id!=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+		         <if test="phone!=null">
+		            and <![CDATA[ PHONE = #{phone}  ]]>
+		         </if>
+			     <if test="code!=null">
+			     	and	<![CDATA[ CODE =#{code} ]]>	
+			     </if>
+		          <if test="createTimeBegin!=null">
+						and <![CDATA[ CREATE_TIME >= STR_TO_DATE(#{createTimeBegin},'%Y-%m-%d %H:%i:%s') ]]>
+				 </if>
+		        <if test="createTimeEnd!=null">
+						and <![CDATA[ CREATE_TIME <=  STR_TO_DATE(#{createTimeEnd},'%Y-%m-%d %H:%i:%s') ]]>
+				 </if>
+		         <if test="status!=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM MESSAGE_LOGS <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="MessageLogsRM">
+    	 SELECT <include refid="allFields"/> FROM MESSAGE_LOGS	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="MessageLogsRM">
+    	SELECT <include refid="allFields"/> FROM MESSAGE_LOGS 
+		<include refid="findPage"/>		
+    </select>
+    
+ 
+	
+</mapper>
+

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.userPayLog.dao.IUserPayLogDao">
+
+    <resultMap id="UserPayLogRM" type="com.ffcs.icity.api.module.userPayLog.entity.UserPayLog">
+        <result property="id" column="ID"/>
+        <result property="outTradeNo" column="OUT_TRADE_NO"/>
+        <result property="orderNo" column="ORDER_NO"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="resultCode" column="RESULT_CODE"/>
+        <result property="totalFee" column="TOTAL_FEE"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="updateTime" column="UPDATE_TIME"/>
+        <result property="payType" column="PAY_TYPE"/>
+        <result property="status" column="STATUS"/>
+        <result property="freeFee" column="FREE_FEE"/>
+        <result property="orderType" column="ORDER_TYPE"/>
+        <result property="prePayId" column="PRE_PAY_ID"/>
+        <result property="resultFee" column="RESULT_FEE"/>
+        <result property="payDesc" column="PAY_DESC"/>
+       
+        
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        ID  ,OUT_TRADE_NO  ,ORDER_NO  ,USER_ID  ,RESULT_CODE  ,TOTAL_FEE  ,CREATE_TIME  ,UPDATE_TIME  ,PAY_TYPE  ,STATUS  ,FREE_FEE  ,ORDER_TYPE  ,PRE_PAY_ID  ,RESULT_FEE  ,PAY_DESC
+	</sql>
+    <insert id="insertUserPayLog" parameterType="com.ffcs.icity.api.module.userPayLog.entity.UserPayLog" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO USER_PAY_LOG (
+        	ID  
+        	 <if test="outTradeNo!=null">,OUT_TRADE_NO  </if>
+        	 <if test="orderNo!=null">,ORDER_NO  </if>
+        	 <if test="userId!=null">,USER_ID  </if>
+        	 <if test="resultCode!=null">,RESULT_CODE  </if>
+        	 <if test="totalFee!=null">,TOTAL_FEE  </if>
+        	,CREATE_TIME
+        	,UPDATE_TIME
+        	 <if test="payType!=null">,PAY_TYPE  </if>
+        	 <if test="status!=null">,STATUS  </if>
+        	 <if test="freeFee!=null">,FREE_FEE  </if>
+        	 <if test="orderType!=null">,ORDER_TYPE  </if>
+        	 <if test="prePayId!=null">,PRE_PAY_ID  </if>
+        	 <if test="resultFee!=null">,RESULT_FEE  </if>
+        	 <if test="payDesc !=null">,PAY_DESC  </if>
+        ) VALUES (
+        	null  
+        	 <if test="outTradeNo!=null">,#{outTradeNo}  </if>
+        	 <if test="orderNo!=null">,#{orderNo}  </if>
+        	 <if test="userId!=null">,#{userId}  </if>
+        	 <if test="resultCode!=null">,#{resultCode}  </if>
+        	 <if test="totalFee!=null">,#{totalFee}  </if>
+        	 , sysdate()
+        	 , sysdate()
+        	 <if test="payType!=null">,#{payType}  </if>
+        	 <if test="status!=null">,#{status}  </if>
+        	 <if test="freeFee!=null">,#{freeFee}  </if>
+        	 <if test="orderType!=null">,#{orderType}  </if>
+        	 <if test="prePayId!=null">,#{prePayId}  </if>
+        	 <if test="resultFee!=null">,#{resultFee}  </if>
+        	 <if test="payDesc !=null">,#{payDesc}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateUserPayLog"  parameterType="com.ffcs.icity.api.module.userPayLog.entity.UserPayLog">
+        UPDATE USER_PAY_LOG SET
+	        ID =  #{id} 
+	      	  <if test="outTradeNo!=null">,OUT_TRADE_NO = #{outTradeNo} </if>
+	      	  <if test="orderNo!=null">,ORDER_NO = #{orderNo} </if>
+	      	  <if test="userId!=null">,USER_ID = #{userId} </if>
+	      	  <if test="resultCode!=null">,RESULT_CODE = #{resultCode} </if>
+	      	  <if test="totalFee!=null">,TOTAL_FEE = #{totalFee} </if>
+	      	  <if test="createTime!=null">,CREATE_TIME = #{createTime} </if>
+	      	  <if test="updateTime!=null">,UPDATE_TIME = #{updateTime} </if>
+	      	  <if test="payType!=null">,PAY_TYPE = #{payType} </if>
+	      	  <if test="status!=null">,STATUS = #{status} </if>
+	      	  <if test="freeFee!=null">,FREE_FEE = #{freeFee} </if>
+	      	  <if test="orderType!=null">,ORDER_TYPE = #{orderType} </if>
+	      	  <if test="prePayId!=null">,PRE_PAY_ID = #{prePayId} </if>
+	      	  <if test="resultFee!=null">,RESULT_FEE = #{resultFee} </if>
+	      	  <if test="payDesc !=null">,PAY_DESC = #{payDesc} </if>
+	      	  
+       
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteUserPayLog" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM USER_PAY_LOG WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getUserPayLogById" resultMap="UserPayLogRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM USER_PAY_LOG 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+    
+    <select id="getUserPayLogByOrderNo" resultMap="UserPayLogRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM USER_PAY_LOG 
+	        WHERE 
+		        ORDER_NO =#{orderNo}
+	    ]]>
+    </select>
+    
+    
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id!=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="outTradeNo!=null">
+			     	and	<![CDATA[ OUT_TRADE_NO =#{outTradeNo} ]]>	
+			     </if>
+			     <if test="orderNo!=null">
+			     	and	<![CDATA[ ORDER_NO =#{orderNo} ]]>	
+			     </if>
+		         <if test="userId!=null">
+		            and <![CDATA[ USER_ID = #{userId}  ]]>
+		         </if>
+			     <if test="resultCode!=null">
+			     	and	<![CDATA[ RESULT_CODE =#{resultCode} ]]>	
+			     </if>
+		         <if test="totalFee!=null">
+		            and <![CDATA[ TOTAL_FEE = #{totalFee}  ]]>
+		         </if>
+		         
+		         
+		         <if test="payType!=null">
+		            and <![CDATA[ PAY_TYPE = #{payType}  ]]>
+		         </if>
+		         <if test="status!=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+		         <if test="freeFee!=null">
+		            and <![CDATA[ FREE_FEE = #{freeFee}  ]]>
+		         </if>
+		         <if test="orderType!=null">
+		            and <![CDATA[ ORDER_TYPE = #{orderType}  ]]>
+		         </if>
+			     <if test="prePayId!=null">
+			     	and	<![CDATA[ PRE_PAY_ID =#{prePayId} ]]>	
+			     </if>
+		         <if test="resultFee!=null">
+		            and <![CDATA[ RESULT_FEE = #{resultFee}  ]]>
+		         </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM USER_PAY_LOG <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="UserPayLogRM">
+    	 SELECT <include refid="allFields"/> FROM USER_PAY_LOG	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="UserPayLogRM">
+    	SELECT <include refid="allFields"/> FROM USER_PAY_LOG 
+		<include refid="findPage"/>	
+		ORDER BY CREATE_TIME DESC	
+    </select>
+    
+ 
+	
+</mapper>
+

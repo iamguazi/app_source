@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.demo.dao.DemoDao">
+
+	<!-- 查询,演示: 1.输入用map传入多个参数 2.<where>语句, 智能添加where和and关键字 3.输出直接映射对象 -->
+	<select id="query"  parameterType="map" resultType="com.ffcs.icity.api.demo.entity.Demo" >
+		select id, name,password
+		from demo
+		<where>
+			<if test="name != null and name !=''">
+				name  like  '%${name}%'
+			</if>
+		</where>
+		order by id desc
+	</select>
+
+	<!-- 获取: 输出直接映射到对象 -->
+	<select id="get" parameterType="long" resultType="com.ffcs.icity.api.demo.entity.Demo">
+		select id,
+		name,password
+		from demo
+		where id=#{id}
+	</select>
+	
+	<!-- 插入： 1.由数据库生成id并赋值到Demo对象 -->
+	<insert id="insert" parameterType="com.ffcs.icity.api.demo.entity.Demo" useGeneratedKeys="true" keyProperty="id">
+		insert into demo (name,password)
+		values
+		(#{name},#{password})
+	</insert>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="com.ffcs.icity.api.demo.entity.Demo">
+		update demo set
+		name = #{name},
+		password = #{password}
+		where id = #{id}
+	</update>
+
+	<!-- 删除 -->
+	<delete id="delete" parameterType="int">
+		delete from demo where id=#{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from demo where id in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+       </foreach>
+	</delete>
+	
+	
+</mapper> 

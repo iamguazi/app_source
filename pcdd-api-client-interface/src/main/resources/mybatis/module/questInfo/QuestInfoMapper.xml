@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.questInfo.dao.IQuestInfoDao">
+
+    <resultMap id="QuestInfoRM" type="com.ffcs.icity.api.module.questInfo.entity.QuestInfo">
+        <result property="id" column="ID"/>
+        <result property="title" column="TITLE"/>
+        <result property="content" column="CONTENT"/>
+        <result property="createTime" column="CREATE_TIME"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        QUEST_INFO.ID  ,QUEST_INFO.TITLE  ,QUEST_INFO.CONTENT  ,QUEST_INFO.CREATE_TIME  
+	</sql>
+    <insert id="insertQuestInfo" parameterType="com.ffcs.icity.api.module.questInfo.entity.QuestInfo" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO QUEST_INFO (
+        	ID  
+        	 <if test="title !=null">,TITLE  </if>
+        	 <if test="content !=null">,CONTENT  </if>
+        	,CREATE_TIME
+        ) VALUES (
+        	null  
+        	 <if test="title !=null">,#{title}  </if>
+        	 <if test="content !=null">,#{content}  </if>
+        	 , sysdate()
+        )
+        
+    </insert>
+
+    <update id="updateQuestInfo"  parameterType="com.ffcs.icity.api.module.questInfo.entity.QuestInfo">
+        UPDATE QUEST_INFO SET
+	        ID =  #{id} 
+	      	  <if test="title !=null">,TITLE = #{title} </if>
+	      	  <if test="content !=null">,CONTENT = #{content} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteQuestInfo" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM QUEST_INFO WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getQuestInfoById" resultMap="QuestInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM QUEST_INFO 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="title !=null">
+			     	and	<![CDATA[ TITLE =#{title} ]]>	
+			     </if>
+			     <if test="content !=null">
+			     	and	<![CDATA[ CONTENT =#{content} ]]>	
+			     </if>
+		         
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM QUEST_INFO <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="QuestInfoRM">
+    	 SELECT <include refid="allFields"/> FROM QUEST_INFO	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="QuestInfoRM">
+    	SELECT <include refid="allFields"/> FROM QUEST_INFO 
+		<include refid="findPage"/>	
+		 ORDER BY ID ASC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

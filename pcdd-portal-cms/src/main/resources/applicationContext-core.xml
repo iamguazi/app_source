@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"
+	default-lazy-init="true">
+
+	<description>Spring公共配置 </description>
+
+	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
+	<context:component-scan base-package="com.ffcs.icity">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	
+		<!-- 数据源配置:Druid连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<!-- 初始化大小 -->
+		<!-- 在使用缓存时,必须将initialSize设置成:0,否则,在一些情况下(如连接数据库失败等),缓存过期并且由于数据库操作失败而无法更新缓存时,不会使用旧缓存(如果有开启此功能)而是直接抛出数据库异常 -->
+		<property name="initialSize" value="0" />
+		<!-- 连接池最小空闲,相当于minPoolSize -->
+		<property name="minIdle" value="${druid.minIdle}" />
+		<!-- 连接池最大使用连接数量,相当于maxPoolSize -->
+		<property name="maxActive" value="${druid.maxActive}" />
+
+		<!-- 间隔多久才进行一次检测,检测需要关闭的空闲连接,单位:毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 一个连接在池中最小生存的时间,单位:毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+
+		<!-- 超时相关设置 -->
+		<!-- 获取连接最大等待时间(配置此属性会影响并发性能),单位:毫秒 -->
+		<property name="maxWait" value="3000" />
+		<!-- 设置JDBC的socket timeout,单位:毫秒 -->
+		<!-- 读写超时:10秒 -->
+		<!-- 连接超时:3秒 -->
+		<property name="connectionProperties" value="socketTimeout=10000;connectTimeout=3000" />
+		<!-- Statement执行超时时间,单位:秒 -->
+		<property name="queryTimeout" value="60" />
+
+		<!-- 用于关闭长时间不使用的连接的配置 -->
+		<!-- 打开removeAbandoned功能(开启连接泄漏) -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 连接泄漏的超时时间,单位:秒 -->
+		<property name="removeAbandonedTimeout" value="1800" />
+		<!-- 关闭泄漏的连接时打印堆栈信息(关闭abanded连接时输出错误日志) -->
+		<property name="logAbandoned" value="true" />
+
+		<!-- 连接有效性检查配置 -->
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="validationQuery" value="select 'x'" />
+
+		<!-- 插件配置 -->
+		<property name="proxyFilters">
+			<list>
+				<ref bean="statFilter" />
+				<ref bean="slf4jLogFilter" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- Druid的统计监控过滤器 -->
+	<bean id="statFilter" class="com.alibaba.druid.filter.stat.StatFilter">
+		<property name="mergeSql" value="true" />
+		<property name="logSlowSql" value="true" />
+		<property name="slowSqlMillis" value="10000" />
+	</bean>
+
+	<!-- Druid的日志输出过滤器 -->
+	<bean id="slf4jLogFilter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+		<property name="resultSetLogEnabled" value="${druid.resultSetLogEnabled}" />
+	</bean>
+
+	<!-- 数据库事务配置 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 使用annotation定义事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+</beans>

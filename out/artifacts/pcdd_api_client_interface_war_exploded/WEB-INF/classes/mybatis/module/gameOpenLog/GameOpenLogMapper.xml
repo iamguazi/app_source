@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.gameOpenLog.dao.IGameOpenLogDao">
+
+    <resultMap id="GameOpenLogRM" type="com.ffcs.icity.api.module.gameOpenLog.entity.GameOpenLog">
+        <result property="id" column="ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="gameType" column="GAME_TYPE"/>
+        <result property="openTime" column="OPEN_TIME"/>
+        <result property="gameNum" column="GAME_NUM"/>
+        <result property="gameResult" column="GAME_RESULT"/>
+        <result property="gameResultDesc" column="GAME_RESULT_DESC"/>
+        <result property="resultType" column="RESULT_TYPE"/>
+        <result property="isBaozi" column="IS_BAOZI"/>
+        
+        <result property="xhibitPoint" column="XHIBIT_POINT"/>
+        <result property="totalPoint" column="TOTAL_POINT"/>
+        <result property="isGive" column="IS_GIVE"/>
+        <result property="givePoint" column="GIVE_POINT"/>
+        <result property="color" column="COLOR"/>
+        
+        
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        GAME_OPEN_LOG.ID  ,GAME_OPEN_LOG.USER_ID  ,GAME_OPEN_LOG.GAME_TYPE  ,GAME_OPEN_LOG.OPEN_TIME  ,GAME_OPEN_LOG.GAME_NUM  ,GAME_OPEN_LOG.GAME_RESULT  
+        ,GAME_OPEN_LOG.GAME_RESULT_DESC  ,GAME_OPEN_LOG.RESULT_TYPE  ,GAME_OPEN_LOG.IS_BAOZI  ,GAME_OPEN_LOG.XHIBIT_POINT  ,GAME_OPEN_LOG.TOTAL_POINT
+         ,GAME_OPEN_LOG.IS_GIVE ,GAME_OPEN_LOG.GIVE_POINT ,GAME_OPEN_LOG.COLOR 
+	</sql>
+    <insert id="insertGameOpenLog" parameterType="com.ffcs.icity.api.module.gameOpenLog.entity.GameOpenLog" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO GAME_OPEN_LOG (
+        	ID  
+        	 <if test="userId !=null">,USER_ID  </if>
+        	 <if test="gameType !=null">,GAME_TYPE  </if>
+        	 <if test="openTime !=null">,OPEN_TIME  </if>
+        	 <if test="gameNum !=null">,GAME_NUM  </if>
+        	 <if test="gameResult !=null">,GAME_RESULT  </if>
+        	 <if test="gameResultDesc !=null">,GAME_RESULT_DESC  </if>
+        	 <if test="resultType !=null">,RESULT_TYPE  </if>
+        	 <if test="isBaozi !=null">,IS_BAOZI  </if>
+        	 <if test="color !=null">,COLOR  </if>
+        ) VALUES (
+        	null  
+        	 <if test="userId !=null">,#{userId}  </if>
+        	 <if test="gameType !=null">,#{gameType}  </if>
+        	 <if test="openTime !=null">,#{openTime}  </if>
+        	 <if test="gameNum !=null">,#{gameNum}  </if>
+        	 <if test="gameResult !=null">,#{gameResult}  </if>
+        	 <if test="gameResultDesc !=null">,#{gameResultDesc}  </if>
+        	 <if test="resultType !=null">,#{resultType}  </if>
+        	 <if test="isBaozi !=null">,#{isBaozi}  </if>
+        	 <if test="color !=null">,#{color}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateGameOpenLog"  parameterType="com.ffcs.icity.api.module.gameOpenLog.entity.GameOpenLog">
+        UPDATE GAME_OPEN_LOG SET
+	        ID =  #{id} 
+	      	  <if test="userId !=null">,USER_ID = #{userId} </if>
+	      	  <if test="gameType !=null">,GAME_TYPE = #{gameType} </if>
+	      	  <if test="openTime !=null">,OPEN_TIME = #{openTime} </if>
+	      	  <if test="gameNum !=null">,GAME_NUM = #{gameNum} </if>
+	      	  <if test="gameResult !=null">,GAME_RESULT = #{gameResult} </if>
+	      	  <if test="gameResultDesc !=null">,GAME_RESULT_DESC = #{gameResultDesc} </if>
+	      	  <if test="resultType !=null">,RESULT_TYPE = #{resultType} </if>
+	      	  <if test="isBaozi !=null">,IS_BAOZI = #{isBaozi} </if>
+	      	  <if test="xhibitPoint !=null">,XHIBIT_POINT = #{xhibitPoint} </if>
+	      	  <if test="totalPoint !=null">,TOTAL_POINT = #{totalPoint} </if>
+	      	  <if test="isGive !=null">,IS_GIVE = #{isGive} </if>
+	      	  <if test="givePoint !=null">,GIVE_POINT = #{givePoint} </if>
+	      	  <if test="color !=null">,COLOR=#{color}  </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteGameOpenLog" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM GAME_OPEN_LOG WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getGameOpenLogById" resultMap="GameOpenLogRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM GAME_OPEN_LOG 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+    
+    <select id="getGameOpenLogByLast" resultMap="GameOpenLogRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM GAME_OPEN_LOG 
+	        WHERE 
+		        GAME_TYPE = #{gameType}
+		        ORDER BY GAME_NUM  DESC
+		        LIMIT 0,1
+	    ]]>
+    </select>
+	
+    
+    
+    <select id="getGameOpenLogByNum" resultMap="GameOpenLogRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM GAME_OPEN_LOG 
+	        WHERE 
+		        GAME_TYPE = #{gameType} 
+		        AND GAME_NUM =#{gameNum}
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+		         
+		         <if test="gameType !=null">
+		            and <![CDATA[ GAME_TYPE = #{gameType}  ]]>
+		         </if>
+		         
+			     <if test="gameNum !=null">
+			     	and	<![CDATA[ GAME_NUM =#{gameNum} ]]>	
+			     </if>
+		         <if test="gameResult !=null">
+		            and <![CDATA[ GAME_RESULT = #{gameResult}  ]]>
+		         </if>
+			     <if test="gameResultDesc !=null">
+			     	and	<![CDATA[ GAME_RESULT_DESC =#{gameResultDesc} ]]>	
+			     </if>
+		         <if test="resultType !=null">
+		            and <![CDATA[ RESULT_TYPE = #{resultType}  ]]>
+		         </if>
+		         <if test="isBaozi !=null">
+		            and <![CDATA[ IS_BAOZI = #{isBaozi}  ]]>
+		         </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM GAME_OPEN_LOG <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="GameOpenLogRM">
+    	 SELECT <include refid="allFields"/> FROM GAME_OPEN_LOG	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="GameOpenLogRM">
+    	SELECT <include refid="allFields"/> FROM GAME_OPEN_LOG 
+		<include refid="findPage"/>	
+		ORDER BY GAME_NUM DESC
+		<if test="start !=null and pageSize !=null">
+			 LIMIT #{start}  ,#{pageSize}  	
+		 </if>	
+    </select>
+    
+ 
+	
+</mapper>
+

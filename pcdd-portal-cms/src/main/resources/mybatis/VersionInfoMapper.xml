@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.version.dao.VersionInfoDao">
+
+   <resultMap id="versionInfoResultMap" type="com.ffcs.icity.mvc.backstage.version.entity.VersionInfo">
+          <result property="id" column="ID"/>
+          <result property="versionCode" column="VERSION_CODE"/>
+          <result property="versionNo" column="VERSION_NO"/>
+          <result property="updateVersionNo" column="UPDATE_VERSION_NO"/>
+          <result property="updateContent" column="UPDATE_CONTENT"/>
+          <result property="versionUrl" column="VERSION_URL"/>
+          <result property="status" column="STATUS"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="client" column="CLIENT"/>
+   </resultMap>
+   
+    <sql id="versionInfoColumns">
+        <![CDATA[
+        ID,VERSION_CODE,VERSION_NO,UPDATE_VERSION_NO,UPDATE_CONTENT,VERSION_URL,STATUS,CREATE_TIME,CLIENT
+        ]]>
+    </sql>
+    
+    <select id="query"  parameterType="map"  resultMap="versionInfoResultMap">
+        select <include refid="versionInfoColumns" />
+        from VERSION_INFO
+        <where>
+        </where>
+        order by ID desc
+    </select>
+
+    <select id="get" parameterType="long" resultMap="versionInfoResultMap">     
+        select <include refid="versionInfoColumns" />
+        <![CDATA[
+            from VERSION_INFO where ID = #{id} 
+        ]]>
+    </select>
+    
+    <insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.version.entity.VersionInfo" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  VERSION_INFO (
+            VERSION_CODE ,
+            VERSION_NO ,
+            UPDATE_VERSION_NO ,
+            UPDATE_CONTENT ,
+            VERSION_URL ,
+            STATUS ,
+            CREATE_TIME ,
+            CLIENT 
+        ) values (
+            #{versionCode},
+            #{versionNo},
+            #{updateVersionNo},
+            #{updateContent},
+            #{versionUrl},
+            #{status},
+            #{createTime},
+            #{client}
+        )
+    ]]>  
+    </insert>
+
+    <update id="update" parameterType="com.ffcs.icity.mvc.backstage.version.entity.VersionInfo">
+    <![CDATA[
+        update VERSION_INFO set 
+           VERSION_CODE = #{versionCode},
+           VERSION_NO = #{versionNo},
+           UPDATE_VERSION_NO = #{updateVersionNo},
+           UPDATE_CONTENT = #{updateContent},
+           VERSION_URL = #{versionUrl},
+           STATUS = #{status},
+           CLIENT = #{client}
+        where  ID = #{id}
+     ]]>
+    </update>
+    
+    <delete id="delete" parameterType="int">
+        delete from VERSION_INFO where ID = #{id}
+    </delete>
+    
+    <delete id="deletes">
+        delete from VERSION_INFO where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+    
+</mapper> 

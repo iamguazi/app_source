@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.manager.dao.BackstageMenuDao">
+
+   <resultMap id="backstageMenuResultMap" type="com.ffcs.icity.mvc.backstage.manager.entity.BackstageMenu">
+          <result property="id" column="ID"/>
+          <result property="parentId" column="PARENT_ID"/>
+          <result property="name" column="NAME"/>
+          <result property="url" column="URL"/>
+          <result property="iconUrl" column="ICON_URL"/>
+          <result property="orderNo" column="ORDER_NO"/>
+          <result property="isRoot" column="IS_ROOT"/>
+          <result property="menuCode" column="MENU_CODE"/>
+   </resultMap>
+   
+   	<sql id="backstageMenuColumns">
+	    <![CDATA[
+		ID,PARENT_ID,NAME,URL,ICON_URL,ORDER_NO,IS_ROOT,MENU_CODE
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="backstageMenuResultMap">
+		select <include refid="backstageMenuColumns" />
+        from BACKSTAGE_MENU
+		<where>
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and ID = #{id}
+			      </if>
+		</where>
+		order by PARENT_ID ASC,ORDER_NO ASC,ID ASC
+	</select>
+	
+	<select id="getPermissions"  parameterType="long"  resultMap="backstageMenuResultMap">
+		SELECT 
+			  bm.ID,bm.PARENT_ID,bm.NAME,URL,bm.ICON_URL,bm.MENU_CODE,bm.ORDER_NO 
+			FROM
+			  BACKSTAGE_MENU bm,
+			  MANAGER_MENU mm 
+			WHERE bm.ID = mm.BACKSTAGE_MENU_ID 
+			<if test="@Ognl@isNotEmpty(id)">
+			   AND mm.MANAGER_ID = #{id}
+			</if> 
+			ORDER BY bm.PARENT_ID ASC,bm.ORDER_NO ASC , bm.ID ASC 
+	</select>
+
+	<select id="get" parameterType="long" resultMap="backstageMenuResultMap">		
+		select <include refid="backstageMenuColumns" />
+	    <![CDATA[
+		    from BACKSTAGE_MENU where ID = #{id} 
+	    ]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.manager.entity.BackstageMenu" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  BACKSTAGE_MENU (
+        	PARENT_ID ,
+        	NAME ,
+        	URL ,
+        	ICON_URL ,
+        	ORDER_NO 
+        ) values (
+        	#{parentId},
+        	#{name},
+        	#{url},
+        	#{iconUrl},
+        	#{orderNo}
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.manager.entity.BackstageMenu">
+	<![CDATA[
+		update BACKSTAGE_MENU set 
+	       PARENT_ID = #{parentId},
+	       NAME = #{name},
+	       URL = #{url},
+	       ICON_URL = #{iconUrl},
+	       ORDER_NO = #{orderNo}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from BACKSTAGE_MENU where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from BACKSTAGE_MENU where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

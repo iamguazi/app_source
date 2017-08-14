@@ -1,0 +1,48 @@
+.ztree *{font-size:16px;font-family:Verdana, Arial, Helvetica, AppleGothic, sans-serif}
+/*下拉单*/
+.dropdown{width:100px; position:absolute; left:0; top:15px; border:1px solid #e5e5e5; background-color:#fff}
+.ztree dt{width:100px; display:block; text-align:center; line-height:32px; color:#333333;font-size:12px;}
+.ztree dt.line{border-bottom:1px solid #e5e5e5}
+.tree ul {
+	border-bottom:0;
+	padding-top:10px;
+}
+.zTreeBtn {
+    color: #999999;
+    font-size: 13px;
+    background-color: #fff;
+    margin-left: 5px;
+    padding: 0;
+    font-weight: bold;
+    cursor: pointer;
+}
+.zTreeBtn:hover {
+    text-decoration: none;
+    color: #f15723;
+}
+.ztree li a {
+    color: #315ca2;
+    font-weight: bold;
+}
+.ztree li a:hover {
+    background-color: #c7daeb;
+    text-decoration: none;
+}
+.ztree li span.button {
+	height:20px;
+	margin-top:6px;	
+}
+.ztree li span.button.roots_open,
+.ztree li span.button.center_open,
+.ztree li span.button.bottom_open,
+.ztree li span.button.noline_open {
+    background-image: url(../img/icon_15.png);
+    background-position: 0 0;
+}
+.ztree li span.button.roots_close,
+.ztree li span.button.center_close,
+.ztree li span.button.bottom_close,
+.ztree li span.button.noline_close {
+    background-image: url(../img/icon_16.png);
+    background-position: 0 0;
+}

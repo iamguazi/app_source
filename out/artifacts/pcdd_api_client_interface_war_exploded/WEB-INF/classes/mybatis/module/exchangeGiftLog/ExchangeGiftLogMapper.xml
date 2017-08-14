@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.exchangeGiftLog.dao.IExchangeGiftLogDao">
+
+    <resultMap id="ExchangeGiftLogRM" type="com.ffcs.icity.api.module.exchangeGiftLog.entity.ExchangeGiftLog">
+        <result property="id" column="ID"/>
+        <result property="giftId" column="GIFT_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="giftName" column="GIFT_NAME"/>
+        <result property="giftCount" column="GIFT_COUNT"/>
+        <result property="nickName" column="NICK_NAME"/>
+        <result property="status" column="STATUS"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="realName" column="REAL_NAME"/>
+        <result property="mobile" column="MOBILE"/>
+        <result property="address" column="ADDRESS"/>
+        <result property="userAccount" column="USER_ACCOUNT"/>
+        <result property="cityId" column="CITY_ID"/>
+        <result property="point" column="POINT"/>
+        <result property="updateTime" column="UPDATE_TIME"/>
+        <result property="giftPoint" column="GIFT_POINT"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        EXCHANGE_GIFT_LOG.ID  ,EXCHANGE_GIFT_LOG.GIFT_ID  ,EXCHANGE_GIFT_LOG.USER_ID  ,EXCHANGE_GIFT_LOG.GIFT_NAME  ,EXCHANGE_GIFT_LOG.GIFT_COUNT  ,EXCHANGE_GIFT_LOG.NICK_NAME  ,EXCHANGE_GIFT_LOG.STATUS  ,EXCHANGE_GIFT_LOG.CREATE_TIME  ,EXCHANGE_GIFT_LOG.REAL_NAME  ,EXCHANGE_GIFT_LOG.MOBILE  ,EXCHANGE_GIFT_LOG.ADDRESS  ,EXCHANGE_GIFT_LOG.USER_ACCOUNT  ,EXCHANGE_GIFT_LOG.CITY_ID  ,EXCHANGE_GIFT_LOG.POINT  ,EXCHANGE_GIFT_LOG.UPDATE_TIME  ,EXCHANGE_GIFT_LOG.GIFT_POINT  
+	</sql>
+    <insert id="insertExchangeGiftLog" parameterType="com.ffcs.icity.api.module.exchangeGiftLog.entity.ExchangeGiftLog" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO EXCHANGE_GIFT_LOG (
+        	ID  
+        	 <if test="giftId !=null">,GIFT_ID  </if>
+        	 <if test="userId !=null">,USER_ID  </if>
+        	 <if test="giftName !=null">,GIFT_NAME  </if>
+        	 <if test="giftCount !=null">,GIFT_COUNT  </if>
+        	 <if test="nickName !=null">,NICK_NAME  </if>
+        	 <if test="status !=null">,STATUS  </if>
+        	,CREATE_TIME
+        	 <if test="realName !=null">,REAL_NAME  </if>
+        	 <if test="mobile !=null">,MOBILE  </if>
+        	 <if test="address !=null">,ADDRESS  </if>
+        	 <if test="userAccount !=null">,USER_ACCOUNT  </if>
+        	 <if test="cityId !=null">,CITY_ID  </if>
+        	 <if test="point !=null">,POINT  </if>
+        	,UPDATE_TIME
+        	 <if test="giftPoint !=null">,GIFT_POINT  </if>
+        ) VALUES (
+        	null  
+        	 <if test="giftId !=null">,#{giftId}  </if>
+        	 <if test="userId !=null">,#{userId}  </if>
+        	 <if test="giftName !=null">,#{giftName}  </if>
+        	 <if test="giftCount !=null">,#{giftCount}  </if>
+        	 <if test="nickName !=null">,#{nickName}  </if>
+        	 <if test="status !=null">,#{status}  </if>
+        	 , sysdate()
+        	 <if test="realName !=null">,#{realName}  </if>
+        	 <if test="mobile !=null">,#{mobile}  </if>
+        	 <if test="address !=null">,#{address}  </if>
+        	 <if test="userAccount !=null">,#{userAccount}  </if>
+        	 <if test="cityId !=null">,#{cityId}  </if>
+        	 <if test="point !=null">,#{point}  </if>
+        	 , sysdate()
+        	 <if test="giftPoint !=null">,#{giftPoint}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateExchangeGiftLog"  parameterType="com.ffcs.icity.api.module.exchangeGiftLog.entity.ExchangeGiftLog">
+        UPDATE EXCHANGE_GIFT_LOG SET
+	        ID =  #{id} 
+	      	  <if test="giftId !=null">,GIFT_ID = #{giftId} </if>
+	      	  <if test="userId !=null">,USER_ID = #{userId} </if>
+	      	  <if test="giftName !=null">,GIFT_NAME = #{giftName} </if>
+	      	  <if test="giftCount !=null">,GIFT_COUNT = #{giftCount} </if>
+	      	  <if test="nickName !=null">,NICK_NAME = #{nickName} </if>
+	      	  <if test="status !=null">,STATUS = #{status} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+	      	  <if test="realName !=null">,REAL_NAME = #{realName} </if>
+	      	  <if test="mobile !=null">,MOBILE = #{mobile} </if>
+	      	  <if test="address !=null">,ADDRESS = #{address} </if>
+	      	  <if test="userAccount !=null">,USER_ACCOUNT = #{userAccount} </if>
+	      	  <if test="cityId !=null">,CITY_ID = #{cityId} </if>
+	      	  <if test="point !=null">,POINT = #{point} </if>
+	      	  <if test="updateTime !=null">,UPDATE_TIME = #{updateTime} </if>
+	      	  <if test="giftPoint !=null">,GIFT_POINT = #{giftPoint} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteExchangeGiftLog" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM EXCHANGE_GIFT_LOG WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getExchangeGiftLogById" resultMap="ExchangeGiftLogRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM EXCHANGE_GIFT_LOG 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+		         <if test="giftId !=null">
+		            and <![CDATA[ GIFT_ID = #{giftId}  ]]>
+		         </if>
+		         <if test="userId !=null">
+		            and <![CDATA[ USER_ID = #{userId}  ]]>
+		         </if>
+			     <if test="giftName !=null">
+			     	and	<![CDATA[ GIFT_NAME =#{giftName} ]]>	
+			     </if>
+		         <if test="giftCount !=null">
+		            and <![CDATA[ GIFT_COUNT = #{giftCount}  ]]>
+		         </if>
+			     <if test="nickName !=null">
+			     	and	<![CDATA[ NICK_NAME =#{nickName} ]]>	
+			     </if>
+		         <if test="status !=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+		         
+			     <if test="realName !=null">
+			     	and	<![CDATA[ REAL_NAME =#{realName} ]]>	
+			     </if>
+			     <if test="mobile !=null">
+			     	and	<![CDATA[ MOBILE =#{mobile} ]]>	
+			     </if>
+			     <if test="address !=null">
+			     	and	<![CDATA[ ADDRESS =#{address} ]]>	
+			     </if>
+			     <if test="userAccount !=null">
+			     	and	<![CDATA[ USER_ACCOUNT =#{userAccount} ]]>	
+			     </if>
+		         <if test="cityId !=null">
+		            and <![CDATA[ CITY_ID = #{cityId}  ]]>
+		         </if>
+		         <if test="point !=null">
+		            and <![CDATA[ POINT = #{point}  ]]>
+		         </if>
+		         
+		         <if test="giftPoint !=null">
+		            and <![CDATA[ GIFT_POINT = #{giftPoint}  ]]>
+		         </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM EXCHANGE_GIFT_LOG <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="ExchangeGiftLogRM">
+    	 SELECT <include refid="allFields"/> FROM EXCHANGE_GIFT_LOG	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="ExchangeGiftLogRM">
+    	SELECT <include refid="allFields"/> FROM EXCHANGE_GIFT_LOG 
+		<include refid="findPage"/>	
+		 ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

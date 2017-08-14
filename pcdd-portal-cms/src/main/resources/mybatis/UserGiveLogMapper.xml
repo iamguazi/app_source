@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.givelog.dao.UserGiveLogDao">
+
+   <resultMap id="userGiveLogResultMap" type="com.ffcs.icity.mvc.backstage.givelog.entity.UserGiveLog">
+          <result property="id" column="ID"/>
+          <result property="userId" column="USER_ID"/>
+          <result property="giveUserId" column="GIVE_USER_ID"/>
+          <result property="giftId" column="GIFT_ID"/>
+          <result property="giftName" column="GIFT_NAME"/>
+          <result property="count" column="COUNT"/>
+          <result property="allFee" column="ALL_FEE"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="roomId" column="ROOM_ID"/>
+          <result property="perFee" column="PER_FEE"/>
+          <result property="userNickName" column="USER_NICK_NAME"/>
+          <result property="hostNickName" column="HOST_NICK_NAME"/>
+   </resultMap>
+   
+   	<sql id="userGiveLogColumns">
+	    <![CDATA[
+		ID,USER_ID,GIVE_USER_ID,GIFT_ID,GIFT_NAME,COUNT,ALL_FEE,CREATE_TIME,ROOM_ID,PER_FEE
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="userGiveLogResultMap">
+		SELECT 
+		  ugl.*,
+		  u.`NICK_NAME` AS USER_NICK_NAME,
+		  h.`NICK_NAME` AS HOST_NICK_NAME 
+		FROM
+		  USER_GIVE_LOG ugl,
+		  USER_INFO u,
+		  USER_INFO h 
+		WHERE ugl.`USER_ID` = u.`ID` 
+		  AND ugl.`GIVE_USER_ID` = h.`ID` 
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and ugl.ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(userNickName)">
+				  and u.NICK_NAME LIKE concat('%',#{userNickName},'%') 
+			      </if>
+			      <if test="@Ognl@isNotEmpty(hostNickName)">
+				  and h.NICK_NAME LIKE concat('%',#{hostNickName},'%') 
+			      </if>
+			      <if test="@Ognl@isNotEmpty(giftName)">
+				  and ugl.GIFT_NAME like concat('%',#{giftName},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				  and ugl.CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				  and  ugl.CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY ),'%Y-%m-%d')
+			      </if>
+			      
+		order by ugl.ID desc
+	</select>
+
+	<select id="get" parameterType="long" resultMap="userGiveLogResultMap">		
+		select <include refid="userGiveLogColumns" />
+	    <![CDATA[
+		    from USER_GIVE_LOG where ID = #{id} 
+	    ]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.givelog.entity.UserGiveLog" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  USER_GIVE_LOG (
+        	USER_ID ,
+        	GIVE_USER_ID ,
+        	GIFT_ID ,
+        	GIFT_NAME ,
+        	COUNT ,
+        	ALL_FEE ,
+        	CREATE_TIME ,
+        	ROOM_ID ,
+        	PER_FEE 
+        ) values (
+        	#{userId},
+        	#{giveUserId},
+        	#{giftId},
+        	#{giftName},
+        	#{count},
+        	#{allFee},
+        	#{createTime},
+        	#{roomId},
+        	#{perFee}
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.givelog.entity.UserGiveLog">
+	<![CDATA[
+		update USER_GIVE_LOG set 
+	       USER_ID = #{userId},
+	       GIVE_USER_ID = #{giveUserId},
+	       GIFT_ID = #{giftId},
+	       GIFT_NAME = #{giftName},
+	       COUNT = #{count},
+	       ALL_FEE = #{allFee},
+	       CREATE_TIME = #{createTime},
+	       ROOM_ID = #{roomId},
+	       PER_FEE = #{perFee}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from USER_GIVE_LOG where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from USER_GIVE_LOG where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

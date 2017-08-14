@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.gift.dao.ExchangeGiftLogDao">
+
+   <resultMap id="exchangeGiftLogResultMap" type="com.ffcs.icity.mvc.backstage.gift.entity.ExchangeGiftLog">
+          <result property="id" column="ID"/>
+          <result property="giftId" column="GIFT_ID"/>
+          <result property="userId" column="USER_ID"/>
+          <result property="giftName" column="GIFT_NAME"/>
+          <result property="giftCount" column="GIFT_COUNT"/>
+          <result property="nickName" column="NICK_NAME"/>
+          <result property="status" column="STATUS"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="realName" column="REAL_NAME"/>
+          <result property="mobile" column="MOBILE"/>
+          <result property="address" column="ADDRESS"/>
+          <result property="userAccount" column="USER_ACCOUNT"/>
+          <result property="cityId" column="CITY_ID"/>
+          <result property="point" column="POINT"/>
+          <result property="giftPoint" column="GIFT_POINT"/>
+          <result property="updateTime" column="UPDATE_TIME"/>
+   </resultMap>
+   
+   	<sql id="exchangeGiftLogColumns">
+	    <![CDATA[
+		ID,GIFT_ID,USER_ID,GIFT_NAME,GIFT_COUNT,NICK_NAME,STATUS,CREATE_TIME,REAL_NAME,MOBILE,ADDRESS,USER_ACCOUNT,CITY_ID,POINT,GIFT_POINT,UPDATE_TIME 
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="exchangeGiftLogResultMap">
+		select <include refid="exchangeGiftLogColumns" />
+        from EXCHANGE_GIFT_LOG
+		<where>
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(giftId)">
+				  and GIFT_ID = #{giftId}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(giftName)">
+				  and GIFT_NAME like concat('%',#{giftName},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(realName)">
+				  and REAL_NAME like concat('%',#{realName},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and STATUS = #{status}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				  and CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				  and CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY),'%Y-%m-%d')
+			      </if>
+		</where>
+		order by ID desc
+	</select>
+
+	<select id="get" parameterType="long" resultMap="exchangeGiftLogResultMap">		
+		select <include refid="exchangeGiftLogColumns" />
+	    <![CDATA[
+		    from EXCHANGE_GIFT_LOG where ID = #{id} 
+	    ]]>
+	</select>
+
+	<select id="countStatus" resultType="int">		
+		select count(*)
+		    from EXCHANGE_GIFT_LOG where STATUS = #{status} 
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.gift.entity.ExchangeGiftLog" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  EXCHANGE_GIFT_LOG (
+        	GIFT_ID ,
+        	USER_ID ,
+        	GIFT_NAME ,
+        	GIFT_COUNT ,
+        	NICK_NAME ,
+        	STATUS ,
+        	CREATE_TIME ,
+        	REAL_NAME ,
+        	MOBILE ,
+        	ADDRESS ,
+        	USER_ACCOUNT ,
+        	CITY_ID ,
+        	POINT 
+        ) values (
+        	#{giftId},
+        	#{userId},
+        	#{giftName},
+        	#{giftCount},
+        	#{nickName},
+        	#{status},
+        	#{createTime},
+        	#{realName},
+        	#{mobile},
+        	#{address},
+        	#{userAccount},
+        	#{cityId},
+        	#{point}
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.gift.entity.ExchangeGiftLog">
+	<![CDATA[
+		update EXCHANGE_GIFT_LOG set 
+	       GIFT_ID = #{giftId},
+	       USER_ID = #{userId},
+	       GIFT_NAME = #{giftName},
+	       GIFT_COUNT = #{giftCount},
+	       NICK_NAME = #{nickName},
+	       STATUS = #{status},
+	       CREATE_TIME = #{createTime},
+	       REAL_NAME = #{realName},
+	       MOBILE = #{mobile},
+	       ADDRESS = #{address},
+	       USER_ACCOUNT = #{userAccount},
+	       CITY_ID = #{cityId},
+	       POINT = #{point}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	<update id="updateStatus" parameterType="map">
+		update EXCHANGE_GIFT_LOG set 
+	       STATUS = #{status},
+	       UPDATE_TIME = now()
+		where  ID = #{id} 
+	</update>
+	
+	<update id="batchUpdateStatus" parameterType="map" >
+		update EXCHANGE_GIFT_LOG set 
+	       STATUS = #{status},
+	       UPDATE_TIME = now()
+		where  ID in <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from EXCHANGE_GIFT_LOG where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from EXCHANGE_GIFT_LOG where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

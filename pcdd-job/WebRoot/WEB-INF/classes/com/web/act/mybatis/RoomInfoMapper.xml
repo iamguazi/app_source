@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.web.act.mapper.RoomInfoMapper" >
+
+    <resultMap id="RoomInfoRM" type="com.web.act.vo.RoomInfo">
+        <result property="id" column="ID"/>
+        <result property="imGourpId" column="IM_GOURP_ID"/>
+        <result property="gameType" column="GAME_TYPE"/>
+        <result property="areaId" column="AREA_ID"/>
+        <result property="roomName" column="ROOM_NAME"/>
+        <result property="roomPhoto" column="ROOM_PHOTO"/>
+        <result property="rebotMaxCount" column="REBOT_MAX_COUNT"/>
+        <result property="rebotMinCount" column="REBOT_MIN_COUNT"/>
+        <result property="peopleMaxCount" column="PEOPLE_MAX_COUNT"/>
+        <result property="perMaxPoint" column="PER_MAX_POINT"/>
+        <result property="perMinPoint" column="PER_MIN_POINT"/>
+        <result property="allMaxPoint" column="ALL_MAX_POINT"/>
+        <result property="status" column="STATUS"/>
+        <result property="createTime" column="CREATE_TIME"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        ID  ,IM_GOURP_ID  ,GAME_TYPE  ,AREA_ID  ,ROOM_NAME  ,ROOM_PHOTO  ,REBOT_MAX_COUNT  ,REBOT_MIN_COUNT  ,PEOPLE_MAX_COUNT  ,PER_MAX_POINT  ,PER_MIN_POINT  ,ALL_MAX_POINT  ,STATUS  ,CREATE_TIME  
+	</sql>
+    <insert id="insertRoomInfo" parameterType="com.web.act.vo.RoomInfo" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO ROOM_INFO (
+        	ID  
+        	 <if test="imGourpId !=null">,IM_GOURP_ID  </if>
+        	 <if test="gameType !=null">,GAME_TYPE  </if>
+        	 <if test="areaId !=null">,AREA_ID  </if>
+        	 <if test="roomName !=null">,ROOM_NAME  </if>
+        	 <if test="roomPhoto !=null">,ROOM_PHOTO  </if>
+        	 <if test="rebotMaxCount !=null">,REBOT_MAX_COUNT  </if>
+        	 <if test="rebotMinCount !=null">,REBOT_MIN_COUNT  </if>
+        	 <if test="peopleMaxCount !=null">,PEOPLE_MAX_COUNT  </if>
+        	 <if test="perMaxPoint !=null">,PER_MAX_POINT  </if>
+        	 <if test="perMinPoint !=null">,PER_MIN_POINT  </if>
+        	 <if test="allMaxPoint !=null">,ALL_MAX_POINT  </if>
+        	 <if test="status !=null">,STATUS  </if>
+        	,CREATE_TIME
+        ) VALUES (
+        	null  
+        	 <if test="imGourpId !=null">,#{imGourpId}  </if>
+        	 <if test="gameType !=null">,#{gameType}  </if>
+        	 <if test="areaId !=null">,#{areaId}  </if>
+        	 <if test="roomName !=null">,#{roomName}  </if>
+        	 <if test="roomPhoto !=null">,#{roomPhoto}  </if>
+        	 <if test="rebotMaxCount !=null">,#{rebotMaxCount}  </if>
+        	 <if test="rebotMinCount !=null">,#{rebotMinCount}  </if>
+        	 <if test="peopleMaxCount !=null">,#{peopleMaxCount}  </if>
+        	 <if test="perMaxPoint !=null">,#{perMaxPoint}  </if>
+        	 <if test="perMinPoint !=null">,#{perMinPoint}  </if>
+        	 <if test="allMaxPoint !=null">,#{allMaxPoint}  </if>
+        	 <if test="status !=null">,#{status}  </if>
+        	 , sysdate()
+        )
+        
+    </insert>
+
+    <update id="updateRoomInfo"  parameterType="com.web.act.vo.RoomInfo">
+        UPDATE ROOM_INFO SET
+	        ID =  #{id} 
+	      	  <if test="imGourpId !=null">,IM_GOURP_ID = #{imGourpId} </if>
+	      	  <if test="gameType !=null">,GAME_TYPE = #{gameType} </if>
+	      	  <if test="areaId !=null">,AREA_ID = #{areaId} </if>
+	      	  <if test="roomName !=null">,ROOM_NAME = #{roomName} </if>
+	      	  <if test="roomPhoto !=null">,ROOM_PHOTO = #{roomPhoto} </if>
+	      	  <if test="rebotMaxCount !=null">,REBOT_MAX_COUNT = #{rebotMaxCount} </if>
+	      	  <if test="rebotMinCount !=null">,REBOT_MIN_COUNT = #{rebotMinCount} </if>
+	      	  <if test="peopleMaxCount !=null">,PEOPLE_MAX_COUNT = #{peopleMaxCount} </if>
+	      	  <if test="perMaxPoint !=null">,PER_MAX_POINT = #{perMaxPoint} </if>
+	      	  <if test="perMinPoint !=null">,PER_MIN_POINT = #{perMinPoint} </if>
+	      	  <if test="allMaxPoint !=null">,ALL_MAX_POINT = #{allMaxPoint} </if>
+	      	  <if test="status !=null">,STATUS = #{status} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteRoomInfo" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM ROOM_INFO WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getRoomInfoById" resultMap="RoomInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM ROOM_INFO 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="imGourpId !=null">
+			     	and	<![CDATA[ IM_GOURP_ID =#{imGourpId} ]]>	
+			     </if>
+		         <if test="gameType !=null">
+		            and <![CDATA[ GAME_TYPE = #{gameType}  ]]>
+		         </if>
+		         <if test="areaId !=null">
+		            and <![CDATA[ AREA_ID = #{areaId}  ]]>
+		         </if>
+			     <if test="roomName !=null">
+			     	and	<![CDATA[ ROOM_NAME =#{roomName} ]]>	
+			     </if>
+			     <if test="roomPhoto !=null">
+			     	and	<![CDATA[ ROOM_PHOTO =#{roomPhoto} ]]>	
+			     </if>
+		         <if test="rebotMaxCount !=null">
+		            and <![CDATA[ REBOT_MAX_COUNT = #{rebotMaxCount}  ]]>
+		         </if>
+		         <if test="rebotMinCount !=null">
+		            and <![CDATA[ REBOT_MIN_COUNT = #{rebotMinCount}  ]]>
+		         </if>
+		         <if test="peopleMaxCount !=null">
+		            and <![CDATA[ PEOPLE_MAX_COUNT = #{peopleMaxCount}  ]]>
+		         </if>
+		         <if test="perMaxPoint !=null">
+		            and <![CDATA[ PER_MAX_POINT = #{perMaxPoint}  ]]>
+		         </if>
+		         <if test="perMinPoint !=null">
+		            and <![CDATA[ PER_MIN_POINT = #{perMinPoint}  ]]>
+		         </if>
+		         <if test="allMaxPoint !=null">
+		            and <![CDATA[ ALL_MAX_POINT = #{allMaxPoint}  ]]>
+		         </if>
+		         <if test="status !=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+		         
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM ROOM_INFO <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="RoomInfoRM">
+    	 SELECT <include refid="allFields"/> FROM ROOM_INFO	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="RoomInfoRM">
+    	SELECT <include refid="allFields"/> FROM ROOM_INFO 
+		<include refid="findPage"/>		
+    </select>
+    
+ 
+	
+</mapper>
+

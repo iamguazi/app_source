@@ -1,0 +1,54 @@
+<!-- 新增或修改页 s-->
+<div id="refuseModal" class="modal fade" style="width: 100%;" tabindex="-1" aria-labelledby="refuseLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width: 70%;">
+    <div class="modal-content">
+    
+      <div class="alert alert-info">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h3 class="modal-title " id="refuseLabel" >
+         拒绝通知   <!--<span id="deleteIdsMsg" data-bind="visible:model.checkItems().length">已选中: <span style="color:#d9534f;font-size:18px;font-weight:bold;" data-bind="text:model.checkItems().length"></span> 条记录</span>-->
+        </h3>
+      </div>
+      
+      <div class="modal-body">
+        <!--添加的内容-->
+        <form class="form-horizontal" id="refuseForm">
+          <div class="form-group">
+            <label  class="col-sm-2 control-label">标题<span class="form-required">*</span></label>
+              <div class="col-sm-6">
+                <input type="text" maxLength="300" required class="form-control" id="title" name="title"  
+                placeholder="请输入标题">
+              </div>
+          </div>
+          
+          <div class="form-group">
+            <label  class="col-sm-2 control-label">内容<span class="form-required">*</span></label>
+              <div class="col-sm-9">
+                <textarea rows="5" style="max-width:100%;"  maxLength="500" class="form-control" id="content" name = "content"  >
+                </textarea>
+              </div>
+          </div>
+        </form>
+      </div>
+     
+       <div class="modal-footer" style="border-top:0;">
+         <div class="row"  >
+           <div class="col-lg-2 col-md-2 col-xs-2 col-sm-2 col-xs-offset-4 col-sm-offset-4 col-lg-offset-4 col-md-offset-4" >
+             <button type="button" class="btn btn-default center-block" data-dismiss="modal">
+                关闭
+             </button>
+           </div>
+           <div class="col-lg-2 col-md-2 col-xs-2 col-sm-2" >
+             <button type="button" class="btn btn-primary center-block" data-bind="click:$root.refuseForm.bind($root)">
+               <span class="glyphicon glyphicon-floppy-disk" style="margin-right: .8em;"></span>保存
+             </button>
+           </div>
+         </div>
+       </div>
+     
+     </div><!-- /.modal-content -->
+   </div><!-- /.modal -->
+</div>          
+<!-- 新增或修改数据e -->

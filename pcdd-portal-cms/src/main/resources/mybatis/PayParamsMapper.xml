@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.payparams.dao.PayParamsDao">
+
+   <resultMap id="payParamsResultMap" type="com.ffcs.icity.mvc.backstage.payparams.entity.PayParams">
+          <result property="id" column="ID"/>
+          <result property="mchId" column="MCH_ID"/>
+          <result property="mchKey" column="MCH_KEY"/>
+          <result property="noticeUrl" column="NOTICE_URL"/>
+          <result property="callbackUrl" column="CALLBACK_URL"/>
+          <result property="mchType" column="MCH_TYPE"/>
+   </resultMap>
+   
+    <sql id="payParamsColumns">
+        <![CDATA[
+        ID,MCH_ID,MCH_KEY,NOTICE_URL,CALLBACK_URL,MCH_TYPE
+        ]]>
+    </sql>
+    
+    <select id="query"  parameterType="map"  resultMap="payParamsResultMap">
+        select <include refid="payParamsColumns" />
+        from PAY_PARAMS
+        <where>
+        </where>
+        order by ID desc
+    </select>
+
+    <select id="get" parameterType="long" resultMap="payParamsResultMap">       
+        select <include refid="payParamsColumns" />
+        <![CDATA[
+            from PAY_PARAMS where ID = #{id} 
+        ]]>
+    </select>
+    
+    <insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.payparams.entity.PayParams" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  PAY_PARAMS (
+            MCH_ID ,
+            MCH_KEY ,
+            NOTICE_URL ,
+            CALLBACK_URL ,
+            MCH_TYPE 
+        ) values (
+            #{mchId},
+            #{mchKey},
+            #{noticeUrl},
+            #{callbackUrl},
+            #{mchType}
+        )
+    ]]>  
+    </insert>
+
+    <update id="update" parameterType="com.ffcs.icity.mvc.backstage.payparams.entity.PayParams">
+    <![CDATA[
+        update PAY_PARAMS set 
+           MCH_ID = #{mchId},
+           MCH_KEY = #{mchKey},
+           NOTICE_URL = #{noticeUrl},
+           CALLBACK_URL = #{callbackUrl},
+           MCH_TYPE = #{mchType}
+        where  ID = #{id}
+     ]]>
+    </update>
+    
+    <delete id="delete" parameterType="int">
+        delete from PAY_PARAMS where ID = #{id}
+    </delete>
+    
+    <delete id="deletes">
+        delete from PAY_PARAMS where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+    
+</mapper> 

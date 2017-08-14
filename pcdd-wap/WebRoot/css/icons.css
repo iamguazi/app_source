@@ -1,0 +1,599 @@
+
+.zixun-bg
+{
+    background: url("../imgs/icon/shouye_71.png");
+    width: 90px;
+    height: 37px;
+    background-size: 90px 37px;
+}
+
+.tianqialert {
+    background: url("../imgs/icon/tu_1.png");
+    width: 270px;
+    height: 270px;
+    background-size: 270px 270px;
+    border-radius: 5px
+}
+
+.icon-close {
+    background: url("../imgs/icon/faxian_189.png");
+    background-size: 100%;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 20px;
+    top: 20px
+}
+
+.hongbaoalert {
+    background: url("../imgs/icon/hongbao-1.png");
+    width: 300px;
+    height: 320px;
+    background-size: 300px 320px;
+    border-radius: 5px
+}
+
+
+.shouye_81
+{
+    background: url("../imgs/icon/shouye_81.png");
+    width: 16px;
+    height: 16px;
+    background-size: 100%;
+    margin-top: 3px;
+    margin-right: 4px;
+}
+.closePicIcon {
+    background: url("../imgs/icon/faxian_189.png");
+    background-size: 100%;
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    right: 4px;
+    top: -7px
+}
+.shouye_83
+{
+    background: url("../imgs/icon/shouye_83.png");
+    width: 16px;
+    height: 16px;
+    background-size: 100%;
+    margin-top: 2px;
+    margin-right: 4px;
+}
+.shouye_83.cur
+{
+    background: url("../imgs/icon/shouye_85.png");
+
+    background-size: 100%;
+
+}
+
+.shouye_79
+ {
+     background: url("../imgs/icon/shouye_79.png");
+     width: 16px;
+     height: 16px;
+     background-size: 100%;
+     margin-top: 3px;
+     margin-right: 4px;
+ }
+.shouye_79.cur
+ {
+     background: url("../imgs/icon/faxian_227.png");
+    background-size: 100%;
+
+ }
+
+.shouye_79se
+{
+    background: url("../imgs/icon/faxian_227.png");
+    width: 16px;
+    height: 16px;
+    background-size: 100%;
+    margin-top: 3px;
+    margin-right: 4px;
+}
+
+.shouye_87
+ {
+     background: url("../imgs/icon/shouye_87.png");
+     width: 16px;
+     height: 16px;
+     background-size: 100%;
+     margin-top: 3px; margin-right: 4px;
+ }
+
+.shouye_112
+{
+    background: url("../imgs/icon/shouye_112.png");
+    width: 13px;
+    height: 13px;
+    background-size: 100%;
+    margin-top: 5px; margin-right: 4px;
+}
+
+.shouye_91
+{
+    background: url("../imgs/icon/shouye_91.png");
+    width: 13px;
+    height: 13px;
+    background-size: 100%;
+    margin-top: 5px; margin-right: 4px;
+}
+
+.shouye_98
+{
+    background: url("../imgs/icon/shouye_98.png");
+    width: 16px;
+    height: 16px;
+    background-size: 100%;
+    position: absolute;
+    left: 1rem;
+    top: 50% !important;
+    margin-top: -8px;
+}
+.shouye_96
+{
+    background: url("../imgs/icon/shouye_96.png");
+    width: 16px;
+    height: 16px;
+    background-size: 100%;
+    position: absolute;
+    left: 1rem;
+    top: 50% !important;
+    margin-top: -8px;
+}
+
+.icon_270 {
+    background: url("../imgs/icon/icon_270.png") no-repeat;
+    background-size: 100%;
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -11px
+}
+
+.icon-delete {
+    background: url("../imgs/icon/faxian_215.png") no-repeat;
+    background-size: 100%;
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -11px
+}
+
+.icon-search
+{
+    background: url("../imgs/icon/shouye_18.png") no-repeat;
+    background-size: 100%;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    margin-top: -8px
+}
+.icon-timezixun
+{
+    background: url("../imgs/icon/shouye_109.png") no-repeat;
+    background-size: 100%;
+    width: 14px;
+    height: 14px;
+    margin-top: 3.5px;
+    margin-right: 3px;
+}
+
+.icon-zonghepingjia
+{
+    background: url("../imgs/icon/shouye_74.png") no-repeat;
+    background-size: 100%;
+    width: 40px;
+    height: 40px;
+    margin-top: 8px;
+
+}
+
+.icon-zhuanshi
+{
+    background: url("../imgs/icon/shouye_1.png") no-repeat;
+    background-size:24px 26px;
+    width: 24px;
+    height: 26px;
+    position: absolute;
+    left: .5rem;
+    top:.5rem;
+    z-index: 2;
+}
+
+.icon-whitezhuanshi
+{
+    background: url("../imgs/icon/white_member.png") no-repeat;
+    background-size:24px 26px;
+    width: 24px;
+    height: 26px;
+    position: absolute;
+    left: .5rem;
+    top:.5rem;
+    z-index: 2;
+}
+
+
+
+.icon-choujiang
+{
+    background: url("../imgs/icon/wode_52.png") no-repeat;
+    background-size:20px 22px;
+    width: 20px;
+    height: 22px;
+    position: absolute;
+    left: 1rem;
+    top:.5rem;
+    z-index: 2;
+}
+
+
+.icon-huangjin
+{
+    background: url("../imgs/icon/shouye_2.png") no-repeat;
+    background-size:24px 26px;
+    width: 24px;
+    height: 26px;
+    position: absolute;
+    left: .5rem;
+    top:.5rem;
+    z-index: 2;
+}
+
+.icon-zanzixun
+{
+    background: url("../imgs/icon/shouye_83.png") no-repeat;
+    background-size: 100%;
+    width: 16px;
+    height: 16px;
+   margin-top: 2px;
+    margin-right: 2px;
+}
+
+.wode_87
+{
+    background: url("../imgs/icon/wode_87.png") no-repeat;
+    background-size: 100%;
+    width: 16px;
+    height: 16px;
+   margin-top: 2px;
+    margin-right: 2px;
+}
+
+
+
+.icon-zanzixun.cur
+{
+    background: url("../imgs/icon/shouye_85.png") no-repeat;
+    background-size: 100%;
+}
+
+
+.shouye_102
+{
+    background: url("../imgs/icon/shouye_102.png") no-repeat;
+    background-size: 100%;
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+
+}
+
+.shouye_175
+{
+    background: url("../imgs/icon/shouye_175.png") no-repeat;
+    background-size: 100%;
+    width: 26px;
+    height: 26px;
+
+}
+
+.shouye_177
+ {
+     background: url("../imgs/icon/shouye_177.png") no-repeat;
+     background-size: 100%;
+     width: 26px;
+     height: 26px;
+
+ }
+
+.shouye_179
+{
+    background: url("../imgs/icon/shouye_179.png") no-repeat;
+    background-size: 100%;
+    width: 26px;
+    height: 26px;
+
+}
+.shouye_179-2
+{
+    background: url("../imgs/icon/shouye_179.png") no-repeat;
+    background-size: 100%;
+    width: 20px;
+    height: 20px;
+
+}
+
+.wode_44
+{
+    background: url("../imgs/icon/wode_44.png") no-repeat;
+    background-size: 100%;
+    width: 22px;
+    height: 22px;
+    margin-top: 1px;
+
+}
+
+
+.shouye_100
+{
+    background: url("../imgs/icon/shouye_100.png") no-repeat;
+    background-size: 100%;
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+
+}
+
+.goodjian
+{
+    background: url("../imgs/icon/shouye_169.png") no-repeat;
+    background-size: 100%;
+    width: 26px;
+    height: 26px;
+
+
+}
+.faxian_209
+{
+    background: url("../imgs/icon/faxian_209.png") no-repeat;
+    background-size: 100%;
+    width: 18px;
+    height: 18px;
+
+    margin-top: 2px;
+}
+.faxian_201
+{
+    background: url("../imgs/icon/faxian_201.png") no-repeat;
+    background-size: 100%;
+    width: 18px;
+    height: 18px;
+
+  margin-top: 2px;
+}
+
+.faxian_232
+{
+    background: url("../imgs/icon/faxian_232.png") no-repeat;
+    background-size: 100%;
+    width: 16px;
+    height: 16px;
+
+  margin-top: 4px;
+}
+
+
+.faxian_230
+{
+    background: url("../imgs/icon/faxian_230.png") no-repeat;
+    background-size: 100%;
+    width: 16px;
+    height: 16px;
+
+    margin-top: 4px;
+}
+
+
+.faxian_206
+{
+    background: url("../imgs/icon/faxian_206.png") no-repeat;
+    background-size: 100%;
+    width: 18px;
+    height: 18px;
+
+    margin-top: 2px;
+}
+.faxian_204
+{
+    background: url("../imgs/icon/faxian_204.png") no-repeat;
+    background-size: 100%;
+    width: 18px;
+    height: 18px;
+
+    margin-top: 2px;
+}
+.wode_30
+{
+    background: url("../imgs/icon/wode_30.png") no-repeat;
+    background-size: 100%;
+    width: 18px;
+    height: 18px;
+
+    margin-top: 2px;
+}
+
+.wode_119
+{
+    background: url("../imgs/icon/wode_119.png") no-repeat;
+    background-size: 100%;
+    width: 66px;
+    height: 18px;
+
+    margin-top: 2px;
+}
+
+.wode_121
+{
+    background: url("../imgs/icon/wode_121.png") no-repeat;
+    background-size: 100%;
+    width: 66px;
+    height: 18px;
+
+    margin-top: 2px;
+}
+
+
+.wode_123
+{
+    background: url("../imgs/icon/wode_123.png") no-repeat;
+    background-size: 100%;
+    width: 66px;
+    height: 18px;
+
+    margin-top: 2px;
+}
+.yihq-quan
+{
+    background: url("../imgs/icon/yihq-quan.png") no-repeat;
+    background-size: 100%;
+    width: 70px;
+    height: 70px;
+ margin-right: 30px;
+    margin-top: 10px;
+    line-height: 70px;
+}
+
+
+
+.goodjia
+{
+    background: url("../imgs/icon/shouye_172.png") no-repeat;
+    background-size: 100%;
+    width: 26px;
+    height: 26px;
+
+
+}
+
+.icon-shoucang
+{
+    background: url("../imgs/icon/shouye_46.png");
+    background-size: 100%;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+}
+
+
+.icon-shoucang.cur
+{
+    background: url("../imgs/icon/shouye_48.png");
+    background-size: 100%;
+
+}
+
+i.faxian_212 {
+    background: url("../imgs/icon/faxian_212.png");
+    background-size: 100%;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    margin-left: -55px;
+    left: 50%;
+    margin-top: 3px;
+}
+i.faxian_227 {
+    background: url("../imgs/icon/faxian_227.png");
+    background-size: 100%;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    margin-top: -10px;
+}
+
+i.faxian_218 {
+    background: url("../imgs/icon/faxian_218.png");
+    background-size: 100%;
+    width: 16px;
+    height:16px;
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    margin-top: -8px;
+}
+.icon_90 {
+    background: url("../imgs/icon/icon_90.png");
+    background-size: 100%;
+    width: 35px;
+    height:35px;
+    position: absolute;
+    right: 0px;
+    top: 0;
+    /*margin-top: -8px;*/
+}
+
+
+.icon_48-1 {
+    background: url("../imgs/icon/icon_48.png") no-repeat;
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+
+}
+
+.shouye_157-1 {
+    background: url("../imgs/icon/shouye_157.png") no-repeat;
+    width: 16px;
+    height: 16px;
+    background-size: 100%;
+    margin-top: 3px;
+
+}
+.shouye_157-1.cur{
+    background: url("../imgs/icon/shouye_160.png") no-repeat;
+    background-size: 100%;
+
+}
+
+
+.icon_50-1 {
+    background: url("../imgs/icon/icon_50.png") no-repeat;
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+
+}
+
+.icon_52-1 {
+    background: url("../imgs/icon/icon_52.png") no-repeat;
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+
+}
+
+.icon_44-1 {
+    background: url("../imgs/icon/icon_44.png") no-repeat;
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+
+}
+.icon_03 {
+    background: url("../imgs/icon/icon_03.png") no-repeat;
+    width: 40px;
+    height: 30px;
+    background-size: 100%;
+    position: absolute;
+    right: -5px;
+    top: -13px;
+
+}
+
+
+
+

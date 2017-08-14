@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.paylog.dao.UserPayLogDao">
+
+   <resultMap id="userPayLogResultMap" type="com.ffcs.icity.mvc.backstage.paylog.entity.UserPayLog">
+          <result property="id" column="ID"/>
+          <result property="outTradeNo" column="OUT_TRADE_NO"/>
+          <result property="orderNo" column="ORDER_NO"/>
+          <result property="userId" column="USER_ID"/>
+          <result property="resultCode" column="RESULT_CODE"/>
+          <result property="totalFee" column="TOTAL_FEE"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="updateTime" column="UPDATE_TIME"/>
+          <result property="payType" column="PAY_TYPE"/>
+          <result property="status" column="STATUS"/>
+          <result property="freeFee" column="FREE_FEE"/>
+          <result property="orderType" column="ORDER_TYPE"/>
+          <result property="prePayId" column="PRE_PAY_ID"/>
+          <result property="resultFee" column="RESULT_FEE"/>
+          <result property="payDesc" column="PAY_DESC"/>
+          <result property="nickName" column="NICK_NAME"/>
+   </resultMap>
+   
+   	<sql id="userPayLogColumns">
+	    <![CDATA[
+		ID,OUT_TRADE_NO,ORDER_NO,USER_ID,RESULT_CODE,TOTAL_FEE,CREATE_TIME,UPDATE_TIME,PAY_TYPE,STATUS,FREE_FEE,ORDER_TYPE,PRE_PAY_ID,RESULT_FEE,PAY_DESC
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="userPayLogResultMap">
+		select upl.*,ui.NICK_NAME
+        from USER_PAY_LOG upl,USER_INFO ui
+        where upl.USER_ID = ui.id
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and upl.ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(orderType)">
+				  and upl.ORDER_TYPE = #{orderType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				  and upl.CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				  and  upl.CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY ),'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(payType)">
+				  and upl.PAY_TYPE = #{payType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and upl.STATUS = #{status}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(nickName)">
+				  and ui.NICK_NAME LIKE CONCAT('%',#{nickName},'%') 
+			      </if>
+			      <if test="@Ognl@isNotEmpty(account)">
+				  and ui.ACCOUNT LIKE CONCAT('%',#{account},'%') 
+			      </if>
+		order by upl.ID desc
+	</select>
+
+	<select id="get" parameterType="long" resultMap="userPayLogResultMap">		
+		select <include refid="userPayLogColumns" />
+	    <![CDATA[
+		    from USER_PAY_LOG where ID = #{id} 
+	    ]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.paylog.entity.UserPayLog" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  USER_PAY_LOG (
+        	OUT_TRADE_NO ,
+        	ORDER_NO ,
+        	USER_ID ,
+        	RESULT_CODE ,
+        	TOTAL_FEE ,
+        	CREATE_TIME ,
+        	UPDATE_TIME ,
+        	PAY_TYPE ,
+        	STATUS ,
+        	FREE_FEE ,
+        	ORDER_TYPE ,
+        	PRE_PAY_ID ,
+        	RESULT_FEE ,
+        	PAY_DESC 
+        ) values (
+        	#{outTradeNo},
+        	#{orderNo},
+        	#{userId},
+        	#{resultCode},
+        	#{totalFee},
+        	#{createTime},
+        	#{updateTime},
+        	#{payType},
+        	#{status},
+        	#{freeFee},
+        	#{orderType},
+        	#{prePayId},
+        	#{resultFee},
+        	#{payDesc}
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.paylog.entity.UserPayLog">
+	<![CDATA[
+		update USER_PAY_LOG set 
+	       OUT_TRADE_NO = #{outTradeNo},
+	       ORDER_NO = #{orderNo},
+	       USER_ID = #{userId},
+	       RESULT_CODE = #{resultCode},
+	       TOTAL_FEE = #{totalFee},
+	       CREATE_TIME = #{createTime},
+	       UPDATE_TIME = #{updateTime},
+	       PAY_TYPE = #{payType},
+	       STATUS = #{status},
+	       FREE_FEE = #{freeFee},
+	       ORDER_TYPE = #{orderType},
+	       PRE_PAY_ID = #{prePayId},
+	       RESULT_FEE = #{resultFee},
+	       PAY_DESC = #{payDesc}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from USER_PAY_LOG where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from USER_PAY_LOG where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

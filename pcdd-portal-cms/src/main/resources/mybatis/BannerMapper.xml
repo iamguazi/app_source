@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.banner.dao.BannerDao">
+
+   <resultMap id="bannerResultMap" type="com.ffcs.icity.mvc.backstage.banner.entity.Banner">
+          <result property="id" column="ID"/>
+          <result property="bannerName" column="BANNER_NAME"/>
+          <result property="bannerImgurl" column="BANNER_IMGURL"/>
+          <result property="content" column="CONTENT"/>
+          <result property="bannerOrder" column="BANNER_ORDER"/>
+          <result property="isGo" column="IS_GO"/>
+          <result property="status" column="STATUS"/>
+          <result property="bannerPlace" column="BANNER_PLACE"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="url" column="URL"/>
+   </resultMap>
+   
+   	<sql id="bannerColumns">
+	    <![CDATA[
+		ID,BANNER_NAME,BANNER_IMGURL,CONTENT,BANNER_ORDER,IS_GO,STATUS,BANNER_PLACE,CREATE_TIME,URL
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="bannerResultMap">
+		select <include refid="bannerColumns" />
+        from BANNER
+		<where>
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(bannerName)">
+				  and BANNER_NAME LIKE CONCAT('%',#{bannerName},'%') 
+			      </if>
+			      <if test="@Ognl@isNotEmpty(bannerImgurl)">
+				  and BANNER_IMGURL = #{bannerImgurl}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(content)">
+				  and CONTENT = #{content}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(bannerOrder)">
+				  and BANNER_ORDER = #{bannerOrder}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(isGo)">
+				  and IS_GO = #{isGo}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and STATUS = #{status}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(bannerPlace)">
+				  and BANNER_PLACE = #{bannerPlace}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				  and CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d') 
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				  and CREATE_TIME <![CDATA[< ]]>  str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY),'%Y-%m-%d')
+			      </if>
+		</where>
+		order by ID desc
+	</select>
+
+	<select id="get" parameterType="long" resultMap="bannerResultMap">		
+		select <include refid="bannerColumns" />
+	    <![CDATA[
+		    from BANNER where ID = #{id} 
+	    ]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.banner.entity.Banner" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  BANNER (
+        	BANNER_NAME ,
+        	BANNER_IMGURL ,
+        	CONTENT ,
+        	BANNER_ORDER ,
+        	IS_GO ,
+        	STATUS ,
+        	BANNER_PLACE ,
+        	CREATE_TIME ,
+        	URL 
+        ) values (
+        	#{bannerName},
+        	#{bannerImgurl},
+        	#{content},
+        	#{bannerOrder},
+        	#{isGo},
+        	#{status},
+        	#{bannerPlace},
+        	now(),
+        	#{url}
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.banner.entity.Banner">
+	<![CDATA[
+		update BANNER set 
+	       BANNER_NAME = #{bannerName},
+	       BANNER_IMGURL = #{bannerImgurl},
+	       CONTENT = #{content},
+	       BANNER_ORDER = #{bannerOrder},
+	       IS_GO = #{isGo},
+	       STATUS = #{status},
+	       BANNER_PLACE = #{bannerPlace},
+	       URL = #{url}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	<update id="updateStatus" parameterType="map" >
+		update BANNER set 
+	       STATUS = #{status}
+		where  ID in <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from BANNER where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from BANNER where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

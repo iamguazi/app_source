@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.userChoiceLog.dao.IUserChoiceLogDao">
+
+    <resultMap id="UserChoiceLogRM" type="com.ffcs.icity.api.module.userChoiceLog.entity.UserChoiceLog">
+        <result property="id" column="ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="roomId" column="ROOM_ID"/>
+        <result property="areaId" column="AREA_ID"/>
+        <result property="choiceNo" column="CHOICE_NO"/>
+        <result property="choiceResult" column="CHOICE_RESULT"/>
+        <result property="bili" column="BILI"/>
+        <result property="point" column="POINT"/>
+        <result property="realResult" column="REAL_RESULT"/>
+        <result property="resultType" column="RESULT_TYPE"/>
+        <result property="getPoint" column="GET_POINT"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="gameType" column="GAME_TYPE"/>
+        <result property="isZhong" column="IS_ZHONG"/>
+        <result property="biliId" column="BILI_ID"/>
+        <result property="choiceName" column="CHOICE_NAME"/>
+        <result property="allFee" column="allFee"/>
+        
+        
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        USER_CHOICE_LOG.ID  ,USER_CHOICE_LOG.USER_ID  ,USER_CHOICE_LOG.ROOM_ID  ,USER_CHOICE_LOG.AREA_ID  ,USER_CHOICE_LOG.CHOICE_NO  ,USER_CHOICE_LOG.CHOICE_RESULT 
+         ,USER_CHOICE_LOG.BILI  ,USER_CHOICE_LOG.POINT  ,USER_CHOICE_LOG.REAL_RESULT  ,USER_CHOICE_LOG.RESULT_TYPE  ,USER_CHOICE_LOG.GET_POINT  ,USER_CHOICE_LOG.CREATE_TIME 
+          ,USER_CHOICE_LOG.GAME_TYPE  ,USER_CHOICE_LOG.IS_ZHONG  ,USER_CHOICE_LOG.BILI_ID  ,USER_CHOICE_LOG.CHOICE_NAME 
+	</sql>
+    <insert id="insertUserChoiceLog" parameterType="com.ffcs.icity.api.module.userChoiceLog.entity.UserChoiceLog" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO USER_CHOICE_LOG (
+        	ID  
+        	 <if test="userId !=null">,USER_ID  </if>
+        	 <if test="roomId !=null">,ROOM_ID  </if>
+        	 <if test="areaId !=null">,AREA_ID  </if>
+        	 <if test="choiceNo !=null">,CHOICE_NO  </if>
+        	 <if test="choiceResult !=null">,CHOICE_RESULT  </if>
+        	 <if test="bili !=null">,BILI  </if>
+        	 <if test="point !=null">,POINT  </if>
+        	 <if test="realResult !=null">,REAL_RESULT  </if>
+        	 <if test="resultType !=null">,RESULT_TYPE  </if>
+        	 <if test="getPoint !=null">,GET_POINT  </if>
+        	,CREATE_TIME
+        	 <if test="gameType !=null">,GAME_TYPE  </if>
+        	 <if test="isZhong !=null">,IS_ZHONG  </if>
+        	 <if test="biliId !=null">,BILI_ID  </if>
+        	 <if test="choiceName !=null">,CHOICE_NAME  </if>
+        ) VALUES (
+        	null  
+        	 <if test="userId !=null">,#{userId}  </if>
+        	 <if test="roomId !=null">,#{roomId}  </if>
+        	 <if test="areaId !=null">,#{areaId}  </if>
+        	 <if test="choiceNo !=null">,#{choiceNo}  </if>
+        	 <if test="choiceResult !=null">,#{choiceResult}  </if>
+        	 <if test="bili !=null">,#{bili}  </if>
+        	 <if test="point !=null">,#{point}  </if>
+        	 <if test="realResult !=null">,#{realResult}  </if>
+        	 <if test="resultType !=null">,#{resultType}  </if>
+        	 <if test="getPoint !=null">,#{getPoint}  </if>
+        	 , sysdate()
+        	 <if test="gameType !=null">,#{gameType}  </if>
+        	 <if test="isZhong !=null">,#{isZhong}  </if>
+        	 <if test="biliId !=null">,#{biliId}  </if>
+        	 <if test="choiceName !=null">,#{choiceName}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateUserChoiceLog"  parameterType="com.ffcs.icity.api.module.userChoiceLog.entity.UserChoiceLog">
+        UPDATE USER_CHOICE_LOG SET
+	        ID =  #{id} 
+	      	  <if test="userId !=null">,USER_ID = #{userId} </if>
+	      	  <if test="roomId !=null">,ROOM_ID = #{roomId} </if>
+	      	  <if test="areaId !=null">,AREA_ID = #{areaId} </if>
+	      	  <if test="choiceNo !=null">,CHOICE_NO = #{choiceNo} </if>
+	      	  <if test="choiceResult !=null">,CHOICE_RESULT = #{choiceResult} </if>
+	      	  <if test="bili !=null">,BILI = #{bili} </if>
+	      	  <if test="point !=null">,POINT = #{point} </if>
+	      	  <if test="realResult !=null">,REAL_RESULT = #{realResult} </if>
+	      	  <if test="resultType !=null">,RESULT_TYPE = #{resultType} </if>
+	      	  <if test="getPoint !=null">,GET_POINT = #{getPoint} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+	      	  <if test="gameType !=null">,GAME_TYPE = #{gameType} </if>
+	      	  <if test="isZhong !=null">,IS_ZHONG = #{isZhong} </if>
+	      	  <if test="biliId !=null">,BILI_ID = #{biliId} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+	
+	<update id="updateUserChoiceLogByUnZhong"  parameterType="com.ffcs.icity.api.module.userChoiceLog.entity.UserChoiceLog">
+        UPDATE USER_CHOICE_LOG SET
+	       IS_ZHONG=0
+	       ,GET_POINT =0
+	      	  <if test="realResult !=null">,REAL_RESULT = #{realResult} </if>
+	      	  <if test="resultType !=null">,RESULT_TYPE = #{resultType} </if>
+	      	   
+        WHERE 
+        		CHOICE_NO = #{choiceNo}
+	     	   AND GAME_TYPE = #{gameType}
+	     	   AND IS_ZHONG=-1
+    </update>
+    
+    <update id="updateUserChoiceLogByZhong"  parameterType="com.ffcs.icity.api.module.userChoiceLog.entity.UserChoiceLog">
+        UPDATE USER_CHOICE_LOG SET
+	       IS_ZHONG=1
+	      	  <if test="realResult !=null">,REAL_RESULT = #{realResult} </if>
+	      	  <if test="resultType !=null">,RESULT_TYPE = #{resultType} </if>
+	      	 ,GET_POINT=BILI*POINT
+	      	   
+        WHERE 
+        		CHOICE_NO = #{choiceNo}
+	     	   AND GAME_TYPE = #{gameType}
+	     	   AND FIND_IN_SET(#{choiceResult},USER_CHOICE_LOG.`CHOICE_RESULT`)
+	     	   AND IS_ZHONG=-1
+    </update>
+    
+    <update id="updateUserChoiceLogBy1314"  parameterType="com.ffcs.icity.api.module.userChoiceLog.entity.UserChoiceLog">
+        UPDATE USER_CHOICE_LOG SET
+	       IS_ZHONG=1
+	      	  <if test="realResult !=null">,REAL_RESULT = #{realResult} </if>
+	      	  <if test="resultType !=null">,RESULT_TYPE = #{resultType} </if>
+	      	 ,GET_POINT=#{bili}*POINT
+	      	   
+        WHERE 
+        		CHOICE_NO = #{choiceNo}
+	     	   AND GAME_TYPE = #{gameType}
+	     	   
+	     	 	 <if test="areaId ==1">
+					 AND USER_CHOICE_LOG.`AREA_ID` IN(1,4)
+				 </if>
+				 <if test="areaId ==2">
+					 AND USER_CHOICE_LOG.`AREA_ID` IN(2,5)
+				 </if>
+				 <if test="areaId ==3">
+					 AND USER_CHOICE_LOG.`AREA_ID` IN(3,6)
+				 </if>
+	     	   AND FIND_IN_SET(#{choiceResult},USER_CHOICE_LOG.`CHOICE_RESULT`)
+	     	   AND IS_ZHONG=-1
+	     	   <if test="type ==1">
+		     	   AND USER_CHOICE_LOG.`CHOICE_NAME` IN('大','小','单','双')
+	     	   </if>
+	     	    <if test="type ==2">
+		     	   AND USER_CHOICE_LOG.`CHOICE_NAME` IN('大双','小双','大单','小单')
+	     	   </if>
+    </update>
+    
+    
+    <delete id="deleteUserChoiceLog" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM USER_CHOICE_LOG WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getUserChoiceLogById" resultMap="UserChoiceLogRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM USER_CHOICE_LOG 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+    
+    
+    <select id="getUserChoiceAllFee" resultType="double">
+	    SELECT IFNULL(SUM(POINT),0)
+	     FROM USER_CHOICE_LOG 
+	        WHERE 
+		        CHOICE_NO =#{choiceNo}
+		        AND  BILI_ID = #{biliId}
+		        AND  USER_ID = #{userId} 
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+		         <if test="userId !=null">
+		            and <![CDATA[ USER_ID = #{userId}  ]]>
+		         </if>
+		         <if test="roomId !=null">
+		            and <![CDATA[ ROOM_ID = #{roomId}  ]]>
+		         </if>
+		         <if test="areaId !=null">
+		            and <![CDATA[ AREA_ID = #{areaId}  ]]>
+		         </if>
+			     <if test="choiceNo !=null">
+			     	and	<![CDATA[ CHOICE_NO =#{choiceNo} ]]>	
+			     </if>
+			     <if test="choiceResult !=null">
+			     	and	<![CDATA[ CHOICE_RESULT =#{choiceResult} ]]>	
+			     </if>
+		         <if test="bili !=null">
+		            and <![CDATA[ BILI = #{bili}  ]]>
+		         </if>
+		         <if test="point !=null">
+		            and <![CDATA[ POINT = #{point}  ]]>
+		         </if>
+			     <if test="realResult !=null">
+			     	and	<![CDATA[ REAL_RESULT =#{realResult} ]]>	
+			     </if>
+			     <if test="resultType !=null">
+			     	and	<![CDATA[ RESULT_TYPE =#{resultType} ]]>	
+			     </if>
+		         <if test="getPoint !=null">
+		            and <![CDATA[ GET_POINT = #{getPoint}  ]]>
+		         </if>
+		         
+		         <if test="gameType !=null">
+		            and <![CDATA[ GAME_TYPE = #{gameType}  ]]>
+		         </if>
+		         <if test="isZhong !=null">
+		            and <![CDATA[ IS_ZHONG = #{isZhong}  ]]>
+		         </if>
+		         <if test="biliId !=null">
+		            and <![CDATA[ BILI_ID = #{biliId}  ]]>
+		         </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM USER_CHOICE_LOG <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="UserChoiceLogRM">
+    	 SELECT <include refid="allFields"/> FROM USER_CHOICE_LOG	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="UserChoiceLogRM">
+    	SELECT <include refid="allFields"/> FROM USER_CHOICE_LOG 
+		<include refid="findPage"/>	
+				  <if test="startTime !=null">
+		            and  DATE_FORMAT(USER_CHOICE_LOG.CREATE_TIME,'%m-%d-%Y')  &gt;= DATE_FORMAT(#{startTime},'%m-%d-%Y')  
+		         </if>
+		          <if test="endTime !=null">
+		            and   DATE_FORMAT(USER_CHOICE_LOG.CREATE_TIME,'%m-%d-%Y')  &lt;= DATE_FORMAT(#{endTime},'%m-%d-%Y')  
+		         </if>		
+		 ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 	
+	<select id="getZhongJiangList" resultMap="UserChoiceLogRM">
+		   
+		SELECT  A.ID  ,A.USER_ID  ,A.ROOM_ID  ,A.AREA_ID  ,A.CHOICE_NO  ,A.CHOICE_RESULT 
+         ,A.BILI  ,A.POINT  ,A.REAL_RESULT  ,A.RESULT_TYPE  ,A.GET_POINT  ,A.CREATE_TIME 
+          ,A.GAME_TYPE  ,A.IS_ZHONG  ,A.BILI_ID  ,A.CHOICE_NAME 
+    	,(SELECT SUM(B.`POINT`) FROM USER_CHOICE_LOG B WHERE B.CHOICE_NO=A.CHOICE_NO AND A.`USER_ID`=B.USER_ID)allFee
+    	 FROM USER_CHOICE_LOG A
+    	 WHERE FIND_IN_SET(#{choiceResult},A.`CHOICE_RESULT`)
+				and A.CHOICE_NO = #{choiceNo}
+				AND A.IS_ZHONG=-1
+				 <if test="gameType !=null">
+		            and <![CDATA[ A.GAME_TYPE = #{gameType}  ]]>
+		         </if>
+		 ORDER BY A.ID DESC	
+    </select>
+    
+    <select id="getSumByNo" resultType="double">
+    	SELECT IFNULL( SUM(USER_CHOICE_LOG.POINT),0) FROM USER_CHOICE_LOG 
+				WHERE   CHOICE_NO = #{choiceNo}
+				 <if test="gameType !=null">
+		            and <![CDATA[ GAME_TYPE = #{gameType}  ]]>
+		         </if>
+		   
+    </select>
+	
+</mapper>
+

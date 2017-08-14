@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.statistics.dao.FinancialStatisticsDao">
+
+   <resultMap id="financialStatisticsMap" type="com.ffcs.icity.mvc.backstage.statistics.entity.FinancialStatistics">
+   		<!-- 
+   		private Integer allUser;  //用户总数
+	    private Integer dayActiveUser; //今日活跃会员
+	    private Integer dayUser; //今日新增会员
+	    private Integer weekUser; //周新增会员
+	    private Integer monthUser;  //月新增会员
+	    private Integer onlineUser; //在线人数
+	    private Double platformWinOrLoseFee;  //平台总输赢
+	    private Double dishAllFee;  //盘内总额
+	    private Double givingAllFee; //赠送总额
+	    private Double toDayFloatExhibit;//今日浮动盈亏
+        private Double dayPayFee;  //今日第三方充值额
+        private Double dayOnlinePayFee; //今日后台充值
+	    private Double dayOfflinePayFee; //线下转账
+	    private Double dayWithdrawalsFee; //今日提现
+	    private Double dayWinOrLoseFee; //今日总输赢 
+	    private Double dayWinOrLoseFee; //今日总输赢 
+	    -->
+   		<result property="allUser" column="ALL_USER"/>
+   		<result property="dayUser" column="DAY_USER"/>
+   		<result property="weekUser" column="WEEK_USER"/>
+   		<result property="monthUser" column="MONTH_USER"/>
+   		<result property="dayActiveUser" column="DAY_ACTIVE_USER"/>
+   		<result property="onlineUser" column="ONLINE_USER"/>
+   		<result property="platformWinOrLoseFee" column="PLATFORM_WIN_OR_LOSE_FEE"/>
+   		<result property="dishAllFee" column="DISH_ALL_FEE"/>
+   		<result property="givingAllFee" column="GIVING_ALL_FEE"/>
+   		<result property="toDayFloatExhibit" column="TODAY_FLOAT_EXHIBIT"/>
+   		<result property="dayPayFee" column="DAY_PAY_FEE"/>
+   		<result property="dayOnlinePayFee" column="DAY_ONLINE_PAY_FEE"/>
+   		<result property="dayOfflinePayFee" column="DAY_OFFLINE_PAY_FEE"/>
+   		<result property="dayWithdrawalsFee" column="DAY_WITHDRAWALS_FEE"/>
+   		<result property="dayWinOrLoseFee" column="DAY_WIN_OR_LOSE_FEE"/>
+   		<result property="totalPoint" column="TOTAL_POINT"/>
+   </resultMap>
+   
+	
+	<select id="query"  parameterType="map"  resultMap="financialStatisticsMap">
+       SELECT 
+          (SELECT COUNT(*) FROM USER_INFO WHERE USER_TYPE = 1) AS ALL_USER,
+          (SELECT COUNT(*) FROM USER_INFO WHERE USER_TYPE = 1 AND  DATE_FORMAT(CREATE_TIME,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') ) AS DAY_USER,
+          (SELECT COUNT(*) FROM USER_INFO WHERE USER_TYPE = 1 AND YEARWEEK(DATE_FORMAT(CREATE_TIME,'%Y-%m-%d')) = YEARWEEK(NOW()) ) AS WEEK_USER,
+          (SELECT COUNT(*) FROM USER_INFO WHERE USER_TYPE = 1 AND DATE_FORMAT(CREATE_TIME,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m') ) AS MONTH_USER,
+          (SELECT 1 FROM DUAL) AS DAY_ACTIVE_USER,
+          (SELECT 1 FROM DUAL) AS ONLINE_USER,
+          (SELECT SUM(USER_CHOICE_LOG.`POINT`-USER_CHOICE_LOG.`GET_POINT`) FROM USER_CHOICE_LOG) AS PLATFORM_WIN_OR_LOSE_FEE,
+          (SELECT 1 FROM DUAL) AS DISH_ALL_FEE,
+          (SELECT 1 FROM DUAL) AS GIVING_ALL_FEE,
+          (SELECT SUM(USER_CHOICE_LOG.`POINT`-USER_CHOICE_LOG.`GET_POINT`) FROM USER_CHOICE_LOG WHERE DATE_FORMAT(CREATE_TIME,'%Y-%m-%d') >= DATE_FORMAT(NOW(),'%Y-%m-%d')) AS TODAY_FLOAT_EXHIBIT,
+          (SELECT IFNULL(SUM(USER_PAY_LOG.`TOTAL_FEE`),0) FROM USER_PAY_LOG WHERE STATUS=1 AND DATE_FORMAT(CREATE_TIME,'%Y-%m-%d') >= DATE_FORMAT(NOW(),'%Y-%m-%d')) AS DAY_PAY_FEE,
+          (SELECT IFNULL(SUM(POINT_CHANGE_LOG.`POINT`),0)  FROM POINT_CHANGE_LOG WHERE POINT_CHANGE_LOG.`POINT_DESC`='后台手动充值' AND  DATE_FORMAT(POINT_CHANGE_LOG.`CREATE_TIME`,'%Y-%m-%d')  = DATE_FORMAT(NOW(),'%Y-%m-%d')) AS DAY_ONLINE_PAY_FEE,
+          (SELECT IFNULL(SUM(USER_ACCOUNT_LOG.`POINT`)  ,0)   FROM `USER_ACCOUNT_LOG` WHERE USER_ACCOUNT_LOG.`STATUS`=1 AND  DATE_FORMAT(USER_ACCOUNT_LOG.`CREATE_TIME`,'%Y-%m-%d')  = DATE_FORMAT(NOW(),'%Y-%m-%d')) AS DAY_OFFLINE_PAY_FEE,
+          (SELECT IFNULL(SUM(REAL_FEE),0) FROM WITHDRAWALS_LOGS WHERE STATUS = 1 AND  DATE_FORMAT(UPDATE_TIME,'%Y-%m-%d')  = DATE_FORMAT(NOW(),'%Y-%m-%d') ) AS DAY_WITHDRAWALS_FEE,
+          (SELECT IFNULL(SUM(TOTAL_FEE),0) FROM USER_PAY_LOG WHERE STATUS = 1 AND DATE_FORMAT(UPDATE_TIME,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') ) AS DAY_WIN_OR_LOSE_FEE,
+          (SELECT IFNULL(SUM(POINT),0) FROM USER_INFO WHERE STATUS = 1 ) AS TOTAL_POINT
+          
+        FROM DUAL
+	</select>
+
+	
+</mapper> 

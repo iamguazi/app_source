@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>走势图</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+
+    <link rel="stylesheet" href="assets/css/amazeui.css?v=2.9">
+    <link rel="stylesheet" href="assets/css/app.css?v=2.9">
+<style>
+    body{
+        zoom: 85%;
+    }
+</style>
+
+</head>
+<body class="bg1">
+
+<section class="" id="amz-main" data-tag="css-nav">
+
+    <div class="   am-text-center list " id="list">
+        
+         
+
+    </div>
+
+</section>
+
+<div style="display: none">
+	<div class="box  bg2 font-color-4  font12 border-bottom" id="head">
+            <div class="width70px am-padding-top-xs  am-padding-bottom-xs ">期号</div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  ">值</div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  ">大</div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  ">小</div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  ">单</div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  ">双</div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  ">大单</div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  ">小单</div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  ">大双</div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  ">小双</div>
+
+        </div>
+        <div class="box  bg4 font-color-4  font12 border-bottom" id="temp">
+            <div class="width70px am-padding-top-xs  am-padding-bottom-xs " field="game_num"></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  font-color-5" field="game_result"></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  " field="game_result" replaceFunc="replace_type1" ></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  " field="game_result" replaceFunc="replace_type2" ></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  " field="game_result" replaceFunc="replace_type3"></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  " field="game_result" replaceFunc="replace_type4"></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  " field="game_result" replaceFunc="replace_type5"></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  " field="game_result" replaceFunc="replace_type6"></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  " field="game_result" replaceFunc="replace_type7"></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  " field="game_result" replaceFunc="replace_type8"></div>
+
+        </div>
+        <div class="box  bg4 font-color-4  font12 border-bottom">
+            <div class="width70px am-padding-top-xs  am-padding-bottom-xs ">435554</div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  font-color-5">20</div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  "></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  font-color-3 bg5">小</div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  "></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  font-color-3 bg6">双</div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  "></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  "></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs "></div>
+            <div class="box-1 am-padding-top-xs  am-padding-bottom-xs  font-color-3 bg7">小双</div>
+
+        </div>
+</div>
+
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/amazeui.min.js"></script>
+<script type="text/javascript" src="../../../js/common/result.js"></script>
+	<script type="text/javascript" src="../../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../../js/common/interface.js"></script>
+	<script type="text/javascript" src="../../../js/module/common/zoushi.js"></script>
+
+
+
+</body>
+</html>

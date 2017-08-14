@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.banner.dao.IBannerDao">
+
+    <resultMap id="BannerRM" type="com.ffcs.icity.api.module.banner.entity.Banner">
+        <result property="id" column="ID"/>
+        <result property="bannerName" column="BANNER_NAME"/>
+        <result property="bannerImgurl" column="BANNER_IMGURL"/>
+        <result property="content" column="CONTENT"/>
+        <result property="bannerOrder" column="BANNER_ORDER"/>
+        <result property="isGo" column="IS_GO"/>
+        <result property="status" column="STATUS"/>
+        <result property="bannerPlace" column="BANNER_PLACE"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="url" column="URL"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        ID  ,BANNER_NAME  ,BANNER_IMGURL  ,CONTENT  ,BANNER_ORDER  ,IS_GO  ,STATUS  ,BANNER_PLACE  ,CREATE_TIME  ,URL  
+	</sql>
+    <insert id="insertBanner" parameterType="com.ffcs.icity.api.module.banner.entity.Banner" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO BANNER (
+        	ID  
+        	 <if test="bannerName !=null">,BANNER_NAME  </if>
+        	 <if test="bannerImgurl !=null">,BANNER_IMGURL  </if>
+        	 <if test="content !=null">,CONTENT  </if>
+        	 <if test="bannerOrder !=null">,BANNER_ORDER  </if>
+        	 <if test="isGo !=null">,IS_GO  </if>
+        	 <if test="status !=null">,STATUS  </if>
+        	 <if test="bannerPlace !=null">,BANNER_PLACE  </if>
+        	,CREATE_TIME
+        	 <if test="url !=null">,URL  </if>
+        ) VALUES (
+        	null  
+        	 <if test="bannerName !=null">,#{bannerName}  </if>
+        	 <if test="bannerImgurl !=null">,#{bannerImgurl}  </if>
+        	 <if test="content !=null">,#{content}  </if>
+        	 <if test="bannerOrder !=null">,#{bannerOrder}  </if>
+        	 <if test="isGo !=null">,#{isGo}  </if>
+        	 <if test="status !=null">,#{status}  </if>
+        	 <if test="bannerPlace !=null">,#{bannerPlace}  </if>
+        	 , sysdate()
+        	 <if test="url !=null">,#{url}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateBanner"  parameterType="com.ffcs.icity.api.module.banner.entity.Banner">
+        UPDATE BANNER SET
+	        ID =  #{id} 
+	      	  <if test="bannerName !=null">,BANNER_NAME = #{bannerName} </if>
+	      	  <if test="bannerImgurl !=null">,BANNER_IMGURL = #{bannerImgurl} </if>
+	      	  <if test="content !=null">,CONTENT = #{content} </if>
+	      	  <if test="bannerOrder !=null">,BANNER_ORDER = #{bannerOrder} </if>
+	      	  <if test="isGo !=null">,IS_GO = #{isGo} </if>
+	      	  <if test="status !=null">,STATUS = #{status} </if>
+	      	  <if test="bannerPlace !=null">,BANNER_PLACE = #{bannerPlace} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+	      	  <if test="url !=null">,URL = #{url} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteBanner" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM BANNER WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getBannerById" resultMap="BannerRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM BANNER 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="bannerName !=null">
+			     	and	<![CDATA[ BANNER_NAME =#{bannerName} ]]>	
+			     </if>
+			     <if test="bannerImgurl !=null">
+			     	and	<![CDATA[ BANNER_IMGURL =#{bannerImgurl} ]]>	
+			     </if>
+			     <if test="content !=null">
+			     	and	<![CDATA[ CONTENT =#{content} ]]>	
+			     </if>
+		         <if test="bannerOrder !=null">
+		            and <![CDATA[ BANNER_ORDER = #{bannerOrder}  ]]>
+		         </if>
+		         <if test="isGo !=null">
+		            and <![CDATA[ IS_GO = #{isGo}  ]]>
+		         </if>
+		         <if test="status !=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+		         <if test="bannerPlace !=null">
+		            and <![CDATA[ BANNER_PLACE = #{bannerPlace}  ]]>
+		         </if>
+		         
+			     <if test="url !=null">
+			     	and	<![CDATA[ URL =#{url} ]]>	
+			     </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM BANNER <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="BannerRM">
+    	 SELECT <include refid="allFields"/> FROM BANNER	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="BannerRM">
+    	SELECT <include refid="allFields"/> FROM BANNER 
+		<include refid="findPage"/>	
+		 ORDER BY BANNER_ORDER DESC	
+    </select>
+    
+ 
+	
+</mapper>
+

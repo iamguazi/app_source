@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.roomUserInfo.dao.IRoomUserInfoDao">
+
+    <resultMap id="RoomUserInfoRM" type="com.ffcs.icity.api.module.roomUserInfo.entity.RoomUserInfo">
+        <result property="id" column="ID"/>
+        <result property="areaId" column="AREA_ID"/>
+        <result property="roomId" column="ROOM_ID"/>
+        <result property="userPhoto" column="USER_PHOTO"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="mobile" column="MOBILE"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        ROOM_USER_INFO.ID  ,ROOM_USER_INFO.AREA_ID  ,ROOM_USER_INFO.ROOM_ID  ,ROOM_USER_INFO.USER_PHOTO  ,ROOM_USER_INFO.USER_ID  ,ROOM_USER_INFO.USER_NAME  ,ROOM_USER_INFO.MOBILE  
+	</sql>
+    <insert id="insertRoomUserInfo" parameterType="com.ffcs.icity.api.module.roomUserInfo.entity.RoomUserInfo" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO ROOM_USER_INFO (
+        	ID  
+        	 <if test="areaId !=null">,AREA_ID  </if>
+        	 <if test="roomId !=null">,ROOM_ID  </if>
+        	 <if test="userPhoto !=null">,USER_PHOTO  </if>
+        	 <if test="userId !=null">,USER_ID  </if>
+        	 <if test="userName !=null">,USER_NAME  </if>
+        	 <if test="mobile !=null">,MOBILE  </if>
+        ) VALUES (
+        	null  
+        	 <if test="areaId !=null">,#{areaId}  </if>
+        	 <if test="roomId !=null">,#{roomId}  </if>
+        	 <if test="userPhoto !=null">,#{userPhoto}  </if>
+        	 <if test="userId !=null">,#{userId}  </if>
+        	 <if test="userName !=null">,#{userName}  </if>
+        	 <if test="mobile !=null">,#{mobile}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateRoomUserInfo"  parameterType="com.ffcs.icity.api.module.roomUserInfo.entity.RoomUserInfo">
+        UPDATE ROOM_USER_INFO SET
+	        ID =  #{id} 
+	      	  <if test="areaId !=null">,AREA_ID = #{areaId} </if>
+	      	  <if test="roomId !=null">,ROOM_ID = #{roomId} </if>
+	      	  <if test="userPhoto !=null">,USER_PHOTO = #{userPhoto} </if>
+	      	  <if test="userId !=null">,USER_ID = #{userId} </if>
+	      	  <if test="userName !=null">,USER_NAME = #{userName} </if>
+	      	  <if test="mobile !=null">,MOBILE = #{mobile} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteRoomUserInfo" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM ROOM_USER_INFO WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getRoomUserInfoById" resultMap="RoomUserInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM ROOM_USER_INFO 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+    
+    
+     <select id="getRoomUserInfoByParams" resultMap="RoomUserInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM ROOM_USER_INFO 
+	        WHERE 
+		        ROOM_ID = #{roomId}
+		        AND AREA_ID = #{areaId}
+		        AND USER_ID = #{userId}
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+		         <if test="areaId !=null">
+		            and <![CDATA[ AREA_ID = #{areaId}  ]]>
+		         </if>
+		         <if test="roomId !=null">
+		            and <![CDATA[ ROOM_ID = #{roomId}  ]]>
+		         </if>
+			     <if test="userPhoto !=null">
+			     	and	<![CDATA[ USER_PHOTO =#{userPhoto} ]]>	
+			     </if>
+		         <if test="userId !=null">
+		            and <![CDATA[ USER_ID = #{userId}  ]]>
+		         </if>
+			     <if test="userName !=null">
+			     	and	<![CDATA[ USER_NAME =#{userName} ]]>	
+			     </if>
+			     <if test="mobile !=null">
+			     	and	<![CDATA[ MOBILE =#{mobile} ]]>	
+			     </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM ROOM_USER_INFO <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="RoomUserInfoRM">
+    	 SELECT <include refid="allFields"/> FROM ROOM_USER_INFO	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="RoomUserInfoRM">
+    	SELECT <include refid="allFields"/> FROM ROOM_USER_INFO 
+		<include refid="findPage"/>	
+		 ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

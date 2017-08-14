@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.otherParams.dao.IOtherParamsDao">
+
+    <resultMap id="OtherParamsRM" type="com.ffcs.icity.api.module.otherParams.entity.OtherParams">
+        <result property="id" column="ID"/>
+        <result property="paramsKey" column="PARAMS_KEY"/>
+        <result property="paramsValue" column="PARAMS_VALUE"/>
+        <result property="paramsGroup" column="PARAMS_GROUP"/>
+        <result property="paramsRemarks" column="PARAMS_REMARKS"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        OTHER_PARAMS.ID  ,OTHER_PARAMS.PARAMS_KEY  ,OTHER_PARAMS.PARAMS_VALUE  ,OTHER_PARAMS.PARAMS_GROUP  ,OTHER_PARAMS.PARAMS_REMARKS  
+	</sql>
+    <insert id="insertOtherParams" parameterType="com.ffcs.icity.api.module.otherParams.entity.OtherParams" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO OTHER_PARAMS (
+        	ID  
+        	 <if test="paramsKey !=null">,PARAMS_KEY  </if>
+        	 <if test="paramsValue !=null">,PARAMS_VALUE  </if>
+        	 <if test="paramsGroup !=null">,PARAMS_GROUP  </if>
+        	 <if test="paramsRemarks !=null">,PARAMS_REMARKS  </if>
+        ) VALUES (
+        	null  
+        	 <if test="paramsKey !=null">,#{paramsKey}  </if>
+        	 <if test="paramsValue !=null">,#{paramsValue}  </if>
+        	 <if test="paramsGroup !=null">,#{paramsGroup}  </if>
+        	 <if test="paramsRemarks !=null">,#{paramsRemarks}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateOtherParams"  parameterType="com.ffcs.icity.api.module.otherParams.entity.OtherParams">
+        UPDATE OTHER_PARAMS SET
+	        ID =  #{id} 
+	      	  <if test="paramsKey !=null">,PARAMS_KEY = #{paramsKey} </if>
+	      	  <if test="paramsValue !=null">,PARAMS_VALUE = #{paramsValue} </if>
+	      	  <if test="paramsGroup !=null">,PARAMS_GROUP = #{paramsGroup} </if>
+	      	  <if test="paramsRemarks !=null">,PARAMS_REMARKS = #{paramsRemarks} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteOtherParams" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM OTHER_PARAMS WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getOtherParamsById" resultMap="OtherParamsRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM OTHER_PARAMS 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+    
+    <select id="getOtherParamsByParams" resultMap="OtherParamsRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM OTHER_PARAMS 
+	        WHERE 
+		        PARAMS_GROUP =#{paramsGroup}  
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="paramsKey !=null">
+			     	and	<![CDATA[ PARAMS_KEY =#{paramsKey} ]]>	
+			     </if>
+			     <if test="paramsValue !=null">
+			     	and	<![CDATA[ PARAMS_VALUE =#{paramsValue} ]]>	
+			     </if>
+			     <if test="paramsGroup !=null">
+			     	and	<![CDATA[ PARAMS_GROUP =#{paramsGroup} ]]>	
+			     </if>
+			     <if test="paramsRemarks !=null">
+			     	and	<![CDATA[ PARAMS_REMARKS =#{paramsRemarks} ]]>	
+			     </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM OTHER_PARAMS <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="OtherParamsRM">
+    	 SELECT <include refid="allFields"/> FROM OTHER_PARAMS	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="OtherParamsRM">
+    	SELECT <include refid="allFields"/> FROM OTHER_PARAMS 
+		<include refid="findPage"/>	
+		 ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

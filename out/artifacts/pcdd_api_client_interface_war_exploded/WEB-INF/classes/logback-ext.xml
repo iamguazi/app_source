@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+
+     <!-- 此配置文件存放项目独有的日志配置 -->
+     
+     <!-- 关闭xmemcached的DEBUG等级日志输出 -->
+     <logger name="com.google.code.yanf4j" level="INFO"/>
+     <logger name="net.rubyeye.xmemcached" level="INFO"/>
+     
+     <!-- 关闭activemq的DEBUG等级日志输出 -->
+     <logger name="org.apache.activemq.transport" level="INFO"/>
+
+</included>
+

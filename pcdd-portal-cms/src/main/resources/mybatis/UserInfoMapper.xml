@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.user.dao.UserInfoDao">
+
+   <resultMap id="userInfoResultMap" type="com.ffcs.icity.mvc.backstage.user.entity.UserInfo">
+          <result property="id" column="ID"/>
+          <result property="account" column="ACCOUNT"/>
+          <result property="password" column="PASSWORD"/>
+          <result property="userPhoto" column="USER_PHOTO"/>
+          <result property="nickName" column="NICK_NAME"/>
+          <result property="sex" column="SEX"/>
+          <result property="mobile" column="MOBILE"/>
+          <result property="point" column="POINT"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="bandId" column="BAND_ID"/>
+          <result property="bandType" column="BAND_TYPE"/>
+          <result property="registrationId" column="REGISTRATION_ID"/>
+          <result property="code" column="CODE"/>
+          <result property="status" column="STATUS"/>
+          <result property="imAccount" column="IM_ACCOUNT"/>
+          <result property="level" column="LEVEL"/>
+          <result property="userType" column="USER_TYPE"/>
+          <result property="loginTime" column="LOGIN_TIME"/>
+          <result property="xhibitPoint" column="XHIBIT_POINT"/>
+          <result property="levelName" column="LEVEL_NAME"/>
+          <result property="realName" column="REAL_NAME"/>
+          <result property="bankName" column="BANK_NAME"/>
+          <result property="bankNo" column="BANK_NO"/>
+          <result property="openCardAddress" column="OPEN_CARD_ADDRESS"/>
+          <result property="ipAddr" column="IP_ADDR"/>
+   </resultMap>
+
+   <resultMap id="robotXlsResultMap" type="com.ffcs.icity.mvc.backstage.user.entity.RobotXls">
+          <result property="account" column="ACCOUNT"/>
+          <result property="userPhoto" column="USER_PHOTO"/>
+          <result property="level" column="LEVEL"/>
+   </resultMap>
+   
+   	<sql id="userInfoColumns">
+	    <![CDATA[
+		ID,ACCOUNT,PASSWORD,USER_PHOTO,NICK_NAME,SEX,MOBILE,POINT,CREATE_TIME,
+		BAND_ID,BAND_TYPE,REGISTRATION_ID,CODE,STATUS,IM_ACCOUNT,LEVEL,USER_TYPE,
+		LOGIN_TIME,XHIBIT_POINT,REAL_NAME,BANK_NAME,BANK_NO,OPEN_CARD_ADDRESS,IP_ADDR
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="userInfoResultMap">
+		select  ui.ID,ui.ACCOUNT,ui.PASSWORD,ui.USER_PHOTO,ui.NICK_NAME,ui.SEX,MOBILE,ui.POINT,
+		ui.CREATE_TIME,ui.BAND_ID,ui.BAND_TYPE,ui.REGISTRATION_ID,ui.CODE,STATUS,ui.IM_ACCOUNT,ui.LEVEL,USER_TYPE,
+		ui.LOGIN_TIME,ui.IP_ADDR,
+		(SELECT IFNULL(SUM(USER_CHOICE_LOG.`GET_POINT`-USER_CHOICE_LOG.`POINT`),0) FROM USER_CHOICE_LOG WHERE USER_CHOICE_LOG.USER_ID=ui.ID) XHIBIT_POINT,
+		ul.LEVEL_NAME
+        from USER_INFO ui left join USER_LEVEL ul on ui.LEVEL = ul.ID
+		<where>
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and ui.ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(account)">
+				  and ui.ACCOUNT like concat('%',#{account},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(code)">
+				  and ui.CODE = #{code}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(nickName)">
+				  and ui.NICK_NAME like concat('%',#{nickName},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(mobile)">
+				  and ui.MOBILE = #{mobile}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and STATUS = #{status}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(userType)">
+				  and ui.USER_TYPE = #{userType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				  and ui.CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				  and ui.CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY),'%Y-%m-%d')
+			      </if>
+		</where>	      
+		order by 
+		<if test="@Ognl@isNotEmpty(pointSort) and pointSort=='desc' ">
+            ui.POINT DESC,
+        </if>
+        <if test="@Ognl@isNotEmpty(pointSort) and pointSort=='asc' ">
+            ui.POINT ASC,
+        </if>
+        <if test="@Ognl@isNotEmpty(xhibitPointSort) and xhibitPointSort=='desc' ">
+            XHIBIT_POINT DESC,
+        </if>
+        <if test="@Ognl@isNotEmpty(xhibitPointSort) and xhibitPointSort=='asc' ">
+            XHIBIT_POINT ASC,
+        </if>
+        ui.ID desc
+	</select>
+
+
+
+	<select id="queryUserBankInfos"  parameterType="map"  resultMap="userInfoResultMap">
+		select  <include refid="userInfoColumns" /> from USER_INFO
+		<where>
+		          BANK_NO IS NOT NULL
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(account)">
+				  and ACCOUNT like concat('%',#{account},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(code)">
+				  and CODE = #{code}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(nickName)">
+				  and NICK_NAME like concat('%',#{nickName},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(realName)">
+				  and REAL_NAME = #{realName}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(bankName)">
+				  and BANK_NAME like concat('%',#{bankName},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(bankNo)">
+				  and BANK_NO like concat('%',#{bankNo},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(mobile)">
+				  and MOBILE = #{mobile}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and STATUS = #{status}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(userType)">
+				  and USER_TYPE = #{userType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				  and CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				  and CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY),'%Y-%m-%d')
+			      </if>
+		</where>	      
+		
+        ORDER BY ID desc
+	</select>
+	
+	<select id="isAccountExits" resultType="int">
+       SELECT COUNT(1)
+       FROM USER_INFO
+       WHERE ACCOUNT = #{account}
+       <if test="id != null">
+           AND ID != #{id}
+       </if>
+    </select>
+	
+	<select id="queryRobots"  parameterType="map"  resultMap="userInfoResultMap">
+		select ui.*,ul.LEVEL_NAME
+        from USER_INFO ui left join USER_LEVEL ul on ui.LEVEL = ul.ID
+		<where>
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and ui.ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(account)">
+				  and ui.ACCOUNT like concat('%',#{account},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(code)">
+                  and ui.CODE = #{code}
+                  </if>
+			      <if test="@Ognl@isNotEmpty(nickName)">
+				  and ui.NICK_NAME like concat('%',#{nickName},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(mobile)">
+				  and ui.MOBILE = #{mobile}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and STATUS = #{status}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(userType)">
+				  and ui.USER_TYPE = #{userType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				  and ui.CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				  and ui.CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY),'%Y-%m-%d')
+			      </if>
+			 </where>     
+		order by ui.ID desc
+	</select>
+	
+	
+    <select id="queryRobotXls"  parameterType="map"  resultMap="robotXlsResultMap">
+        SELECT ui.ACCOUNT, ui.USER_PHOTO, ui.LEVEL
+        FROM USER_INFO ui
+        <where>
+                  <if test="@Ognl@isNotEmpty(id)">
+                  and ui.ID = #{id}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(account)">
+                  and ui.ACCOUNT = #{account}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(code)">
+                  and ui.CODE = #{code}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(nickName)">
+                  and ui.NICK_NAME like concat('%',#{nickName},'%')
+                  </if>
+                  <if test="@Ognl@isNotEmpty(mobile)">
+                  and ui.MOBILE = #{mobile}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(status)">
+                  and ui.STATUS = #{status}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(userType)">
+                  and ui.USER_TYPE = #{userType}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(createTimeBegin)">
+                  and ui.CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+                  </if>
+                  <if test="@Ognl@isNotEmpty(createTimeEnd)">
+                  and ui.CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY),'%Y-%m-%d')
+                  </if>
+             </where>    
+        order by ui.ID desc
+    </select>
+    
+	<select id="get" parameterType="long" resultMap="userInfoResultMap">		
+		select <include refid="userInfoColumns" />
+	    <![CDATA[
+		    from USER_INFO where ID = #{id} 
+	    ]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.user.entity.UserInfo" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  USER_INFO (
+        	ACCOUNT ,
+        	PASSWORD ,
+        	USER_PHOTO ,
+        	NICK_NAME ,
+        	SEX ,
+        	MOBILE ,
+        	POINT ,
+        	CREATE_TIME ,
+        	BAND_TYPE ,
+        	STATUS ,
+        	LEVEL ,
+        	USER_TYPE ,
+        	LOGIN_TIME 
+        ) values (
+        	#{account},
+        	#{password},
+        	#{userPhoto},
+        	#{nickName},
+        	#{sex},
+        	#{mobile},
+        	#{point},
+        	now(),
+        	#{bandType},
+        	#{status},
+        	#{level},
+        	#{userType},
+        	#{loginTime}
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.user.entity.UserInfo">
+	<![CDATA[
+		update USER_INFO set 
+	       ACCOUNT = #{account},
+	       PASSWORD = #{password},
+	       USER_PHOTO = #{userPhoto},
+	       NICK_NAME = #{nickName},
+	       SEX = #{sex},
+	       MOBILE = #{mobile},
+	       POINT = #{point},
+	       STATUS = #{status},
+	       LEVEL = #{level},
+	       USER_TYPE = #{userType}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	<update id="resetPassword" >
+	<![CDATA[
+		update USER_INFO set 
+	       PASSWORD = #{password}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	
+	<update id="updatePoint" parameterType="map">
+		update USER_INFO set 
+	       POINT = IFNULL(POINT,0)+#{point}
+		where  ID = #{userId}
+	</update>
+
+	<update id="updatePointAndAllPoint" parameterType="map">
+		update USER_INFO set 
+	       POINT = IFNULL(POINT,0)+#{point},
+	       ALL_POINT = IFNULL(ALL_POINT,0)+#{point}
+		where  ID = #{userId}
+	</update>
+	
+	<update id="updateStatus" parameterType="map" >
+		update USER_INFO set 
+	       STATUS = #{status}
+		where  ID in <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+	</update>
+
+	<update id="updateUserBankInfos"  parameterType="com.ffcs.icity.mvc.backstage.user.entity.UserInfo">
+        update USER_INFO set 
+           REAL_NAME = #{realName},
+           BANK_NAME = #{bankName},
+           BANK_NO = #{bankNo},
+           OPEN_CARD_ADDRESS = #{openCardAddress}
+        where  ID = #{id}
+	</update>
+
+	<update id="batchUpdateRobotXls"  parameterType="com.ffcs.icity.mvc.backstage.user.entity.RobotXls">
+         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+                <if test="@Ognl@isNotEmpty(item.userPhoto) or @Ognl@isNotEmpty(item.level)">
+                     update USER_INFO  
+                     <set>
+                        <if test="@Ognl@isNotEmpty(item.userPhoto)">
+                        USER_PHOTO = #{item.userPhoto},
+	                    </if>
+	                    <if test="@Ognl@isNotEmpty(item.level)">
+                        LEVEL = #{item.level}
+                        </if>
+                     </set>
+                    where  ACCOUNT = #{item.account}
+                </if>
+         </foreach>
+        
+	</update>
+
+	<update id="batchCleanUserBankInfos" parameterType="com.ffcs.icity.mvc.backstage.user.entity.UserInfo" >
+		update USER_INFO set 
+           REAL_NAME = NULL,
+           BANK_NAME = NULL,
+           BANK_NO = NULL,
+           OPEN_CARD_ADDRESS = NULL
+        where  ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from USER_INFO where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from USER_INFO where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

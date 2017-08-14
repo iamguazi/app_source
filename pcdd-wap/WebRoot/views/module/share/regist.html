@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>分享注册</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+
+    <link rel="stylesheet" href="assets/css/zhaoui.min.css?v=2.9">
+    <link rel="stylesheet" href="assets/css/style.css?v=2.3">
+    <link rel="stylesheet" href="assets/css/index.css?v=2.3">
+
+</head>
+<body class="bg-1">
+
+<section class="padding-bottom-60" id="amz-main" data-tag="css-nav">
+    <i><img src="assets/images/icon/icon_1.png" class="width-90px"></i>
+
+    <div><img src="assets/images/icon/icon_3.png" class="width-100pxs am-center"></div>
+    <div><img src="assets/images/icon/icon_4.png" class="width-100pxs am-center"></div>
+    <div class="margin-top-20 prelative am-center width-280px">
+       <i class="icon-rigzit-1"></i> <input type="text" class="input-1 " id="account" maxlength="15" placeholder="请输入用户名">
+    </div>
+    <div class="margin-top-20 prelative am-center width-280px">
+        <i class="icon-rigzit-3"></i> <input type="password" class="input-1 " id="password" maxlength="12" placeholder="请输入6~12位字母或者数字">
+    </div>
+    <div class="margin-top-20 prelative am-center width-280px">
+        <i class="icon-rigzit-2"></i> <input type="password" class="input-1 " id="er_password" maxlength="12" placeholder="请输入确认密码">
+    </div>
+
+    <div class="margin-top-20 prelative am-center font-color-white width-280px padding-left-30" >
+        <i class="icon-select cur"></i>
+        <span onclick="toXieyi()">同意《注册协议》</span>
+        
+    </div>
+
+
+    <div class="btn-6 am-center font-14 margin-top-20" onclick="register()">
+        注册
+    </div>
+
+    <i class="btpic"><img src="assets/images/icon/icon_2.png" class="width-90px "></i>
+
+    <div class="font-14 am-text-center am-margin-top-sm am-padding-bottom-sm">
+        <span class="font-color-2">已有注册账号，</span>
+        <span class="font-color-white" onclick="toUpload()">下载客户端</span>
+    </div>
+
+
+</section>
+
+
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/zhao.min.js"></script>
+  	<script type="text/javascript" src="../../../js/common/result.js"></script>
+	<script type="text/javascript" src="../../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../../js/common/interface.js"></script>
+	<script type="text/javascript" src="../../../js/module/common/regist.js?v=1.1"></script>
+
+<script>
+
+    $(".icon-select").on("click",function (){
+        $(this).toggleClass("cur");
+    })
+
+</script>
+</body>
+</html>

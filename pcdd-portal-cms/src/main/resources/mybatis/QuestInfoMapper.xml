@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.quest.dao.QuestInfoDao">
+
+   <resultMap id="questInfoResultMap" type="com.ffcs.icity.mvc.backstage.quest.entity.QuestInfo">
+          <result property="id" column="ID"/>
+          <result property="title" column="TITLE"/>
+          <result property="content" column="CONTENT"/>
+          <result property="createTime" column="CREATE_TIME"/>
+   </resultMap>
+   
+    <sql id="questInfoColumns">
+        <![CDATA[
+        ID,TITLE,CONTENT,CREATE_TIME
+        ]]>
+    </sql>
+    
+    <select id="query"  parameterType="map"  resultMap="questInfoResultMap">
+        select <include refid="questInfoColumns" />
+        from QUEST_INFO
+        <where>
+                  <if test="@Ognl@isNotEmpty(id)">
+                  and ID = #{id}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(title)">
+                  and TITLE like concat('%',#{title},'%')
+                  </if>
+        </where>
+        order by ID desc
+    </select>
+
+    <select id="get" parameterType="long" resultMap="questInfoResultMap">       
+        select <include refid="questInfoColumns" />
+        <![CDATA[
+            from QUEST_INFO where ID = #{id} 
+        ]]>
+    </select>
+    
+    <insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.quest.entity.QuestInfo" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  QUEST_INFO (
+            TITLE ,
+            CONTENT ,
+            CREATE_TIME 
+        ) values (
+            #{title},
+            #{content},
+            now()
+        )
+    ]]>  
+    </insert>
+
+    <update id="update" parameterType="com.ffcs.icity.mvc.backstage.quest.entity.QuestInfo">
+    <![CDATA[
+        update QUEST_INFO set 
+           TITLE = #{title},
+           CONTENT = #{content}
+        where  ID = #{id}
+     ]]>
+    </update>
+    
+    <delete id="delete" parameterType="int">
+        delete from QUEST_INFO where ID = #{id}
+    </delete>
+    
+    <delete id="deletes">
+        delete from QUEST_INFO where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+    
+</mapper> 

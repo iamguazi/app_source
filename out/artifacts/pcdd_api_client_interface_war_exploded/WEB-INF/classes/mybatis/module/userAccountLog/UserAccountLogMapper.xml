@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.userAccountLog.dao.IUserAccountLogDao">
+
+    <resultMap id="UserAccountLogRM" type="com.ffcs.icity.api.module.userAccountLog.entity.UserAccountLog">
+        <result property="id" column="ID"/>
+        <result property="account" column="ACCOUNT"/>
+        <result property="accountType" column="ACCOUNT_TYPE"/>
+        <result property="realName" column="REAL_NAME"/>
+        <result property="bankName" column="BANK_NAME"/>
+        <result property="point" column="POINT"/>
+        <result property="status" column="STATUS"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="addType" column="ADD_TYPE"/>
+        <result property="accountId" column="ACCOUNT_ID"/>
+        
+        
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        USER_ACCOUNT_LOG.ID  ,USER_ACCOUNT_LOG.ACCOUNT  ,USER_ACCOUNT_LOG.ACCOUNT_TYPE  ,USER_ACCOUNT_LOG.REAL_NAME  ,USER_ACCOUNT_LOG.BANK_NAME  
+        ,USER_ACCOUNT_LOG.POINT  ,USER_ACCOUNT_LOG.STATUS  ,USER_ACCOUNT_LOG.CREATE_TIME  ,USER_ACCOUNT_LOG.USER_ID  ,ADD_TYPE ,ACCOUNT_ID
+	</sql>
+    <insert id="insertUserAccountLog" parameterType="com.ffcs.icity.api.module.userAccountLog.entity.UserAccountLog" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO USER_ACCOUNT_LOG (
+        	ID  
+        	 <if test="account !=null">,ACCOUNT  </if>
+        	 <if test="accountType !=null">,ACCOUNT_TYPE  </if>
+        	 <if test="realName !=null">,REAL_NAME  </if>
+        	 <if test="bankName !=null">,BANK_NAME  </if>
+        	 <if test="point !=null">,POINT  </if>
+        	 <if test="status !=null">,STATUS  </if>
+        	,CREATE_TIME
+        	 <if test="userId !=null">,USER_ID  </if>
+        	 <if test="addType !=null">,ADD_TYPE  </if>
+        	 <if test="accountId !=null">,ACCOUNT_ID  </if>
+        ) VALUES (
+        	null  
+        	 <if test="account !=null">,#{account}  </if>
+        	 <if test="accountType !=null">,#{accountType}  </if>
+        	 <if test="realName !=null">,#{realName}  </if>
+        	 <if test="bankName !=null">,#{bankName}  </if>
+        	 <if test="point !=null">,#{point}  </if>
+        	 <if test="status !=null">,#{status}  </if>
+        	 , sysdate()
+        	 <if test="userId !=null">,#{userId}  </if>
+        	 <if test="addType !=null">,#{addType}  </if>
+        	 <if test="accountId !=null">,#{accountId}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateUserAccountLog"  parameterType="com.ffcs.icity.api.module.userAccountLog.entity.UserAccountLog">
+        UPDATE USER_ACCOUNT_LOG SET
+	        ID =  #{id} 
+	      	  <if test="account !=null">,ACCOUNT = #{account} </if>
+	      	  <if test="accountType !=null">,ACCOUNT_TYPE = #{accountType} </if>
+	      	  <if test="realName !=null">,REAL_NAME = #{realName} </if>
+	      	  <if test="bankName !=null">,BANK_NAME = #{bankName} </if>
+	      	  <if test="point !=null">,POINT = #{point} </if>
+	      	  <if test="status !=null">,STATUS = #{status} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+	      	  <if test="userId !=null">,USER_ID = #{userId} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteUserAccountLog" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM USER_ACCOUNT_LOG WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getUserAccountLogById" resultMap="UserAccountLogRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM USER_ACCOUNT_LOG 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="account !=null">
+			     	and	<![CDATA[ ACCOUNT =#{account} ]]>	
+			     </if>
+		         <if test="accountType !=null">
+		            and <![CDATA[ ACCOUNT_TYPE = #{accountType}  ]]>
+		         </if>
+			     <if test="realName !=null">
+			     	and	<![CDATA[ REAL_NAME =#{realName} ]]>	
+			     </if>
+			     <if test="bankName !=null">
+			     	and	<![CDATA[ BANK_NAME =#{bankName} ]]>	
+			     </if>
+		         <if test="point !=null">
+		            and <![CDATA[ POINT = #{point}  ]]>
+		         </if>
+		         <if test="status !=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+		         
+		         <if test="userId !=null">
+		            and <![CDATA[ USER_ID = #{userId}  ]]>
+		         </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM USER_ACCOUNT_LOG <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="UserAccountLogRM">
+    	 SELECT <include refid="allFields"/> FROM USER_ACCOUNT_LOG	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="UserAccountLogRM">
+    	SELECT <include refid="allFields"/> FROM USER_ACCOUNT_LOG 
+		<include refid="findPage"/>	
+		 ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

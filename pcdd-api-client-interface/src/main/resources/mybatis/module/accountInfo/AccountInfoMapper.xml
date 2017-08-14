@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.accountInfo.dao.IAccountInfoDao">
+
+    <resultMap id="AccountInfoRM" type="com.ffcs.icity.api.module.accountInfo.entity.AccountInfo">
+        <result property="id" column="ID"/>
+        <result property="account" column="ACCOUNT"/>
+        <result property="accountType" column="ACCOUNT_TYPE"/>
+        <result property="realName" column="REAL_NAME"/>
+        <result property="bankName" column="BANK_NAME"/>
+        <result property="openCardAddress" column="OPEN_CARD_ADDRESS"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="photo" column="PHOTO"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        ACCOUNT_INFO.ID  ,ACCOUNT_INFO.ACCOUNT  ,ACCOUNT_INFO.ACCOUNT_TYPE  ,ACCOUNT_INFO.REAL_NAME  ,ACCOUNT_INFO.BANK_NAME  ,ACCOUNT_INFO.OPEN_CARD_ADDRESS  
+        ,ACCOUNT_INFO.CREATE_TIME  ,ACCOUNT_INFO.PHOTO
+	</sql>
+    <insert id="insertAccountInfo" parameterType="com.ffcs.icity.api.module.accountInfo.entity.AccountInfo" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO ACCOUNT_INFO (
+        	ID  
+        	 <if test="account !=null">,ACCOUNT  </if>
+        	 <if test="accountType !=null">,ACCOUNT_TYPE  </if>
+        	 <if test="realName !=null">,REAL_NAME  </if>
+        	 <if test="bankName !=null">,BANK_NAME  </if>
+        	 <if test="openCardAddress !=null">,OPEN_CARD_ADDRESS  </if>
+        	,CREATE_TIME
+        ) VALUES (
+        	null  
+        	 <if test="account !=null">,#{account}  </if>
+        	 <if test="accountType !=null">,#{accountType}  </if>
+        	 <if test="realName !=null">,#{realName}  </if>
+        	 <if test="bankName !=null">,#{bankName}  </if>
+        	 <if test="openCardAddress !=null">,#{openCardAddress}  </if>
+        	 , sysdate()
+        )
+        
+    </insert>
+
+    <update id="updateAccountInfo"  parameterType="com.ffcs.icity.api.module.accountInfo.entity.AccountInfo">
+        UPDATE ACCOUNT_INFO SET
+	        ID =  #{id} 
+	      	  <if test="account !=null">,ACCOUNT = #{account} </if>
+	      	  <if test="accountType !=null">,ACCOUNT_TYPE = #{accountType} </if>
+	      	  <if test="realName !=null">,REAL_NAME = #{realName} </if>
+	      	  <if test="bankName !=null">,BANK_NAME = #{bankName} </if>
+	      	  <if test="openCardAddress !=null">,OPEN_CARD_ADDRESS = #{openCardAddress} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteAccountInfo" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM ACCOUNT_INFO WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getAccountInfoById" resultMap="AccountInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM ACCOUNT_INFO 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="account !=null">
+			     	and	<![CDATA[ ACCOUNT =#{account} ]]>	
+			     </if>
+		         <if test="accountType !=null">
+		            and <![CDATA[ ACCOUNT_TYPE = #{accountType}  ]]>
+		         </if>
+			     <if test="realName !=null">
+			     	and	<![CDATA[ REAL_NAME =#{realName} ]]>	
+			     </if>
+			     <if test="bankName !=null">
+			     	and	<![CDATA[ BANK_NAME =#{bankName} ]]>	
+			     </if>
+			     <if test="openCardAddress !=null">
+			     	and	<![CDATA[ OPEN_CARD_ADDRESS =#{openCardAddress} ]]>	
+			     </if>
+		         
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM ACCOUNT_INFO <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="AccountInfoRM">
+    	 SELECT <include refid="allFields"/> FROM ACCOUNT_INFO	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="AccountInfoRM">
+    	SELECT <include refid="allFields"/> FROM ACCOUNT_INFO 
+		<include refid="findPage"/>	
+		 ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

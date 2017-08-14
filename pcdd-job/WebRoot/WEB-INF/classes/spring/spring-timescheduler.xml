@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd  
+                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd"> 
+	
+	<context:component-scan base-package="com.web.act.job" />  
+   	<context:annotation-config/>
+   	
+   	<!-- <bean id="autoCreateOrderJob" class="com.web.act.job.AutoCreateOrderJob"/> -->
+   	<bean id="GameOpenLogDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="GameOpenLogJob" />
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>		
+   		
+   		
+   	<bean id="OpenCloseDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="OpenCloseJob" />
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="checkLiveRoomDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="LiveRoomJob" />
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="RebotDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="RobotJob" />
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	
+	
+	
+	
+	
+	<!-- 定时获取回水结果 -->
+	<bean id="GameOpenLogTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="GameOpenLogDetail" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每天 1:00 执行 -->
+			  <value>0 0 1 * * ?</value>
+		</property>
+	</bean>
+	
+	 
+	<!-- 开盘 封盘结果 -->
+	<bean id="OpenCloseTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="OpenCloseDetail" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每 秒 执行 -->
+			  <value>0/1 * * * * ?</value>
+		</property>
+	</bean>
+	
+	 
+	<!-- 取投注结果 -->
+	<bean id="checkLiveRoomTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="checkLiveRoomDetail" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每隔30秒执行 -->
+			  <value>0/10 * * * * ?</value>
+		</property>
+	</bean>
+	
+ <!-- 机器人 -->
+	<bean id="RebotTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="RebotDetail" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每隔2分钟执行 -->
+			  <value>0 0/2 * * * ?</value>
+		</property>
+	</bean>
+	
+	
+	<bean id="schedulerFactoryBean"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<!--延迟10S启动，确保其它配置已经完成加载-->  
+        <property name="startupDelay" value="10"/>
+		<property name="triggers">
+			<list>
+				<ref bean="checkLiveRoomTrigger" />
+				  
+			</list>
+		</property>
+	</bean>
+
+</beans>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.account.dao.UserAccountLogDao">
+
+   <resultMap id="userAccountLogResultMap" type="com.ffcs.icity.mvc.backstage.account.entity.UserAccountLog">
+          <result property="id" column="ID"/>
+          <result property="accountId" column="ACCOUNT_ID"/>
+          <result property="account" column="ACCOUNT"/>
+          <result property="accountInfo" column="ACCOUNT_INFO"/>
+          <result property="accountType" column="ACCOUNT_TYPE"/>
+          <result property="collectionType" column="COLLECTION_TYPE"/>
+          <result property="realName" column="REAL_NAME"/>
+          <result property="bankName" column="BANK_NAME"/>
+          <result property="point" column="POINT"/>
+          <result property="status" column="STATUS"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="userId" column="USER_ID"/>
+          <result property="addType" column="ADD_TYPE"/>
+   </resultMap>
+   
+    <sql id="userAccountLogColumns">
+        <![CDATA[
+        ID,ACCOUNT_ID,ACCOUNT,ACCOUNT_TYPE,REAL_NAME,BANK_NAME,POINT,STATUS,CREATE_TIME,USER_ID,ADD_TYPE
+        ]]>
+    </sql>
+    
+    <select id="query"  parameterType="map"  resultMap="userAccountLogResultMap">
+        select         
+            ual.ID,ual.ACCOUNT_ID,ual.ACCOUNT,ual.ACCOUNT_TYPE,ual.REAL_NAME,ual.BANK_NAME,
+            ual.POINT,ual.STATUS,ual.CREATE_TIME,ual.USER_ID,ual.ADD_TYPE,ai.ACCOUNT AS ACCOUNT_INFO,ai.ACCOUNT_TYPE as COLLECTION_TYPE
+        from USER_ACCOUNT_LOG  ual,ACCOUNT_INFO ai
+        where ual.ACCOUNT_ID = ai.ID
+                  <if test="@Ognl@isNotEmpty(id)">
+                  and ual.ID = #{id}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(accountId)">
+                  and ual.ACCOUNT_ID = #{accountId}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(account)">
+                  and ual.ACCOUNT like concat('%',#{account},'%') 
+                  </if>
+                  <if test="@Ognl@isNotEmpty(accountType)">
+                  and ual.ACCOUNT_TYPE = #{accountType}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(realName)">
+                  and ual.REAL_NAME like concat('%',#{realName},'%')
+                  </if>
+                  <if test="@Ognl@isNotEmpty(bankName)">
+                  and BANK_NAME like concat('%',#{bankName},'%')
+                  </if>
+                  <if test="@Ognl@isNotEmpty(status)">
+                  and STATUS = #{status}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(createTimeBegin)">
+                  and ual.CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+                  </if>
+                  <if test="@Ognl@isNotEmpty(createTimeEnd)">
+                  and ual.CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd}, INTERVAL 1 DAY),'%Y-%m-%d')
+                  </if>
+                  <if test="@Ognl@isNotEmpty(userId)">
+                  and ual.USER_ID = #{userId}
+                  </if>
+        order by ual.ID desc
+    </select>
+
+    <select id="get" parameterType="long" resultMap="userAccountLogResultMap">      
+        select <include refid="userAccountLogColumns" />
+        <![CDATA[
+            from USER_ACCOUNT_LOG where ID = #{id} 
+        ]]>
+    </select>
+
+    <select id="countStatus" parameterType="int" resultType="int">      
+        select count(*)
+            from USER_ACCOUNT_LOG where STATUS = #{status} 
+    </select>
+    
+    <insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.account.entity.UserAccountLog" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  USER_ACCOUNT_LOG (
+            ACCOUNT_ID ,
+            ACCOUNT ,
+            ACCOUNT_TYPE ,
+            REAL_NAME ,
+            BANK_NAME ,
+            POINT ,
+            STATUS ,
+            CREATE_TIME ,
+            USER_ID ,
+            ADD_TYPE 
+        ) values (
+            #{accountId},
+            #{account},
+            #{accountType},
+            #{realName},
+            #{bankName},
+            #{point},
+            #{status},
+            #{createTime},
+            #{userId},
+            #{addType}
+        )
+    ]]>  
+    </insert>
+
+    <update id="update" parameterType="com.ffcs.icity.mvc.backstage.account.entity.UserAccountLog">
+    <![CDATA[
+        update USER_ACCOUNT_LOG set 
+           ACCOUNT_ID = #{accountId},
+           ACCOUNT = #{account},
+           ACCOUNT_TYPE = #{accountType},
+           REAL_NAME = #{realName},
+           BANK_NAME = #{bankName},
+           POINT = #{point},
+           STATUS = #{status},
+           CREATE_TIME = #{createTime},
+           USER_ID = #{userId},
+           ADD_TYPE = #{addType}
+        where  ID = #{id}
+     ]]>
+    </update>
+    
+    
+    <update id="updateStatus" >
+    <![CDATA[
+        update USER_ACCOUNT_LOG set 
+           STATUS = #{status}
+        where  ID = #{id}
+     ]]>
+    </update>
+    
+    <delete id="delete" parameterType="int">
+        delete from USER_ACCOUNT_LOG where ID = #{id}
+    </delete>
+    
+    <delete id="deletes">
+        delete from USER_ACCOUNT_LOG where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+    
+</mapper> 

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.huishui.dao.HuiShuiRuleDao">
+
+   <resultMap id="huiShuiRuleResultMap" type="com.ffcs.icity.mvc.backstage.huishui.entity.HuiShuiRule">
+          <result property="id" column="ID"/>
+          <result property="areaType" column="AREA_TYPE"/>
+          <result property="bili" column="BILI"/>
+          <result property="startPoint" column="START_POINT"/>
+          <result property="endPoint" column="END_POINT"/>
+          <result property="createTime" column="CREATE_TIME"/>
+   </resultMap>
+   
+   	<sql id="huiShuiRuleColumns">
+	    <![CDATA[
+		ID,AREA_TYPE,BILI,START_POINT,END_POINT,CREATE_TIME
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="huiShuiRuleResultMap">
+		select <include refid="huiShuiRuleColumns" />
+        from HUI_SHUI_RULE
+		<where>
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(areaType)">
+				  and AREA_TYPE = #{areaType}
+			      </if>
+		</where>
+		order by ID desc
+	</select>
+
+	<select id="get" parameterType="long" resultMap="huiShuiRuleResultMap">		
+		select <include refid="huiShuiRuleColumns" />
+	    <![CDATA[
+		    from HUI_SHUI_RULE where ID = #{id} 
+	    ]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.huishui.entity.HuiShuiRule" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  HUI_SHUI_RULE (
+        	AREA_TYPE ,
+        	BILI ,
+        	START_POINT ,
+        	END_POINT ,
+        	CREATE_TIME 
+        ) values (
+        	#{areaType},
+        	#{bili},
+        	#{startPoint},
+        	#{endPoint},
+        	now()
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.huishui.entity.HuiShuiRule">
+	<![CDATA[
+		update HUI_SHUI_RULE set 
+	       AREA_TYPE = #{areaType},
+	       BILI = #{bili},
+	       START_POINT = #{startPoint},
+	       END_POINT = #{endPoint}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from HUI_SHUI_RULE where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from HUI_SHUI_RULE where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

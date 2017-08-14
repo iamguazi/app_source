@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd"
+		default-lazy-init="false">
+		
+		<description>接口配置</description>
+<!--公共模块 -->	
+		<!--短信 -->
+			<bean id="/sendSMSVerification" class="com.ffcs.icity.api.module.messageLogs.controller.SendSMSVerificationController" />
+ 
+ 		<!--文件上传 -->
+			<bean id="/file/upload" class="com.ffcs.icity.api.module.common.FileUploadController" />
+ 
+ 		<!--广告 -->
+			<bean id="/banner/list" class="com.ffcs.icity.api.module.banner.controller.BannerListController" />
+ 		
+ 		<!--广告 -->
+			<bean id="/banner/details" class="com.ffcs.icity.api.module.banner.controller.BannerDetailsController" />
+ 
+<!--用户模块 -->	
+       
+       <!--用户登录 -->
+			<bean id="/user/login" class="com.ffcs.icity.api.module.userInfo.controller.UserInfoLoginController" />
+       
+       <!--用户注册 -->
+			<bean id="/user/register" class="com.ffcs.icity.api.module.userInfo.controller.UserInfoRegisterController" />
+       	
+       	<!--用户详情 -->
+			<bean id="/user/details" class="com.ffcs.icity.api.module.userInfo.controller.UserInfoDetailsController" />
+       
+       <!--用户绑定 -->
+			<bean id="/user/band" class="com.ffcs.icity.api.module.userInfo.controller.UserInfoBandController" />
+       
+       <!--用户找回密码 -->
+			<bean id="/user/password/find" class="com.ffcs.icity.api.module.userInfo.controller.UserInfoFindPasswordController" />
+       
+		<!--用户第三方登录 -->
+			<bean id="/user3rd/login" class="com.ffcs.icity.api.module.userInfo.controller.UserInfo3rdLoginController" />
+       
+        <!--用户更新 -->  
+         	<bean id="/user/update" class="com.ffcs.icity.api.module.userInfo.controller.UpdateUserInfoController" />
+       
+       <!--用户列表 -->  
+         	<bean id="/user/list" class="com.ffcs.icity.api.module.userInfo.controller.UserInfoListController" />
+  
+  		<!--用户创建 -->  
+         	<bean id="/im/create" class="com.ffcs.icity.api.module.IM.controller.CreateIMUserController" />
+  
+  		<!--用户机器人创建 -->  
+         	<bean id="/im/2400/create" class="com.ffcs.icity.api.module.IM.controller.CreateIM2400UserController" />
+  
+ <!--首页模块 -->	
+       
+       <!--首页-->
+			<bean id="/home/page" class="com.ffcs.icity.api.module.homePage.controller.HomePageController" />
+ 
+       <!--游戏区域列表-->
+			<bean id="/gameArea/list" class="com.ffcs.icity.api.module.gameArea.controller.GameAreaListController" />
+ 
+ 		<!--游戏房间添加-->
+			<bean id="/room/add" class="com.ffcs.icity.api.module.roomInfo.controller.AddRoomInfoController" />
+ 
+ 		<!--游戏房间列表-->
+			<bean id="/room/list" class="com.ffcs.icity.api.module.roomInfo.controller.RoomInfoListController" />
+ 
+ 		<!--游戏房间详情-->
+			<bean id="/room/details" class="com.ffcs.icity.api.module.roomInfo.controller.RoomInfoDetailsController" />
+ 
+ 		<!--通知列表-->
+			<bean id="/notice/list" class="com.ffcs.icity.api.module.noticeInfo.controller.NoticeInfoListController" />
+ 
+ 		<!--通知详情-->
+			<bean id="/notice/details" class="com.ffcs.icity.api.module.noticeInfo.controller.NoticeInfoDetailsController" />
+ 		
+ 		<!--未读通知数量-->
+			<bean id="/notice/count" class="com.ffcs.icity.api.module.noticeInfo.controller.NoticeInfoCountController" />
+ 
+ <!--群组模块 -->	
+       
+       <!--加人-->
+			<bean id="/room/user/add" class="com.ffcs.icity.api.module.roomUserInfo.controller.AddRoomUserInfoController" />
+ 		
+ 		<!--加人消息-->
+			<bean id="/room/user/sendMsg" class="com.ffcs.icity.api.module.roomUserInfo.controller.AddRoomUserInfoMsgController" />
+ 
+       <!--踢人-->
+			<bean id="/room/user/del" class="com.ffcs.icity.api.module.roomUserInfo.controller.DelRoomUserInfoController" />
+ 		
+ 		<!--下注-->
+			<bean id="/room/point/add" class="com.ffcs.icity.api.module.userChoiceLog.controller.AddUserChoiceLogController" />
+ 		
+ 		<!--下注比例列表-->
+			<bean id="/room/bili/list" class="com.ffcs.icity.api.module.gameBili.controller.GameBiliListController" />
+ 		
+ 		<!--发消息-->
+			<bean id="/room/send" class="com.ffcs.icity.api.module.roomUserInfo.controller.SendRoomMsgController" />
+ 
+ 		<!--开奖记录以及倒计时-->
+			<bean id="/room/open/info" class="com.ffcs.icity.api.module.gameOpenLog.controller.GameOpenLogListController" />
+ 
+ 		<!--开奖接口-->
+			<bean id="/result/open" class="com.ffcs.icity.api.module.gameOpenLog.controller.AddGameOpenLogController" />
+ 		
+ 		<!--机器人接口-->
+			<bean id="/rebot/open" class="com.ffcs.icity.api.module.userChoiceLog.controller.AddUserChoiceLogByRobotController" />
+ 
+ <!--个人中心模块 -->	
+       
+       <!--账变记录-->
+			<bean id="/point/change/list" class="com.ffcs.icity.api.module.pointChangeLog.controller.PointChangeLogListController" />
+ 		
+ 		<!--游戏记录-->
+			<bean id="/game/choice/list" class="com.ffcs.icity.api.module.userChoiceLog.controller.UserChoiceLogListController" />
+ 
+ 		<!--充值记录-->
+			<bean id="/game/charge/list" class="com.ffcs.icity.api.module.userPayLog.controller.UserPayLogListController" />
+ 
+ 		<!--提现列表 -->   
+         	<bean id="/withdrawals/list" class="com.ffcs.icity.api.module.withdrawalsLogs.controller.WithdrawalsLogsListController" />
+
+     	<!--提现 -->   
+         	<bean id="/withdrawals/add" class="com.ffcs.icity.api.module.withdrawalsLogs.controller.AddWithdrawalsLogsController" />
+     	
+     	<!--回水列表 -->   
+         	<bean id="/huishui/list" class="com.ffcs.icity.api.module.userHuiShuiLog.controller.UserHuiShuiLogListController" />
+     
+     	
+     	<!--提现银行卡修改 -->   
+         	<bean id="/withdrawals/bank/update" class="com.ffcs.icity.api.module.userInfo.controller.UpdateUserBankInfoController" />
+     	
+  <!--充值模块 -->	    	
+     	<!--帐号列表 -->   
+         	<bean id="/account/list" class="com.ffcs.icity.api.module.accountInfo.controller.AccountInfoListController" />
+     	
+     	<!--添加转账记录 -->   
+         	<bean id="/account/user/add" class="com.ffcs.icity.api.module.userAccountLog.controller.AddUserAccountLogController" />
+     	
+     	<!--用户转账记录 -->   
+         	<bean id="/account/user/list" class="com.ffcs.icity.api.module.userAccountLog.controller.UserAccountLogListController" />
+     	
+     	<!--添加支付日志 -->   
+         	<bean id="/user/recharge" class="com.ffcs.icity.api.module.userPayLog.controller.AddUserPayLogController" />
+     	
+     	<!--支付宝回调 -->   
+         	<bean id="/ali/recv" class="com.ffcs.icity.api.alipay.controller.RecvAliPayParamController" />
+     	
+     	<!--mo宝回调 -->   
+         	<!--<bean id="/mobo/recv" class="com.ffcs.icity.api.mobaoPay.controller.RecvMobaoPayParamController" />-->
+     	
+     	<!--爱益回调 -->   
+         	<bean id="/aiyi/recv" class="com.ffcs.icity.api.aiyiPay.controller.RecvAiyiPayController" />
+     	
+     	<!--多宝回调 -->   
+         	<!--<bean id="/duobao/recv" class="com.ffcs.icity.api.duobaoPay.controller.RecvDuoBaoPayController" />-->
+     	
+     	<!--爱益支付url -->   
+         	<bean id="/aiyi/pay/url" class="com.ffcs.icity.api.aiyiPay.controller.GetPayUrlController" />
+     	
+     	<!--多宝支付url -->   
+         	<!--<bean id="/duobao/pay/url" class="com.ffcs.icity.api.duobaoPay.controller.GetPayUrlController" />-->
+     	
+     	<!--礼物列表 -->   
+         	<bean id="/gift/list" class="com.ffcs.icity.api.module.giftInfo.controller.GiftInfoListController" />
+     	
+     	<!--兑换礼物 -->   
+         	<bean id="/gift/exchange" class="com.ffcs.icity.api.module.exchangeGiftLog.controller.AddExchangeGiftLogController" />
+     	
+     	<!--礼物兑换记录 -->   
+         	<bean id="/exchange/list" class="com.ffcs.icity.api.module.exchangeGiftLog.controller.ExchangeGiftLogListController" />
+  		
+  		 
+  <!--其他模块 -->	    	
+     	<!--帐号列表 -->   
+         	<bean id="/tixian/params" class="com.ffcs.icity.api.module.otherInfo.controller.OtherInfoListController" />
+     	
+     	<!-- 客服列表 -->   
+         	<bean id="/kefu/list" class="com.ffcs.icity.api.module.otherInfo.controller.OtherInfoListByKefuController" />
+     	
+     	<!-- 分享列表 -->   
+         	<bean id="/share/list" class="com.ffcs.icity.api.module.otherInfo.controller.OtherInfoListByShareController" />
+     	
+     	<!--开奖 -->   
+         	<bean id="/open" class="com.ffcs.icity.api.module.gameOpenLog.controller.OpenLogNumController" />
+     	
+     	<!--后台手动开奖 -->   
+         	<bean id="/black/open" class="com.ffcs.icity.api.module.gameOpenLog.controller.OpenLogByBlackController" />
+     	
+     	<!--开奖记录 -->   
+         	<bean id="/wap/open/log" class="com.ffcs.icity.api.module.gameOpenLog.controller.GameOpenListByWapController" />
+     	
+     	<!--后台手动开奖 -->   
+         	<bean id="/wap/huishui" class="com.ffcs.icity.api.module.huiShuiRule.controller.HuiShuiRuleListController" />
+     	
+     	<!--客服问题列表-->   
+         	<bean id="/quest/list" class="com.ffcs.icity.api.module.questInfo.controller.QuestInfoListController" />
+     	
+     	<!--客服问题-->
+         	<bean id="/quest/details" class="com.ffcs.icity.api.module.questInfo.controller.QuestInfoDetailsController" />
+
+	<!--回水-->
+	<bean id="/huishui/add" class="com.ffcs.icity.api.module.userHuiShuiLog.controller.AddUserHuiShuiLogController" />
+
+	<!--分销-->
+	<bean id="/fenxiao/add" class="com.ffcs.icity.api.module.userFenxiaoLog.controller.AddUserFenxiaoLogController" />
+
+	<!--分销列表-->
+	<bean id="/fenxiao/list" class="com.ffcs.icity.api.module.userFenxiaoLog.controller.UserFenxiaoLogListController" />
+
+	<!--封禁-->
+	<bean id="/user/jinyong" class="com.ffcs.icity.api.module.userInfo.controller.UpdateUserStatusController" />
+     	
+     	<!--验证是否付款-->   
+         	<bean id="/user/pay/check" class="com.ffcs.icity.api.module.userPayLog.controller.CheckUserPayLogController" />
+     	
+     	<!--版本更新 -->   
+         	<bean id="/version" class="com.ffcs.icity.api.module.versionInfo.controller.VersionInfoDetailsController" />
+        
+        <!--wap详情 -->   
+         	<bean id="/wap/details" class="com.ffcs.icity.api.module.wapInfo.controller.WapInfoDetailsController" />
+         	
+        
+          <!--用户收益列表-->   
+         	<bean id="/share/bili/list" class="com.ffcs.icity.api.module.shareBili.controller.ShareBiliListController" />
+         	
+         	 <!--支付列表-->   
+         	<bean id="/pay/list" class="com.ffcs.icity.api.module.payListConfig.controller.PayListConfigListController" />
+         	
+         <!--支付列表-->   
+         	<bean id="/pay/url" class="com.ffcs.icity.api.aiyiPay.controller.GetPayParamsUrlController" />
+</beans>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.noticeInfo.dao.INoticeInfoDao">
+
+    <resultMap id="NoticeInfoRM" type="com.ffcs.icity.api.module.noticeInfo.entity.NoticeInfo">
+        <result property="id" column="ID"/>
+        <result property="title" column="TITLE"/>
+        <result property="content" column="CONTENT"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="noticeType" column="NOTICE_TYPE"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        NOTICE_INFO.ID  ,NOTICE_INFO.TITLE  ,NOTICE_INFO.CONTENT  ,NOTICE_INFO.CREATE_TIME  ,NOTICE_INFO.NOTICE_TYPE  ,NOTICE_INFO.USER_ID  
+	</sql>
+    <insert id="insertNoticeInfo" parameterType="com.ffcs.icity.api.module.noticeInfo.entity.NoticeInfo" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO NOTICE_INFO (
+        	ID  
+        	 <if test="title !=null">,TITLE  </if>
+        	 <if test="content !=null">,CONTENT  </if>
+        	,CREATE_TIME
+        	 <if test="noticeType !=null">,NOTICE_TYPE  </if>
+        	 <if test="userId !=null">,USER_ID  </if>
+        ) VALUES (
+        	null  
+        	 <if test="title !=null">,#{title}  </if>
+        	 <if test="content !=null">,#{content}  </if>
+        	 , sysdate()
+        	 <if test="noticeType !=null">,#{noticeType}  </if>
+        	 <if test="userId !=null">,#{userId}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateNoticeInfo"  parameterType="com.ffcs.icity.api.module.noticeInfo.entity.NoticeInfo">
+        UPDATE NOTICE_INFO SET
+	        ID =  #{id} 
+	      	  <if test="title !=null">,TITLE = #{title} </if>
+	      	  <if test="content !=null">,CONTENT = #{content} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+	      	  <if test="noticeType !=null">,NOTICE_TYPE = #{noticeType} </if>
+	      	  <if test="userId !=null">,USER_ID = #{userId} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteNoticeInfo" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM NOTICE_INFO WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getNoticeInfoById" resultMap="NoticeInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM NOTICE_INFO 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="title !=null">
+			     	and	<![CDATA[ TITLE =#{title} ]]>	
+			     </if>
+			     <if test="content !=null">
+			     	and	<![CDATA[ CONTENT =#{content} ]]>	
+			     </if>
+		         
+		         <if test="noticeType !=null">
+		            and <![CDATA[ NOTICE_TYPE = #{noticeType}  ]]>
+		         </if>
+		         <if test="userId !=null">
+		            and <![CDATA[ USER_ID = 0 ]]>
+		         </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM NOTICE_INFO <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="NoticeInfoRM">
+    	 SELECT <include refid="allFields"/> FROM NOTICE_INFO	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="NoticeInfoRM">
+    	SELECT <include refid="allFields"/>
+    	,( SELECT COUNT(1) FROM USER_AND_NOTICE    WHERE  USER_ID = #{userId}  AND NOTICE_ID = NOTICE_INFO.ID)status
+    	 FROM NOTICE_INFO 
+		
+		 WHERE 1=1
+		 <if test="noticeType !=null">
+		            and <![CDATA[ NOTICE_TYPE = #{noticeType}  ]]>
+		         </if>
+		   ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+    <select id="getMyList" resultMap="NoticeInfoRM">
+    	SELECT <include refid="allFields"/>
+    	,( SELECT COUNT(1) FROM USER_AND_NOTICE    WHERE  USER_ID = #{userId}  AND NOTICE_ID = NOTICE_INFO.ID)status
+    	 FROM NOTICE_INFO 
+		 WHERE USER_ID = #{userId} 
+		 ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 	<select id="getUnreadCount" resultType="int">
+    	SELECT COUNT(1)
+    	 FROM NOTICE_INFO 
+		 WHERE USER_ID =0
+    	AND ( SELECT COUNT(1) FROM USER_AND_NOTICE    WHERE  USER_ID = #{userId}  AND NOTICE_ID = NOTICE_INFO.ID)=0
+    </select>
+	
+	
+	<select id="getUnreadMyCount" resultType="int">
+    	SELECT COUNT(1)
+    	 FROM NOTICE_INFO 
+		 WHERE USER_ID = #{userId} 
+    	AND ( SELECT COUNT(1) FROM USER_AND_NOTICE    WHERE  USER_ID = #{userId}  AND NOTICE_ID = NOTICE_INFO.ID)=0
+    </select>
+	
+</mapper>
+

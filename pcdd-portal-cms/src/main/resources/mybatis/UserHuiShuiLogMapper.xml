@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.huishui.dao.UserHuiShuiLogDao">
+
+   <resultMap id="userHuiShuiLogResultMap" type="com.ffcs.icity.mvc.backstage.huishui.entity.UserHuiShuiLog">
+          <result property="id" column="ID"/>
+          <result property="type" column="TYPE"/>
+          <result property="userId" column="USER_ID"/>
+          <result property="point" column="POINT"/>
+          <result property="bili" column="BILI"/>
+          <result property="huiShuiPoint" column="HUI_SHUI_POINT"/>
+          <result property="status" column="STATUS"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="nickName" column="NICK_NAME"/>
+          <result property="account" column="ACCOUNT"/>
+          <result property="mobile" column="MOBILE"/>
+          <result property="zuhePoint" column="ZUHE_POINT"/>
+          <result property="pointNum" column="POINT_NUM"/>
+          <result property="xhibitPoint" column="XHIBIT_POINT"/>
+   </resultMap>
+   
+   	<sql id="userHuiShuiLogColumns">
+	    <![CDATA[
+		ID,TYPE,USER_ID,POINT,BILI,HUI_SHUI_POINT,STATUS,CREATE_TIME,ZUHE_POINT,POINT_NUM,XHIBIT_POINT
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="userHuiShuiLogResultMap">
+		select uhsl.*,ui.NICK_NAME,ui.ACCOUNT,ui.MOBILE
+        from USER_HUI_SHUI_LOG uhsl , USER_INFO ui
+        where uhsl.USER_ID = ui.ID
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and uhsl.ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(nickName)">
+				  and ui.NICK_NAME like CONCAT('%',#{nickName},'%') 
+			      </if>
+			      <if test="@Ognl@isNotEmpty(account)">
+				  and ui.ACCOUNT like CONCAT('%',#{account},'%') 
+			      </if>
+			      <if test="@Ognl@isNotEmpty(type)">
+				  and uhsl.TYPE = #{type}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(userId)">
+				  and uhsl.USER_ID = #{userId}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and uhsl.STATUS = #{status}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				  and uhsl.CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				  and uhsl.CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY),'%Y-%m-%d')
+			      </if>
+		order by ID desc
+	</select>
+
+	<select id="get" parameterType="long" resultMap="userHuiShuiLogResultMap">		
+		select <include refid="userHuiShuiLogColumns" />
+	    <![CDATA[
+		    from USER_HUI_SHUI_LOG where ID = #{id} 
+	    ]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.huishui.entity.UserHuiShuiLog" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  USER_HUI_SHUI_LOG (
+        	TYPE ,
+        	USER_ID ,
+        	POINT ,
+        	BILI ,
+        	HUI_SHUI_POINT ,
+        	STATUS ,
+        	CREATE_TIME 
+        ) values (
+        	#{type},
+        	#{userId},
+        	#{point},
+        	#{bili},
+        	#{huiShuiPoint},
+        	#{status},
+        	now()
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.huishui.entity.UserHuiShuiLog">
+	<![CDATA[
+		update USER_HUI_SHUI_LOG set 
+	       TYPE = #{type},
+	       USER_ID = #{userId},
+	       POINT = #{point},
+	       BILI = #{bili},
+	       HUI_SHUI_POINT = #{huiShuiPoint},
+	       STATUS = #{status}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	<update id="updateStatus" parameterType="map">
+	<![CDATA[
+		update USER_HUI_SHUI_LOG set 
+	       STATUS = #{status}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	<update id="batchUpdateStatus" >
+		update USER_HUI_SHUI_LOG set 
+	       STATUS = #{status}
+		where  ID in 
+		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from USER_HUI_SHUI_LOG where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from USER_HUI_SHUI_LOG where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

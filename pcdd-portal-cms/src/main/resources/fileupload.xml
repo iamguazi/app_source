@@ -1,0 +1,50 @@
+<!--
+
+此文件用于定义上传文件策略
+
+策略定义例子：
+
+	<fileUploadStrategy>
+		<id>file</id>  策略ID
+		<parentId>file</parentId>  父策略ID,如果提供了父策略ID,那么当策略的属性为空(maxSize属性为-1)时,会使用父策略同名属性的值
+		<maxSize>1048576</maxSize>  最大的上传文件大小,单位:字节,  例: 1M = 1048576 (1024*1024)
+		<storageDir>file</storageDir>  上传文件的存储目录
+		<baseStoragePath></baseStoragePath>   上传文件存储的根目录,当为空时,值为:<应用根目录路径>/uploads
+		<baseFileUrl></baseFileUrl>  上传文件的URL的前缀部分,当为空时,值为:应用的根URL
+		<exts>   允许上传的文件类型的扩展名,当为空时,表示不限制上传文件类型
+			<ext>png</ext>
+			<ext>bmp</ext>
+			<ext>jpg</ext>
+			<ext>jpeg</ext>
+			<ext>gif</ext>
+		</exts>
+	</fileUploadStrategy>
+
+-->
+
+<fileUploadStrategys>
+
+    <!-- 默认的文件策略 -->
+	<fileUploadStrategy>
+		<id>file</id>
+		<maxSize>10485760</maxSize>
+		<storageDir>file</storageDir>
+		<baseStoragePath></baseStoragePath>
+		<baseFileUrl>/uploads</baseFileUrl>
+	</fileUploadStrategy>
+	
+	<!-- 默认的图片策略 -->
+	<fileUploadStrategy>
+		<id>image</id>
+		<parentId>file</parentId>
+		<maxSize>1048576</maxSize>
+		<storageDir>image</storageDir>
+		<exts>
+			<ext>png</ext>
+			<ext>bmp</ext>
+			<ext>jpg</ext>
+			<ext>jpeg</ext>
+			<ext>gif</ext>
+		</exts>
+	</fileUploadStrategy>
+</fileUploadStrategys>

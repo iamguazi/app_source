@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.statistics.dao.PreviewFinancialStatisticsDao">
+
+   <resultMap id="previewFinancialStatisticsMap" type="com.ffcs.icity.mvc.backstage.statistics.entity.PreviewFinancialStatistics">
+   		<result property="newUser" column="NEW_USER"/>
+   		<result property="beijing28Exhibit" column="BEIJING28_EXHIBIT"/>
+   		<result property="canada28Exhibit" column="CANADA28_EXHIBIT"/>
+   		<result property="backWater" column="BACK_WATER"/>
+   		<result property="withdrawalFee" column="WITHDRAWAL_FEE"/>
+   		<result property="rechargeFee" column="RECHARGE_FEE"/>
+   		<result property="id" column="ID"/>
+   		<result property="account" column="ACCOUNT"/>
+   		<result property="nickName" column="NICK_NAME"/>
+   		<result property="xhibitPoint" column="XHIBIT_POINT"/>
+   </resultMap>
+
+	<select id="query"  parameterType="map"  resultMap="previewFinancialStatisticsMap">
+		SELECT
+		  ( SELECT  COUNT(1) FROM USER_INFO WHERE DATE_FORMAT(#{searchTime}, '%y-%m-%d') = DATE_FORMAT(USER_INFO.`CREATE_TIME`, '%y-%m-%d') ) NEW_USER,
+		  ( SELECT  IFNULL(SUM(USER_CHOICE_LOG.`POINT`-USER_CHOICE_LOG.`GET_POINT`),0) FROM USER_CHOICE_LOG WHERE   DATE_FORMAT(#{searchTime}, '%y-%m-%d') = DATE_FORMAT(USER_CHOICE_LOG.`CREATE_TIME`, '%y-%m-%d') AND USER_CHOICE_LOG.`GAME_TYPE`=1) BEIJING28_EXHIBIT,
+		  ( SELECT  IFNULL(SUM(USER_CHOICE_LOG.`POINT`-USER_CHOICE_LOG.`GET_POINT`),0) FROM USER_CHOICE_LOG WHERE  DATE_FORMAT(#{searchTime}, '%y-%m-%d') = DATE_FORMAT(USER_CHOICE_LOG.`CREATE_TIME`, '%y-%m-%d') AND USER_CHOICE_LOG.`GAME_TYPE`=2) CANADA28_EXHIBIT,
+		  ( SELECT  IFNULL(SUM(`USER_HUI_SHUI_LOG`.`HUI_SHUI_POINT`),0) FROM USER_HUI_SHUI_LOG WHERE  DATE_FORMAT(#{searchTime}, '%y-%m-%d') = DATE_FORMAT(USER_HUI_SHUI_LOG.`CREATE_TIME`, '%y-%m-%d') AND USER_HUI_SHUI_LOG.`STATUS`=1) BACK_WATER,
+		  ( SELECT  IFNULL(SUM(`WITHDRAWALS_LOGS`.`REAL_FEE`),0) FROM WITHDRAWALS_LOGS WHERE  DATE_FORMAT(#{searchTime}, '%y-%m-%d') = DATE_FORMAT(WITHDRAWALS_LOGS.`CREATE_TIME`, '%y-%m-%d')  AND WITHDRAWALS_LOGS.`STATUS`=1 ) WITHDRAWAL_FEE,
+		  ( SELECT  IFNULL(SUM(`USER_PAY_LOG`.`TOTAL_FEE`),0) FROM USER_PAY_LOG WHERE  DATE_FORMAT(#{searchTime}, '%y-%m-%d') = DATE_FORMAT(USER_PAY_LOG.`CREATE_TIME`, '%y-%m-%d') AND USER_PAY_LOG.`STATUS`=1 ) RECHARGE_FEE
+        FROM  DUAL
+	</select>
+
+	<select id="queryForMap"  parameterType="map"  resultType="map">
+		SELECT
+		  ( SELECT  COUNT(1) FROM USER_INFO WHERE DATE_FORMAT(#{searchTime}, '%y-%m-%d') = DATE_FORMAT(USER_INFO.`CREATE_TIME`, '%y-%m-%d') ) newUser,
+		  ( SELECT  IFNULL(SUM(USER_CHOICE_LOG.`POINT`-USER_CHOICE_LOG.`GET_POINT`),0) FROM USER_CHOICE_LOG WHERE   DATE_FORMAT(#{searchTime}, '%y-%m-%d') = DATE_FORMAT(USER_CHOICE_LOG.`CREATE_TIME`, '%y-%m-%d') AND USER_CHOICE_LOG.`GAME_TYPE`=1) gameType1,
+		  ( SELECT  IFNULL(SUM(USER_CHOICE_LOG.`POINT`-USER_CHOICE_LOG.`GET_POINT`),0) FROM USER_CHOICE_LOG WHERE  DATE_FORMAT(#{searchTime}, '%y-%m-%d') = DATE_FORMAT(USER_CHOICE_LOG.`CREATE_TIME`, '%y-%m-%d') AND USER_CHOICE_LOG.`GAME_TYPE`=2) gameType2,
+		  ( SELECT  IFNULL(SUM(`USER_HUI_SHUI_LOG`.`HUI_SHUI_POINT`),0) FROM USER_HUI_SHUI_LOG WHERE  DATE_FORMAT(#{searchTime}, '%y-%m-%d') = DATE_FORMAT(USER_HUI_SHUI_LOG.`CREATE_TIME`, '%y-%m-%d') AND USER_HUI_SHUI_LOG.`STATUS`=1) backWater,
+		  ( SELECT  IFNULL(SUM(`WITHDRAWALS_LOGS`.`REAL_FEE`),0) FROM WITHDRAWALS_LOGS WHERE  DATE_FORMAT(#{searchTime}, '%y-%m-%d') = DATE_FORMAT(WITHDRAWALS_LOGS.`CREATE_TIME`, '%y-%m-%d')  AND WITHDRAWALS_LOGS.`STATUS`=1 ) withdrawalFee,
+		  ( SELECT  IFNULL(SUM(`USER_PAY_LOG`.`TOTAL_FEE`),0) FROM USER_PAY_LOG WHERE  DATE_FORMAT(#{searchTime}, '%y-%m-%d') = DATE_FORMAT(USER_PAY_LOG.`CREATE_TIME`, '%y-%m-%d') AND USER_PAY_LOG.`STATUS`=1 ) rechargeFee
+        FROM  DUAL
+	</select>
+
+	<select id="queryPreview"  parameterType="map" resultMap="previewFinancialStatisticsMap"  >
+		SELECT 
+		  USER_INFO.ID,
+		  USER_INFO.ACCOUNT,
+		  USER_INFO.NICK_NAME,
+		  SUM(
+		    USER_CHOICE_LOG.`GET_POINT` - USER_CHOICE_LOG.`POINT`
+		  ) XHIBIT_POINT 
+		FROM
+		  USER_CHOICE_LOG,
+		  USER_INFO 
+		WHERE USER_CHOICE_LOG.`USER_ID` = USER_INFO.`ID` 
+		<if test="@Ognl@isNotEmpty(createTimeBegin)">
+		  AND DATE_FORMAT(
+            USER_CHOICE_LOG.`CREATE_TIME`,
+            '%Y-%m-%d'
+          ) = #{createTimeBegin} 
+		</if>
+		
+		<if test="!@Ognl@isNotEmpty(createTimeBegin)">
+          AND DATE_FORMAT(
+            USER_CHOICE_LOG.`CREATE_TIME`,
+            '%Y-%m-%d'
+          ) = CURDATE() 
+        </if>
+          
+		GROUP BY USER_INFO.ID,
+		  USER_INFO.ACCOUNT 
+		  
+		<if test="@Ognl@isNotEmpty(xhibitPointSort) and xhibitPointSort == 'asc' ">
+		ORDER BY XHIBIT_POINT ASC 
+		</if>
+
+		<if test="@Ognl@isNotEmpty(xhibitPointSort) and xhibitPointSort == 'desc' ">
+		ORDER BY XHIBIT_POINT DESC
+		</if>
+		
+		<if test="@Ognl@isEmpty(xhibitPointSort)">
+        ORDER BY XHIBIT_POINT DESC 
+        </if>
+	</select>
+
+	
+</mapper> 

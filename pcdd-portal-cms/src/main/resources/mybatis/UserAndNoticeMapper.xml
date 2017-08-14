@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.notice.dao.UserAndNoticeDao">
+
+   <resultMap id="userAndNoticeResultMap" type="com.ffcs.icity.mvc.backstage.notice.entity.UserAndNotice">
+          <result property="id" column="ID"/>
+          <result property="userId" column="USER_ID"/>
+          <result property="noticeId" column="NOTICE_ID"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="status" column="STATUS"/>
+   </resultMap>
+   
+    <sql id="userAndNoticeColumns">
+        <![CDATA[
+        ID,USER_ID,NOTICE_ID,CREATE_TIME,STATUS
+        ]]>
+    </sql>
+    
+    <select id="query"  parameterType="map"  resultMap="userAndNoticeResultMap">
+        select <include refid="userAndNoticeColumns" />
+        from USER_AND_NOTICE
+        <where>
+                  <if test="@Ognl@isNotEmpty(userId)">
+                  and USER_ID = #{userId}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(noticeId)">
+                  and NOTICE_ID = #{noticeId}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(status)">
+                  and STATUS = #{status}
+                  </if>
+        </where>
+        order by ID desc
+    </select>
+
+    <select id="get" parameterType="long" resultMap="userAndNoticeResultMap">       
+        select <include refid="userAndNoticeColumns" />
+        <![CDATA[
+            from USER_AND_NOTICE where ID = #{id} 
+        ]]>
+    </select>
+    
+    <insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.notice.entity.UserAndNotice" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  USER_AND_NOTICE (
+            USER_ID ,
+            NOTICE_ID ,
+            CREATE_TIME ,
+            STATUS 
+        ) values (
+            #{userId},
+            #{noticeId},
+            now(),
+            #{status}
+        )
+    ]]>  
+    </insert>
+
+    <update id="update" parameterType="com.ffcs.icity.mvc.backstage.notice.entity.UserAndNotice">
+    <![CDATA[
+        update USER_AND_NOTICE set 
+           USER_ID = #{userId},
+           NOTICE_ID = #{noticeId},
+           CREATE_TIME = #{createTime},
+           STATUS = #{status}
+        where  ID = #{id}
+     ]]>
+    </update>
+    
+    <delete id="delete" parameterType="int">
+        delete from USER_AND_NOTICE where ID = #{id}
+    </delete>
+    
+    <delete id="deletes">
+        delete from USER_AND_NOTICE where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+    
+</mapper> 

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.otherInfo.dao.IOtherInfoDao">
+
+    <resultMap id="OtherInfoRM" type="com.ffcs.icity.api.module.otherInfo.entity.OtherInfo">
+        <result property="id" column="ID"/>
+        <result property="otherKey" column="OTHER_KEY"/>
+        <result property="otherValue" column="OTHER_VALUE"/>
+        <result property="beizhu" column="BEIZHU"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        ID  ,OTHER_KEY  ,OTHER_VALUE  ,BEIZHU  
+	</sql>
+    <insert id="insertOtherInfo" parameterType="com.ffcs.icity.api.module.otherInfo.entity.OtherInfo" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO OTHER_INFO (
+        	ID  
+        	 <if test="otherKey !=null">,OTHER_KEY  </if>
+        	 <if test="otherValue !=null">,OTHER_VALUE  </if>
+        	 <if test="beizhu !=null">,BEIZHU  </if>
+        ) VALUES (
+        	null  
+        	 <if test="otherKey !=null">,#{otherKey}  </if>
+        	 <if test="otherValue !=null">,#{otherValue}  </if>
+        	 <if test="beizhu !=null">,#{beizhu}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateOtherInfo"  parameterType="com.ffcs.icity.api.module.otherInfo.entity.OtherInfo">
+        UPDATE OTHER_INFO SET
+	        ID =  #{id} 
+	      	  <if test="otherKey !=null">,OTHER_KEY = #{otherKey} </if>
+	      	  <if test="otherValue !=null">,OTHER_VALUE = #{otherValue} </if>
+	      	  <if test="beizhu !=null">,BEIZHU = #{beizhu} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteOtherInfo" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM OTHER_INFO WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getOtherInfoById" resultMap="OtherInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM OTHER_INFO 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	
+	<select id="getOtherInfoByKey" resultMap="OtherInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM OTHER_INFO 
+	        WHERE 
+		        OTHER_KEY =#{key} ]]>
+    </select>
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="otherKey !=null">
+			     	and	<![CDATA[ OTHER_KEY =#{otherKey} ]]>	
+			     </if>
+			     <if test="otherValue !=null">
+			     	and	<![CDATA[ OTHER_VALUE =#{otherValue} ]]>	
+			     </if>
+			     <if test="beizhu !=null">
+			     	and	<![CDATA[ BEIZHU =#{beizhu} ]]>	
+			     </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM OTHER_INFO <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="OtherInfoRM">
+    	 SELECT <include refid="allFields"/> FROM OTHER_INFO	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="OtherInfoRM">
+    	SELECT <include refid="allFields"/> FROM OTHER_INFO 
+		<include refid="findPage"/>		
+    </select>
+    
+ 
+	
+</mapper>
+

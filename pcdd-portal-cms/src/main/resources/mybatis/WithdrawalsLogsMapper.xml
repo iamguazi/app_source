@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.withdrawalslogs.dao.WithdrawalsLogsDao">
+
+   <resultMap id="withdrawalsLogsResultMap" type="com.ffcs.icity.mvc.backstage.withdrawalslogs.entity.WithdrawalsLogs">
+          <result property="id" column="ID"/>
+          <result property="userId" column="USER_ID"/>
+          <result property="userType" column="USER_TYPE"/>
+          <result property="type" column="TYPE"/>
+          <result property="fee" column="FEE"/>
+          <result property="realFee" column="REAL_FEE"/>
+          <result property="bili" column="BILI"/>
+          <result property="account" column="ACCOUNT"/>
+          <result property="status" column="STATUS"/>
+          <result property="source" column="SOURCE"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="updateTime" column="UPDATE_TIME"/>
+          <result property="realName" column="REAL_NAME"/>
+          <result property="mobile" column="MOBILE"/>
+          <result property="bankName" column="BANK_NAME"/>
+          <result property="nickName" column="NICK_NAME"/>
+   </resultMap>
+   
+   	<sql id="withdrawalsLogsColumns">
+	    <![CDATA[
+		ID,USER_ID,USER_TYPE,TYPE,FEE,BILI,ACCOUNT,REAL_FEE,STATUS,SOURCE,CREATE_TIME,UPDATE_TIME,REAL_NAME,MOBILE,BANK_NAME
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="withdrawalsLogsResultMap">
+		select wl.*,ui.NICK_NAME
+        from WITHDRAWALS_LOGS wl,USER_INFO ui
+		where wl.USER_ID = ui.ID
+		          <if test="@Ognl@isNotEmpty(id)">
+				  and wl.ID = #{id}
+			      </if>
+				  <if test="@Ognl@isNotEmpty(nickName)">
+				  and ui.NICK_NAME like concat('%',#{nickName},'%')
+			      </if>
+				  <if test="@Ognl@isNotEmpty(account)">
+				  and ui.ACCOUNT like concat('%',#{account},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(userId)">
+				  and wl.USER_ID = #{userId}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(source)">
+				  and wl.SOURCE = #{source}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and wl.STATUS = #{status}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				  and wl.CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				  and wl.CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY),'%Y-%m-%d')
+			      </if>
+		order by wl.ID desc
+	</select>
+
+	<select id="get" parameterType="long" resultMap="withdrawalsLogsResultMap">		
+		select <include refid="withdrawalsLogsColumns" />
+	    <![CDATA[
+		    from WITHDRAWALS_LOGS where ID = #{id} 
+	    ]]>
+	</select>
+
+	<select id="countStatus"  resultType="int">		
+		select count(*)
+		    from WITHDRAWALS_LOGS where STATUS = #{status} 
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.withdrawalslogs.entity.WithdrawalsLogs" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  WITHDRAWALS_LOGS (
+        	USER_ID ,
+        	TYPE ,
+        	FEE ,
+        	ACCOUNT ,
+        	STATUS ,
+        	SOURCE ,
+        	CREATE_TIME ,
+        	UPDATE_TIME ,
+        	REAL_NAME ,
+        	MOBILE ,
+        	BANK_NAME 
+        ) values (
+        	#{userId},
+        	#{type},
+        	#{fee},
+        	#{account},
+        	#{status},
+        	#{source},
+        	#{createTime},
+        	#{updateTime},
+        	#{realName},
+        	#{mobile},
+        	#{bankName}
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.withdrawalslogs.entity.WithdrawalsLogs">
+	<![CDATA[
+		update WITHDRAWALS_LOGS set 
+	       USER_ID = #{userId},
+	       TYPE = #{type},
+	       FEE = #{fee},
+	       ACCOUNT = #{account},
+	       STATUS = #{status},
+	       SOURCE = #{source},
+	       CREATE_TIME = #{createTime},
+	       UPDATE_TIME = #{updateTime},
+	       REAL_NAME = #{realName},
+	       MOBILE = #{mobile},
+	       BANK_NAME = #{bankName}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	
+	<update id="updateStatus" parameterType="map">
+		update WITHDRAWALS_LOGS set 
+	       STATUS = #{status},
+	       UPDATE_TIME = NOW()
+		where  ID = #{id} 
+	</update>
+
+	<update id="batchUpdateStatus" >
+		update WITHDRAWALS_LOGS set 
+	       STATUS = #{status},
+	       UPDATE_TIME = NOW()
+		where  ID in 
+		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+	</update>
+	
+	
+	<delete id="delete" parameterType="int">
+		delete from WITHDRAWALS_LOGS where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from WITHDRAWALS_LOGS where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

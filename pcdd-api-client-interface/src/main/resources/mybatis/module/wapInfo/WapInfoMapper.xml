@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.wapInfo.dao.IWapInfoDao">
+
+    <resultMap id="WapInfoRM" type="com.ffcs.icity.api.module.wapInfo.entity.WapInfo">
+        <result property="id" column="ID"/>
+        <result property="wapTitle" column="WAP_TITLE"/>
+        <result property="wapContent" column="WAP_CONTENT"/>
+        <result property="wapKey" column="WAP_KEY"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        WAP_INFO.ID  ,WAP_INFO.WAP_TITLE  ,WAP_INFO.WAP_CONTENT  ,WAP_INFO.WAP_KEY  
+	</sql>
+    <insert id="insertWapInfo" parameterType="com.ffcs.icity.api.module.wapInfo.entity.WapInfo" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO WAP_INFO (
+        	ID  
+        	 <if test="wapTitle !=null">,WAP_TITLE  </if>
+        	 <if test="wapContent !=null">,WAP_CONTENT  </if>
+        	 <if test="wapKey !=null">,WAP_KEY  </if>
+        ) VALUES (
+        	null  
+        	 <if test="wapTitle !=null">,#{wapTitle}  </if>
+        	 <if test="wapContent !=null">,#{wapContent}  </if>
+        	 <if test="wapKey !=null">,#{wapKey}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateWapInfo"  parameterType="com.ffcs.icity.api.module.wapInfo.entity.WapInfo">
+        UPDATE WAP_INFO SET
+	        ID =  #{id} 
+	      	  <if test="wapTitle !=null">,WAP_TITLE = #{wapTitle} </if>
+	      	  <if test="wapContent !=null">,WAP_CONTENT = #{wapContent} </if>
+	      	  <if test="wapKey !=null">,WAP_KEY = #{wapKey} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteWapInfo" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM WAP_INFO WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getWapInfoById" resultMap="WapInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM WAP_INFO 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+    
+    <select id="getWapInfoByKey" resultMap="WapInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM WAP_INFO 
+	        WHERE 
+		       WAP_KEY =#{wapKey}
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="wapTitle !=null">
+			     	and	<![CDATA[ WAP_TITLE =#{wapTitle} ]]>	
+			     </if>
+			     <if test="wapContent !=null">
+			     	and	<![CDATA[ WAP_CONTENT =#{wapContent} ]]>	
+			     </if>
+			     <if test="wapKey !=null">
+			     	and	<![CDATA[ WAP_KEY =#{wapKey} ]]>	
+			     </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM WAP_INFO <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="WapInfoRM">
+    	 SELECT <include refid="allFields"/> FROM WAP_INFO	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="WapInfoRM">
+    	SELECT <include refid="allFields"/> FROM WAP_INFO 
+		<include refid="findPage"/>	
+		 ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

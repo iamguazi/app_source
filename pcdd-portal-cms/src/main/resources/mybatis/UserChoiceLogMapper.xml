@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.user.dao.UserChoiceLogDao">
+
+   <resultMap id="userChoiceLogResultMap" type="com.ffcs.icity.mvc.backstage.user.entity.UserChoiceLog">
+          <result property="id" column="ID"/>
+          <result property="userId" column="USER_ID"/>
+          <result property="roomId" column="ROOM_ID"/>
+          <result property="roomLevel" column="ROOM_LEVEL"/>
+          <result property="choiceNo" column="CHOICE_NO"/>
+          <result property="choiceResult" column="CHOICE_RESULT"/>
+          <result property="choiceName" column="CHOICE_NAME"/>
+          <result property="bili" column="BILI"/>
+          <result property="point" column="POINT"/>
+          <result property="realResult" column="REAL_RESULT"/>
+          <result property="resultType" column="RESULT_TYPE"/>
+          <result property="getPoint" column="GET_POINT"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="gameType" column="GAME_TYPE"/>
+          <result property="biliId" column="BILI_ID"/>
+          <result property="isZhong" column="IS_ZHONG"/>
+          <result property="xhibitPoint" column="XHIBIT_POINT"/>
+          <result property="account" column="ACCOUNT"/>
+          <result property="nickName" column="NICK_NAME"/>
+          <result property="userPhoto" column="USER_PHOTO"/>
+          <result property="areaName" column="AREA_NAME"/>
+          <result property="roomName" column="ROOM_NAME"/>
+          <result property="status" column="STATUS"/>
+          <result property="accountPoint" column="ACCOUNT_POINT"/>
+   </resultMap>
+   
+   	<sql id="userChoiceLogColumns">
+	    <![CDATA[
+		ID,USER_ID,ROOM_ID,AREA_ID,CHOICE_NO,CHOICE_NAME,CHOICE_RESULT,BILI,POINT,REAL_RESULT,RESULT_TYPE,GET_POINT,CREATE_TIME,GAME_TYPE,IS_ZHONG,BILI_ID,XHIBIT_POINT
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="userChoiceLogResultMap">
+		select 
+            ucl.ID,ucl.USER_ID,ucl.AREA_ID,ucl.ROOM_ID,ucl.CHOICE_NO,ucl.CHOICE_NAME,ucl.CHOICE_RESULT,ucl.BILI,
+            ucl.POINT,ucl.REAL_RESULT,ucl.RESULT_TYPE,ucl.GET_POINT,ucl.CREATE_TIME,ucl.GAME_TYPE,ucl.IS_ZHONG,ucl.BILI_ID,
+            IF(ucl.IS_ZHONG !=-1,(IFNULL(ucl.GET_POINT,0)-IFNULL(ucl.POINT,0)),0) XHIBIT_POINT,ui.ACCOUNT,ui.NICK_NAME,ui.USER_PHOTO,ui.STATUS,ui.POINT AS ACCOUNT_POINT,ga.AREA_NAME,ri.ROOM_NAME
+        from USER_CHOICE_LOG ucl,USER_INFO ui,ROOM_INFO ri,GAME_AREA ga
+        where ucl.USER_ID = ui.ID AND ucl.ROOM_ID = ri.ID AND ri.AREA_ID = ga.ID
+			      <if test="@Ognl@isNotEmpty(userId)">
+				  and ucl.USER_ID = #{userId}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(account)">
+				  and ui.ACCOUNT like concat('%',#{account},'%') 
+			      </if>
+			      <if test="@Ognl@isNotEmpty(nickName)">
+				  and ui.NICK_NAME like concat('%',#{nickName},'%') 
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and ui.STATUS = #{status}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(roomId)">
+				  and ucl.ROOM_ID = #{roomId}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(roomLevel)">
+				  and ucl.ROOM_LEVEL = #{roomLevel}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(choiceNo)">
+				  and ucl.CHOICE_NO = #{choiceNo}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				  and ucl.CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				  and ucl.CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY),'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(gameType)">
+				  and ucl.GAME_TYPE = #{gameType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(areaId)">
+                  and ucl.AREA_ID = #{areaId}
+                  </if>
+		order by ucl.ID desc
+	</select>
+
+	<select id="getTotalXhibitPoint"  parameterType="map"  resultType="double">
+		select 
+            SUM(IF(ucl.IS_ZHONG !=-1,(IFNULL(ucl.GET_POINT,0)-IFNULL(ucl.POINT,0)),0)) XHIBIT_POINT
+        from USER_CHOICE_LOG ucl,USER_INFO ui,ROOM_INFO ri,GAME_AREA ga
+        where ucl.USER_ID = ui.ID AND ucl.ROOM_ID = ri.ID AND ri.AREA_ID = ga.ID
+			      <if test="@Ognl@isNotEmpty(userId)">
+				  and ucl.USER_ID = #{userId}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(account)">
+				  and ui.ACCOUNT like concat('%',#{account},'%') 
+			      </if>
+			      <if test="@Ognl@isNotEmpty(nickName)">
+				  and ui.NICK_NAME like concat('%',#{nickName},'%') 
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and ui.STATUS = #{status}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(roomId)">
+				  and ucl.ROOM_ID = #{roomId}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(roomLevel)">
+				  and ucl.ROOM_LEVEL = #{roomLevel}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(choiceNo)">
+				  and ucl.CHOICE_NO = #{choiceNo}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				  and ucl.CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				  and ucl.CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY),'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(gameType)">
+				  and ucl.GAME_TYPE = #{gameType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(areaId)">
+                  and ucl.AREA_ID = #{areaId}
+                  </if>
+		order by ucl.ID desc
+	</select>
+
+	<select id="get" parameterType="long" resultMap="userChoiceLogResultMap">		
+		select <include refid="userChoiceLogColumns" />
+	    <![CDATA[
+		    from USER_CHOICE_LOG where ID = #{id} 
+	    ]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.user.entity.UserChoiceLog" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  USER_CHOICE_LOG (
+        	USER_ID ,
+        	ROOM_ID ,
+        	ROOM_LEVEL ,
+        	CHOICE_NO ,
+        	CHOICE_RESULT ,
+        	BILI ,
+        	POINT ,
+        	REAL_RESULT ,
+        	RESULT_TYPE ,
+        	GET_POINT ,
+        	CREATE_TIME ,
+        	GAME_TYPE ,
+        	XHIBIT_POINT 
+        ) values (
+        	#{userId},
+        	#{roomId},
+        	#{roomLevel},
+        	#{choiceNo},
+        	#{choiceResult},
+        	#{bili},
+        	#{point},
+        	#{realResult},
+        	#{resultType},
+        	#{getPoint},
+        	#{createTime},
+        	#{gameType},
+        	#{xhibitPoint}
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.user.entity.UserChoiceLog">
+	<![CDATA[
+		update USER_CHOICE_LOG set 
+	       USER_ID = #{userId},
+	       ROOM_ID = #{roomId},
+	       ROOM_LEVEL = #{roomLevel},
+	       CHOICE_NO = #{choiceNo},
+	       CHOICE_RESULT = #{choiceResult},
+	       BILI = #{bili},
+	       POINT = #{point},
+	       REAL_RESULT = #{realResult},
+	       RESULT_TYPE = #{resultType},
+	       GET_POINT = #{getPoint},
+	       CREATE_TIME = #{createTime},
+	       GAME_TYPE = #{gameType},
+	       XHIBIT_POINT = #{xhibitPoint}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	
+	<delete id="delete" parameterType="int">
+		delete from USER_CHOICE_LOG where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from USER_CHOICE_LOG where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

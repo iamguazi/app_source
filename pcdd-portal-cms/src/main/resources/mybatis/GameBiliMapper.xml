@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.gamebili.dao.GameBiliDao">
+
+   <resultMap id="gameBiliResultMap" type="com.ffcs.icity.mvc.backstage.gamebili.entity.GameBili">
+          <result property="id" column="ID"/>
+          <result property="gameType" column="GAME_TYPE"/>
+          <result property="biliType" column="BILI_TYPE"/>
+          <result property="biliName" column="BILI_NAME"/>
+          <result property="bili" column="BILI"/>
+          <result property="result" column="RESULT"/>
+          <result property="areaId" column="AREA_ID"/>
+          <result property="areaTypeName" column="AREA_TYPE_NAME"/>
+          <result property="minPoint" column="MIN_POINT"/>
+          <result property="maxPoint" column="MAX_POINT"/>
+   </resultMap>
+   
+   	<sql id="gameBiliColumns">
+	    <![CDATA[
+		ID,GAME_TYPE,BILI_TYPE,BILI_NAME,BILI,RESULT,AREA_ID,MIN_POINT,MAX_POINT
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="gameBiliResultMap">
+		select gb.*,ga.AREA_NAME as AREA_TYPE_NAME
+        from GAME_BILI gb, GAME_AREA ga
+		where gb.AREA_ID = ga.ID
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and gb.ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(gameType)">
+				  and gb.GAME_TYPE = #{gameType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(biliType)">
+				  and gb.BILI_TYPE = #{biliType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(biliName)">
+				  and gb.BILI_NAME like concat('%',#{biliName},'%')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(areaId)">
+				  and gb.AREA_ID = #{areaId}
+			      </if>
+		order by gb.ID desc
+	</select>
+
+	<select id="get" parameterType="long" resultMap="gameBiliResultMap">		
+		select <include refid="gameBiliColumns" />
+	    <![CDATA[
+		    from GAME_BILI where ID = #{id} 
+	    ]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.gamebili.entity.GameBili" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  GAME_BILI (
+        	GAME_TYPE ,
+        	BILI_TYPE ,
+        	BILI_NAME ,
+        	BILI ,
+        	RESULT ,
+        	AREA_ID,
+        	MIN_POINT,
+        	MAX_POINT 
+        ) values (
+        	#{gameType},
+        	#{biliType},
+        	#{biliName},
+        	#{bili},
+        	#{result},
+        	#{areaId},
+        	#{minPoint},
+        	#{maxPoint}
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.gamebili.entity.GameBili">
+	<![CDATA[
+		update GAME_BILI set 
+	       GAME_TYPE = #{gameType},
+	       BILI_TYPE = #{biliType},
+	       BILI_NAME = #{biliName},
+	       BILI = #{bili},
+	       RESULT = #{result},
+	       AREA_ID = #{areaId},
+	       MIN_POINT= #{minPoint},
+	       MAX_POINT = #{maxPoint}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from GAME_BILI where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from GAME_BILI where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

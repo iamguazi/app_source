@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.gameBili.dao.IGameBiliDao">
+
+    <resultMap id="GameBiliRM" type="com.ffcs.icity.api.module.gameBili.entity.GameBili">
+        <result property="id" column="ID"/>
+        <result property="gameType" column="GAME_TYPE"/>
+        <result property="biliType" column="BILI_TYPE"/>
+        <result property="biliName" column="BILI_NAME"/>
+        <result property="bili" column="BILI"/>
+        <result property="result" column="RESULT"/>
+        <result property="areaId" column="AREA_ID"/>
+        <result property="minPoint" column="MIN_POINT"/>
+        <result property="maxPoint" column="MAX_POINT"/>
+        
+        
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        GAME_BILI.ID  ,GAME_BILI.GAME_TYPE  ,GAME_BILI.BILI_TYPE  ,GAME_BILI.BILI_NAME  ,GAME_BILI.BILI  ,GAME_BILI.RESULT  ,GAME_BILI.AREA_ID 
+        ,GAME_BILI.MIN_POINT ,GAME_BILI.MAX_POINT
+	</sql>
+    <insert id="insertGameBili" parameterType="com.ffcs.icity.api.module.gameBili.entity.GameBili" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO GAME_BILI (
+        	ID  
+        	 <if test="gameType !=null">,GAME_TYPE  </if>
+        	 <if test="biliType !=null">,BILI_TYPE  </if>
+        	 <if test="biliName !=null">,BILI_NAME  </if>
+        	 <if test="bili !=null">,BILI  </if>
+        	 <if test="result !=null">,RESULT  </if>
+        ) VALUES (
+        	null  
+        	 <if test="gameType !=null">,#{gameType}  </if>
+        	 <if test="biliType !=null">,#{biliType}  </if>
+        	 <if test="biliName !=null">,#{biliName}  </if>
+        	 <if test="bili !=null">,#{bili}  </if>
+        	 <if test="result !=null">,#{result}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateGameBili"  parameterType="com.ffcs.icity.api.module.gameBili.entity.GameBili">
+        UPDATE GAME_BILI SET
+	        ID =  #{id} 
+	      	  <if test="gameType !=null">,GAME_TYPE = #{gameType} </if>
+	      	  <if test="biliType !=null">,BILI_TYPE = #{biliType} </if>
+	      	  <if test="biliName !=null">,BILI_NAME = #{biliName} </if>
+	      	  <if test="bili !=null">,BILI = #{bili} </if>
+	      	  <if test="result !=null">,RESULT = #{result} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteGameBili" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM GAME_BILI WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getGameBiliById" resultMap="GameBiliRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM GAME_BILI 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+    
+     <select id="getGameBiliByAreaId" resultMap="GameBiliRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM GAME_BILI 
+	        WHERE 
+		        AREA_ID =  #{areaId} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+		         <if test="gameType !=null">
+		            and <![CDATA[ GAME_TYPE = #{gameType}  ]]>
+		         </if>
+		         <if test="biliType !=null">
+		            and <![CDATA[ BILI_TYPE = #{biliType}  ]]>
+		         </if>
+			     <if test="biliName !=null">
+			     	and	<![CDATA[ BILI_NAME =#{biliName} ]]>	
+			     </if>
+		         <if test="bili !=null">
+		            and <![CDATA[ BILI = #{bili}  ]]>
+		         </if>
+			     <if test="result !=null">
+			     	and	<![CDATA[ RESULT =#{result} ]]>	
+			     </if>
+			     <if test="areaId !=null">
+			     	and	<![CDATA[ AREA_ID =#{areaId} ]]>	
+			     </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM GAME_BILI <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="GameBiliRM">
+    	 SELECT <include refid="allFields"/> FROM GAME_BILI	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="GameBiliRM">
+    	SELECT <include refid="allFields"/> FROM GAME_BILI 
+		<include refid="findPage"/>	
+		 ORDER BY ID 	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.account.dao.AccountInfoDao">
+
+   <resultMap id="accountInfoResultMap" type="com.ffcs.icity.mvc.backstage.account.entity.AccountInfo">
+          <result property="id" column="ID"/>
+          <result property="account" column="ACCOUNT"/>
+          <result property="accountType" column="ACCOUNT_TYPE"/>
+          <result property="payName" column="PAY_NAME"/>
+          <result property="realName" column="REAL_NAME"/>
+          <result property="bankName" column="BANK_NAME"/>
+          <result property="openCardAddress" column="OPEN_CARD_ADDRESS"/>
+          <result property="photo" column="PHOTO"/>
+          <result property="createTime" column="CREATE_TIME"/>
+   </resultMap>
+   
+    <sql id="accountInfoColumns">
+        <![CDATA[
+        ID,ACCOUNT,ACCOUNT_TYPE,REAL_NAME,BANK_NAME,OPEN_CARD_ADDRESS,PHOTO,CREATE_TIME
+        ]]>
+    </sql>
+    
+    <select id="query"  parameterType="map"  resultMap="accountInfoResultMap">
+        select 
+                ai.ID,ai.ACCOUNT,ai.ACCOUNT_TYPE,ai.REAL_NAME,
+                ai.BANK_NAME,ai.OPEN_CARD_ADDRESS,PHOTO,ai.CREATE_TIME
+        from ACCOUNT_INFO ai 
+        <where>
+                  <if test="@Ognl@isNotEmpty(id)">
+                  and ai.ID = #{id}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(userId)">
+                  and ai.USER_ID = #{userId}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(account)">
+                  and ai.ACCOUNT like concat('%',#{account},'%') 
+                  </if>
+                  <if test="@Ognl@isNotEmpty(accountType)">
+                  and ai.ACCOUNT_TYPE = #{accountType}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(realName)">
+                  and ai.REAL_NAME like concat('%',#{realName},'%')
+                  </if>
+                  <if test="@Ognl@isNotEmpty(bankName)">
+                  and ai.BANK_NAME like concat('%',#{bankName},'%')
+                  </if>
+                  <if test="@Ognl@isNotEmpty(createTimeBegin)">
+                  and ai.CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+                  </if>
+                  <if test="@Ognl@isNotEmpty(createTimeEnd)">
+                  and ai.CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd}, INTERVAL 1 DAY),'%Y-%m-%d')
+                  </if>
+        </where>
+        order by ai.ID desc
+    </select>
+
+    <select id="get" parameterType="long" resultMap="accountInfoResultMap">     
+        select <include refid="accountInfoColumns" />
+        <![CDATA[
+            from ACCOUNT_INFO where ID = #{id} 
+        ]]>
+    </select>
+    
+    <insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.account.entity.AccountInfo" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  ACCOUNT_INFO (
+            ACCOUNT ,
+            ACCOUNT_TYPE ,
+            REAL_NAME ,
+            BANK_NAME ,
+            OPEN_CARD_ADDRESS ,
+            PHOTO,
+            CREATE_TIME 
+        ) values (
+            #{account},
+            #{accountType},
+            #{realName},
+            #{bankName},
+            #{openCardAddress},
+            #{photo},
+            now()
+        )
+    ]]>  
+    </insert>
+
+    <update id="update" parameterType="com.ffcs.icity.mvc.backstage.account.entity.AccountInfo">
+    <![CDATA[
+        update ACCOUNT_INFO set 
+           ACCOUNT = #{account},
+           ACCOUNT_TYPE = #{accountType},
+           REAL_NAME = #{realName},
+           BANK_NAME = #{bankName},
+           OPEN_CARD_ADDRESS = #{openCardAddress},
+           PHOTO = #{photo}
+        where  ID = #{id}
+     ]]>
+    </update>
+    
+    <delete id="delete" parameterType="int">
+        delete from ACCOUNT_INFO where ID = #{id}
+    </delete>
+    
+    <delete id="deletes">
+        delete from ACCOUNT_INFO where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+    
+</mapper> 

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.withdrawalsLogs.dao.IWithdrawalsLogsDao">
+
+    <resultMap id="WithdrawalsLogsRM" type="com.ffcs.icity.api.module.withdrawalsLogs.entity.WithdrawalsLogs">
+        <result property="id" column="ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="userType" column="USER_TYPE"/>
+        <result property="type" column="TYPE"/>
+        <result property="fee" column="FEE"/>
+        <result property="bili" column="BILI"/>
+        <result property="realFee" column="REAL_FEE"/>
+        <result property="bankName" column="BANK_NAME"/>
+        <result property="account" column="ACCOUNT"/>
+        <result property="status" column="STATUS"/>
+        <result property="source" column="SOURCE"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="updateTime" column="UPDATE_TIME"/>
+        <result property="realName" column="REAL_NAME"/>
+        <result property="mobile" column="MOBILE"/>
+        <result property="createBankName" column="CREATE_BANK_NAME"/>
+        
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        ID  ,USER_ID  ,USER_TYPE  ,TYPE  ,FEE  ,BILI  ,REAL_FEE  ,BANK_NAME  ,ACCOUNT  ,STATUS  ,SOURCE  ,CREATE_TIME  ,UPDATE_TIME  ,REAL_NAME  ,MOBILE   ,CREATE_BANK_NAME
+	</sql>
+    <insert id="insertWithdrawalsLogs" parameterType="com.ffcs.icity.api.module.withdrawalsLogs.entity.WithdrawalsLogs" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO WITHDRAWALS_LOGS (
+        	ID  
+        	 <if test="userId !=null">,USER_ID  </if>
+        	 <if test="userType !=null">,USER_TYPE  </if>
+        	 <if test="type !=null">,TYPE  </if>
+        	 <if test="fee !=null">,FEE  </if>
+        	 <if test="bili !=null">,BILI  </if>
+        	 <if test="realFee !=null">,REAL_FEE  </if>
+        	 <if test="bankName !=null">,BANK_NAME  </if>
+        	 <if test="account !=null">,ACCOUNT  </if>
+        	 <if test="status !=null">,STATUS  </if>
+        	 <if test="source !=null">,SOURCE  </if>
+        	,CREATE_TIME
+        	,UPDATE_TIME
+        	 <if test="realName !=null">,REAL_NAME  </if>
+        	 <if test="mobile !=null">,MOBILE  </if>
+        	 <if test="createBankName !=null">,CREATE_BANK_NAME  </if>
+        ) VALUES (
+        	null  
+        	 <if test="userId !=null">,#{userId}  </if>
+        	 <if test="userType !=null">,#{userType}  </if>
+        	 <if test="type !=null">,#{type}  </if>
+        	 <if test="fee !=null">,#{fee}  </if>
+        	 <if test="bili !=null">,#{bili}  </if>
+        	 <if test="realFee !=null">,#{realFee}  </if>
+        	 <if test="bankName !=null">,#{bankName}  </if>
+        	 <if test="account !=null">,#{account}  </if>
+        	 <if test="status !=null">,#{status}  </if>
+        	 <if test="source !=null">,#{source}  </if>
+        	 , sysdate()
+        	 , sysdate()
+        	 <if test="realName !=null">,#{realName}  </if>
+        	 <if test="mobile !=null">,#{mobile}  </if>
+        	 <if test="createBankName !=null">,#{createBankName}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateWithdrawalsLogs"  parameterType="com.ffcs.icity.api.module.withdrawalsLogs.entity.WithdrawalsLogs">
+        UPDATE WITHDRAWALS_LOGS SET
+	        ID =  #{id} 
+	      	  <if test="userId !=null">,USER_ID = #{userId} </if>
+	      	  <if test="userType !=null">,USER_TYPE = #{userType} </if>
+	      	  <if test="type !=null">,TYPE = #{type} </if>
+	      	  <if test="fee !=null">,FEE = #{fee} </if>
+	      	  <if test="bili !=null">,BILI = #{bili} </if>
+	      	  <if test="realFee !=null">,REAL_FEE = #{realFee} </if>
+	      	  <if test="bankName !=null">,BANK_NAME = #{bankName} </if>
+	      	  <if test="account !=null">,ACCOUNT = #{account} </if>
+	      	  <if test="status !=null">,STATUS = #{status} </if>
+	      	  <if test="source !=null">,SOURCE = #{source} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+	      	  <if test="updateTime !=null">,UPDATE_TIME = #{updateTime} </if>
+	      	  <if test="realName !=null">,REAL_NAME = #{realName} </if>
+	      	  <if test="mobile !=null">,MOBILE = #{mobile} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteWithdrawalsLogs" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM WITHDRAWALS_LOGS WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getWithdrawalsLogsById" resultMap="WithdrawalsLogsRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM WITHDRAWALS_LOGS 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+		         <if test="userId !=null">
+		            and <![CDATA[ USER_ID = #{userId}  ]]>
+		         </if>
+		         <if test="userType !=null">
+		            and <![CDATA[ USER_TYPE = #{userType}  ]]>
+		         </if>
+		         <if test="type !=null">
+		            and <![CDATA[ TYPE = #{type}  ]]>
+		         </if>
+		         <if test="fee !=null">
+		            and <![CDATA[ FEE = #{fee}  ]]>
+		         </if>
+		         <if test="bili !=null">
+		            and <![CDATA[ BILI = #{bili}  ]]>
+		         </if>
+		         <if test="realFee !=null">
+		            and <![CDATA[ REAL_FEE = #{realFee}  ]]>
+		         </if>
+			     <if test="bankName !=null">
+			     	and	<![CDATA[ BANK_NAME =#{bankName} ]]>	
+			     </if>
+			     <if test="account !=null">
+			     	and	<![CDATA[ ACCOUNT =#{account} ]]>	
+			     </if>
+		         <if test="status !=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+			     <if test="source !=null">
+			     	and	<![CDATA[ SOURCE =#{source} ]]>	
+			     </if>
+		         
+		         
+			     <if test="realName !=null">
+			     	and	<![CDATA[ REAL_NAME =#{realName} ]]>	
+			     </if>
+			     <if test="mobile !=null">
+			     	and	<![CDATA[ MOBILE =#{mobile} ]]>	
+			     </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM WITHDRAWALS_LOGS <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="WithdrawalsLogsRM">
+    	 SELECT <include refid="allFields"/> FROM WITHDRAWALS_LOGS	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="WithdrawalsLogsRM">
+    	SELECT <include refid="allFields"/> FROM WITHDRAWALS_LOGS 
+		<include refid="findPage"/>	
+		 ORDER BY ID DESC	
+		 <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+    
+    <select id="getFee" resultType="double">
+    	SELECT IFNULL((SUM(WITHDRAWALS_LOGS.`FEE`)),0) FROM WITHDRAWALS_LOGS
+		WHERE WITHDRAWALS_LOGS.`USER_ID`=#{userId}
+		AND WITHDRAWALS_LOGS.`USER_TYPE`=#{userType}
+		AND WITHDRAWALS_LOGS.`STATUS`=0
+    </select>
+ 
+	
+	<select id="getWithdrawalsCount" resultType="int">
+    	SELECT COUNT(1) 
+		FROM WITHDRAWALS_LOGS
+		WHERE   DATE_FORMAT( WITHDRAWALS_LOGS.`CREATE_TIME`,'%Y-%m-%d')= CURDATE()
+		 AND WITHDRAWALS_LOGS.`USER_ID`=#{userId}
+    </select>
+</mapper>
+

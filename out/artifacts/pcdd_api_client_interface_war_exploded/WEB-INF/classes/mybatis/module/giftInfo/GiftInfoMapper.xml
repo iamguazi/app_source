@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.giftInfo.dao.IGiftInfoDao">
+
+    <resultMap id="GiftInfoRM" type="com.ffcs.icity.api.module.giftInfo.entity.GiftInfo">
+        <result property="id" column="ID"/>
+        <result property="giftName" column="GIFT_NAME"/>
+        <result property="giftPoint" column="GIFT_POINT"/>
+        <result property="giftPhoto" column="GIFT_PHOTO"/>
+        <result property="status" column="STATUS"/>
+        <result property="giftOrder" column="GIFT_ORDER"/>
+        <result property="createTime" column="CREATE_TIME"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        GIFT_INFO.ID  ,GIFT_INFO.GIFT_NAME  ,GIFT_INFO.GIFT_POINT  ,GIFT_INFO.GIFT_PHOTO  ,GIFT_INFO.STATUS  ,GIFT_INFO.GIFT_ORDER  ,GIFT_INFO.CREATE_TIME  
+	</sql>
+    <insert id="insertGiftInfo" parameterType="com.ffcs.icity.api.module.giftInfo.entity.GiftInfo" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO GIFT_INFO (
+        	ID  
+        	 <if test="giftName !=null">,GIFT_NAME  </if>
+        	 <if test="giftPoint !=null">,GIFT_POINT  </if>
+        	 <if test="giftPhoto !=null">,GIFT_PHOTO  </if>
+        	 <if test="status !=null">,STATUS  </if>
+        	 <if test="giftOrder !=null">,GIFT_ORDER  </if>
+        	,CREATE_TIME
+        ) VALUES (
+        	null  
+        	 <if test="giftName !=null">,#{giftName}  </if>
+        	 <if test="giftPoint !=null">,#{giftPoint}  </if>
+        	 <if test="giftPhoto !=null">,#{giftPhoto}  </if>
+        	 <if test="status !=null">,#{status}  </if>
+        	 <if test="giftOrder !=null">,#{giftOrder}  </if>
+        	 , sysdate()
+        )
+        
+    </insert>
+
+    <update id="updateGiftInfo"  parameterType="com.ffcs.icity.api.module.giftInfo.entity.GiftInfo">
+        UPDATE GIFT_INFO SET
+	        ID =  #{id} 
+	      	  <if test="giftName !=null">,GIFT_NAME = #{giftName} </if>
+	      	  <if test="giftPoint !=null">,GIFT_POINT = #{giftPoint} </if>
+	      	  <if test="giftPhoto !=null">,GIFT_PHOTO = #{giftPhoto} </if>
+	      	  <if test="status !=null">,STATUS = #{status} </if>
+	      	  <if test="giftOrder !=null">,GIFT_ORDER = #{giftOrder} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteGiftInfo" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM GIFT_INFO WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getGiftInfoById" resultMap="GiftInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM GIFT_INFO 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="giftName !=null">
+			     	and	<![CDATA[ GIFT_NAME =#{giftName} ]]>	
+			     </if>
+		         <if test="giftPoint !=null">
+		            and <![CDATA[ GIFT_POINT = #{giftPoint}  ]]>
+		         </if>
+			     <if test="giftPhoto !=null">
+			     	and	<![CDATA[ GIFT_PHOTO =#{giftPhoto} ]]>	
+			     </if>
+		         <if test="status !=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+		         <if test="giftOrder !=null">
+		            and <![CDATA[ GIFT_ORDER = #{giftOrder}  ]]>
+		         </if>
+		         
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM GIFT_INFO <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="GiftInfoRM">
+    	 SELECT <include refid="allFields"/> FROM GIFT_INFO	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="GiftInfoRM">
+    	SELECT <include refid="allFields"/> FROM GIFT_INFO 
+		<include refid="findPage"/>	
+		 ORDER BY GIFT_ORDER DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.gameArea.dao.IGameAreaDao">
+
+    <resultMap id="GameAreaRM" type="com.ffcs.icity.api.module.gameArea.entity.GameArea">
+        <result property="id" column="ID"/>
+        <result property="gameType" column="GAME_TYPE"/>
+        <result property="areaType" column="AREA_TYPE"/>
+        <result property="areaName" column="AREA_NAME"/>
+        <result property="areaPhoto" column="AREA_PHOTO"/>
+        <result property="feedbackDesc" column="FEEDBACK_DESC"/>
+        <result property="minPoint" column="MIN_POINT"/>
+        <result property="status" column="STATUS"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="peopleCount" column="peopleCount"/>
+        
+        
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        GAME_AREA.ID  ,GAME_AREA.GAME_TYPE  ,GAME_AREA.AREA_TYPE  ,GAME_AREA.AREA_NAME  ,GAME_AREA.AREA_PHOTO  ,GAME_AREA.FEEDBACK_DESC  ,GAME_AREA.MIN_POINT  ,GAME_AREA.STATUS  ,GAME_AREA.CREATE_TIME  
+	</sql>
+    <insert id="insertGameArea" parameterType="com.ffcs.icity.api.module.gameArea.entity.GameArea" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO GAME_AREA (
+        	ID  
+        	 <if test="gameType !=null">,GAME_TYPE  </if>
+        	 <if test="areaType !=null">,AREA_TYPE  </if>
+        	 <if test="areaName !=null">,AREA_NAME  </if>
+        	 <if test="areaPhoto !=null">,AREA_PHOTO  </if>
+        	 <if test="feedbackDesc !=null">,FEEDBACK_DESC  </if>
+        	 <if test="minPoint !=null">,MIN_POINT  </if>
+        	 <if test="status !=null">,STATUS  </if>
+        	,CREATE_TIME
+        ) VALUES (
+        	null  
+        	 <if test="gameType !=null">,#{gameType}  </if>
+        	 <if test="areaType !=null">,#{areaType}  </if>
+        	 <if test="areaName !=null">,#{areaName}  </if>
+        	 <if test="areaPhoto !=null">,#{areaPhoto}  </if>
+        	 <if test="feedbackDesc !=null">,#{feedbackDesc}  </if>
+        	 <if test="minPoint !=null">,#{minPoint}  </if>
+        	 <if test="status !=null">,#{status}  </if>
+        	 , sysdate()
+        )
+        
+    </insert>
+
+    <update id="updateGameArea"  parameterType="com.ffcs.icity.api.module.gameArea.entity.GameArea">
+        UPDATE GAME_AREA SET
+	        ID =  #{id} 
+	      	  <if test="gameType !=null">,GAME_TYPE = #{gameType} </if>
+	      	  <if test="areaType !=null">,AREA_TYPE = #{areaType} </if>
+	      	  <if test="areaName !=null">,AREA_NAME = #{areaName} </if>
+	      	  <if test="areaPhoto !=null">,AREA_PHOTO = #{areaPhoto} </if>
+	      	  <if test="feedbackDesc !=null">,FEEDBACK_DESC = #{feedbackDesc} </if>
+	      	  <if test="minPoint !=null">,MIN_POINT = #{minPoint} </if>
+	      	  <if test="status !=null">,STATUS = #{status} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteGameArea" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM GAME_AREA WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getGameAreaById" resultMap="GameAreaRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM GAME_AREA 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+		         <if test="gameType !=null">
+		            and <![CDATA[ GAME_TYPE = #{gameType}  ]]>
+		         </if>
+		         <if test="areaType !=null">
+		            and <![CDATA[ AREA_TYPE = #{areaType}  ]]>
+		         </if>
+			     <if test="areaName !=null">
+			     	and	<![CDATA[ AREA_NAME =#{areaName} ]]>	
+			     </if>
+			     <if test="areaPhoto !=null">
+			     	and	<![CDATA[ AREA_PHOTO =#{areaPhoto} ]]>	
+			     </if>
+			     <if test="feedbackDesc !=null">
+			     	and	<![CDATA[ FEEDBACK_DESC =#{feedbackDesc} ]]>	
+			     </if>
+		         <if test="minPoint !=null">
+		            and <![CDATA[ MIN_POINT = #{minPoint}  ]]>
+		         </if>
+		         <if test="status !=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+		         
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM GAME_AREA <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="GameAreaRM">
+    	 SELECT <include refid="allFields"/> FROM GAME_AREA	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="GameAreaRM">
+    	SELECT <include refid="allFields"/>
+    	,(SELECT IFNULL(SUM(ROOM_INFO.`MIN_PEOPLE_COUNT`),0) FROM `ROOM_INFO` WHERE ROOM_INFO.AREA_ID=GAME_AREA.ID)+(SELECT COUNT(1) FROM ROOM_USER_INFO WHERE ROOM_USER_INFO.AREA_ID=GAME_AREA.ID)peopleCount
+    	 FROM GAME_AREA 
+		<include refid="findPage"/>	
+		 ORDER BY ID  	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

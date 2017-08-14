@@ -1,0 +1,114 @@
+
+.page-page {
+    padding: 15px;
+    position: relative;
+;
+}
+
+.page-wrapper {
+    font: 13px/1.2 "Open Sans",sans-serif;
+    display: inline-block;
+    width: 100%;
+}
+.page-wrapper:before,
+.page-wrapper:after {
+    content: "";
+    display: table;
+    line-height: 0;
+    visibility: hidden;
+    clear: both;
+}
+.page-desc {
+    margin-right: 25px;
+    vertical-align: middle;;
+    display: inline-block;
+}
+.page-desc .desc-container {
+    font: 14px/ 32px "microsoft yahei";
+}
+.desc-container i {
+    color: #e33e2b;
+}
+.page-pagego {
+    width: 100px;
+    vertical-align: middle;
+    display: inline-block;
+}
+.page-pagego .form-control {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: 32px;
+}
+.page-pagego .page-gobtn {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    height: 32px;
+}
+
+
+
+.page-container {
+    float: right;
+    vertical-align: middle;;
+    margin-right: 15px;
+}
+.page {
+    display: inline;
+    padding: 0;
+    margin: 20px 15px 20px 0;
+    border-radius: 4px;
+}
+
+.page > li {
+    margin: 0 5px 10px 0;
+    display: inline-block;
+    float: left;
+}
+
+.page > li:last-child {
+    margin-right: 0;
+}
+.page > li > a,
+.page > li > span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #636e7b;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    outline: medium none invert;
+}
+.page > .active > a,
+.page > .active > span,
+.page > .active > a:hover,
+.page > .active > span:hover,
+.page > .active > a:focus,
+.page > .active > span:focus {
+    z-index: 2;
+    color: #fff;
+    cursor: default;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+.page > .disabled > span,
+.page > .disabled > span:hover,
+.page > .disabled > span:focus,
+.page > .disabled > a,
+.page > .disabled > a:hover,
+.page > .disabled > a:focus {
+    color: #777;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+}
+.page .page-items-container {
+    padding: 0;
+}
+@font-face{font-family:'FontAwesome';src:url('fontawesome-webfont.eot@v=4.2.0');}
+.fa{display:inline-block;font:normal normal normal 14px/1 FontAwesome;font-size:inherit;text-rendering:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.fa-angle-left:before{content:"\f104"}.fa-angle-right:before{content:"\f105"}
+
+

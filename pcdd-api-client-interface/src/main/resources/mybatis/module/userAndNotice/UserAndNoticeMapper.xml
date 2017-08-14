@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.userAndNotice.dao.IUserAndNoticeDao">
+
+    <resultMap id="UserAndNoticeRM" type="com.ffcs.icity.api.module.userAndNotice.entity.UserAndNotice">
+        <result property="id" column="ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="noticeId" column="NOTICE_ID"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="status" column="STATUS"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        USER_AND_NOTICE.ID  ,USER_AND_NOTICE.USER_ID  ,USER_AND_NOTICE.NOTICE_ID  ,USER_AND_NOTICE.CREATE_TIME  ,USER_AND_NOTICE.STATUS  
+	</sql>
+    <insert id="insertUserAndNotice" parameterType="com.ffcs.icity.api.module.userAndNotice.entity.UserAndNotice" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO USER_AND_NOTICE (
+        	ID  
+        	 <if test="userId !=null">,USER_ID  </if>
+        	 <if test="noticeId !=null">,NOTICE_ID  </if>
+        	,CREATE_TIME
+        	 <if test="status !=null">,STATUS  </if>
+        ) VALUES (
+        	null  
+        	 <if test="userId !=null">,#{userId}  </if>
+        	 <if test="noticeId !=null">,#{noticeId}  </if>
+        	 , sysdate()
+        	 <if test="status !=null">,#{status}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateUserAndNotice"  parameterType="com.ffcs.icity.api.module.userAndNotice.entity.UserAndNotice">
+        UPDATE USER_AND_NOTICE SET
+	        ID =  #{id} 
+	      	  <if test="userId !=null">,USER_ID = #{userId} </if>
+	      	  <if test="noticeId !=null">,NOTICE_ID = #{noticeId} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+	      	  <if test="status !=null">,STATUS = #{status} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteUserAndNotice" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM USER_AND_NOTICE WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getUserAndNoticeById" resultMap="UserAndNoticeRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM USER_AND_NOTICE 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+    
+    
+     <select id="getUserAndNoticeByParams" resultMap="UserAndNoticeRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM USER_AND_NOTICE 
+	        WHERE 
+		       USER_ID = #{userId}
+		       AND NOTICE_ID = #{noticeId}
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+		         <if test="userId !=null">
+		            and <![CDATA[ USER_ID = #{userId}  ]]>
+		         </if>
+		         <if test="noticeId !=null">
+		            and <![CDATA[ NOTICE_ID = #{noticeId}  ]]>
+		         </if>
+		         
+		         <if test="status !=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM USER_AND_NOTICE <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="UserAndNoticeRM">
+    	 SELECT <include refid="allFields"/> FROM USER_AND_NOTICE	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="UserAndNoticeRM">
+    	SELECT <include refid="allFields"/> FROM USER_AND_NOTICE 
+		<include refid="findPage"/>	
+		 ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

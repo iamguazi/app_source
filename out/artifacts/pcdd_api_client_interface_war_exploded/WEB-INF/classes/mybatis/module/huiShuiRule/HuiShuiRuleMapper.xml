@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.huiShuiRule.dao.IHuiShuiRuleDao">
+
+    <resultMap id="HuiShuiRuleRM" type="com.ffcs.icity.api.module.huiShuiRule.entity.HuiShuiRule">
+        <result property="id" column="ID"/>
+        <result property="areaType" column="AREA_TYPE"/>
+        <result property="bili" column="BILI"/>
+        <result property="startPoint" column="START_POINT"/>
+        <result property="endPoint" column="END_POINT"/>
+        <result property="createTime" column="CREATE_TIME"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        HUI_SHUI_RULE.ID  ,HUI_SHUI_RULE.AREA_TYPE  ,HUI_SHUI_RULE.BILI  ,HUI_SHUI_RULE.START_POINT  ,HUI_SHUI_RULE.END_POINT  ,HUI_SHUI_RULE.CREATE_TIME  
+	</sql>
+    <insert id="insertHuiShuiRule" parameterType="com.ffcs.icity.api.module.huiShuiRule.entity.HuiShuiRule" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO HUI_SHUI_RULE (
+        	ID  
+        	 <if test="areaType !=null">,AREA_TYPE  </if>
+        	 <if test="bili !=null">,BILI  </if>
+        	 <if test="startPoint !=null">,START_POINT  </if>
+        	 <if test="endPoint !=null">,END_POINT  </if>
+        	,CREATE_TIME
+        ) VALUES (
+        	null  
+        	 <if test="areaType !=null">,#{areaType}  </if>
+        	 <if test="bili !=null">,#{bili}  </if>
+        	 <if test="startPoint !=null">,#{startPoint}  </if>
+        	 <if test="endPoint !=null">,#{endPoint}  </if>
+        	 , sysdate()
+        )
+        
+    </insert>
+
+    <update id="updateHuiShuiRule"  parameterType="com.ffcs.icity.api.module.huiShuiRule.entity.HuiShuiRule">
+        UPDATE HUI_SHUI_RULE SET
+	        ID =  #{id} 
+	      	  <if test="areaType !=null">,AREA_TYPE = #{areaType} </if>
+	      	  <if test="bili !=null">,BILI = #{bili} </if>
+	      	  <if test="startPoint !=null">,START_POINT = #{startPoint} </if>
+	      	  <if test="endPoint !=null">,END_POINT = #{endPoint} </if>
+	      	  <if test="createTime !=null">,CREATE_TIME = #{createTime} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteHuiShuiRule" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM HUI_SHUI_RULE WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getHuiShuiRuleById" resultMap="HuiShuiRuleRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM HUI_SHUI_RULE 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+		         <if test="areaType !=null">
+		            and <![CDATA[ AREA_TYPE = #{areaType}  ]]>
+		         </if>
+		         <if test="bili !=null">
+		            and <![CDATA[ BILI = #{bili}  ]]>
+		         </if>
+		         <if test="startPoint !=null">
+		            and <![CDATA[ START_POINT = #{startPoint}  ]]>
+		         </if>
+		         <if test="endPoint !=null">
+		            and <![CDATA[ END_POINT = #{endPoint}  ]]>
+		         </if>
+		         
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM HUI_SHUI_RULE <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="HuiShuiRuleRM">
+    	 SELECT <include refid="allFields"/> FROM HUI_SHUI_RULE	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="HuiShuiRuleRM">
+    	SELECT <include refid="allFields"/> FROM HUI_SHUI_RULE 
+		<include refid="findPage"/>	
+		 ORDER BY START_POINT ASC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

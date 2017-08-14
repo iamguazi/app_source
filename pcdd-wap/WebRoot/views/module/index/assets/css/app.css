@@ -1,0 +1,163 @@
+/* Write your styles */
+
+.bg1
+{
+    background-color: #ebebeb;
+}
+.bg2
+{
+    background-color: #ffc81f;
+}
+.bg3
+{
+    background-color: #ffffff;
+}
+.bg4
+{
+    background-color: #f5f7f8;
+}
+
+.bg5
+{
+    background-color: #65a6ff;
+}
+
+.bg6
+{
+    background-color: #65caff;
+}
+
+.bg7
+{
+    background-color: #66d7c1;
+}
+
+
+
+
+
+.font-color-1
+{
+    color: #333333;
+}
+.font-color-2
+{
+    color: #999999;
+}
+.font-color-3
+{
+    color: #ffffff;
+}.font-color-4
+{
+    color: #8b390a;
+}
+.font-color-5
+{
+    color: #3a84ff;
+}
+.font12
+{
+    font-size: 12px;
+}
+ .font14
+ {
+     font-size: 14px;
+ }
+ .font15
+ {
+     font-size: 15px;
+ }
+ .border-bottom
+ {
+     border-bottom: 1px solid #ebebeb;
+ }
+.border-right
+{
+    border-right: 1px solid #ebebeb;
+}
+ .list .border-bottom:last-child
+ {
+     border-bottom: none;
+ }
+
+.prelative {
+    position: relative !important;
+}
+
+.icon-arrow-right {
+    width: 18px;
+    height: 18px;
+    background: url("../images/icon/icon_93.png") no-repeat;
+    background-size: 100%;
+    position: absolute;
+    right: .8rem;
+    top: 50%;
+    margin-top: -9px;
+}
+
+.icon_21 {
+    width: 20px;
+    height: 20px;
+    margin-top: 4px;
+    margin-right: 5px;
+    background: url("../images/icon/icon_21.png") no-repeat;
+    background-size: 100%;
+
+}
+.icon_15 {
+    width: 20px;
+    height: 20px;
+    margin-top: 4px;
+    margin-right: 5px;
+    background: url("../images/icon/icon_15.png") no-repeat;
+    background-size: 100%;
+
+}
+
+.box {
+    width: 100%;
+    display: -webkit-flex;
+    display: flex;
+    /*display: -webkit-box;*/
+    /*display: box;*/
+}
+
+
+
+.box-1 {
+    -moz-box-flex: 1;
+    -webkit-box-flex: 1;
+    box-flex: 1;
+    flex: 1;
+}
+
+.flexcenter
+{
+    justify-content: center;
+}
+
+.width100px
+{
+    width: 100px;
+}
+
+.width80px
+{
+    width: 80px;
+}
+.width70px
+{
+    width: 70px;
+}
+
+.btnshare
+{
+    padding: 8px 30px;
+    background-color: #3a85ff;
+    margin: auto;
+    color: #ffffff;
+    width: 150px;
+    text-align: center;
+    border-radius: 50px;
+    margin-top: 15px;
+}

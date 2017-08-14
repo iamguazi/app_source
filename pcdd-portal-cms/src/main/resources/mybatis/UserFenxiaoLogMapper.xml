@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.fenxiao.dao.UserFenxiaoLogDao">
+
+   <resultMap id="userFenxiaoLogResultMap" type="com.ffcs.icity.mvc.backstage.fenxiao.entity.UserFenxiaoLog">
+          <result property="id" column="ID"/>
+          <result property="userId" column="USER_ID"/>
+          <result property="point" column="POINT"/>
+          <result property="fenxiaoPoint" column="FENXIAO_POINT"/>
+          <result property="status" column="STATUS"/>
+          <result property="zuhePoint" column="ZUHE_POINT"/>
+          <result property="pointNum" column="POINT_NUM"/>
+          <result property="getPoint" column="GET_POINT"/>
+          <result property="xhibitPoint" column="XHIBIT_POINT"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="fenxiaoUserId" column="FENXIAO_USER_ID"/>
+          <result property="nickName" column="NICK_NAME"/>
+          <result property="friendName" column="FRIEND_NAME"/>
+          <result property="account" column="ACCOUNT"/>
+          <result property="mobile" column="MOBILE"/>
+   </resultMap>
+   
+    <sql id="userFenxiaoLogColumns">
+        <![CDATA[
+        ID,USER_ID,POINT,FENXIAO_POINT,STATUS,ZUHE_POINT,POINT_NUM,GET_POINT,XHIBIT_POINT,CREATE_TIME,FENXIAO_USER_ID
+        ]]>
+    </sql>
+    
+    <select id="query"  parameterType="map"  resultMap="userFenxiaoLogResultMap">
+        SELECT 
+		  ufl.*,
+		  ui.`ACCOUNT`,
+		  ui.`NICK_NAME`,
+		  ui.`MOBILE`,
+		  (SELECT 
+		    NICK_NAME 
+		  FROM
+		    USER_INFO 
+		  WHERE ID = ufl.`FENXIAO_USER_ID` 
+		  LIMIT 1) AS FRIEND_NAME FROM USER_FENXIAO_LOG ufl,
+		  USER_INFO ui 
+		WHERE ufl.`USER_ID` = ui.`ID` 
+                  <if test="@Ognl@isNotEmpty(status)">
+                  and ufl.STATUS = #{status}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(nickName)">
+                  and ui.NICK_NAME like CONCAT('%',#{nickName},'%') 
+                  </if>
+                  <if test="@Ognl@isNotEmpty(account)">
+                  and ui.ACCOUNT like CONCAT('%',#{account},'%') 
+                  </if>
+                  <if test="@Ognl@isNotEmpty(userId)">
+                  and ufl.USER_ID = #{userId}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(createTimeBegin)">
+                  and ufl.CREATE_TIME >= str_to_date(#{createTimeBegin},'%Y-%m-%d')
+                  </if>
+                  <if test="@Ognl@isNotEmpty(createTimeEnd)">
+                  and ufl.CREATE_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{createTimeEnd},INTERVAL 1 DAY),'%Y-%m-%d')
+                  </if>
+                  <if test="@Ognl@isNotEmpty(fenxiaoUserId)">
+                  and ufl.FENXIAO_USER_ID = #{fenxiaoUserId}
+                  </if>
+        order by ID desc
+    </select>
+
+    <select id="get" parameterType="long" resultMap="userFenxiaoLogResultMap">      
+        select <include refid="userFenxiaoLogColumns" />
+        <![CDATA[
+            from USER_FENXIAO_LOG where ID = #{id} 
+        ]]>
+    </select>
+    
+    <insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.fenxiao.entity.UserFenxiaoLog" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  USER_FENXIAO_LOG (
+            USER_ID ,
+            POINT ,
+            FENXIAO_POINT ,
+            STATUS ,
+            ZUHE_POINT ,
+            POINT_NUM ,
+            GET_POINT ,
+            XHIBIT_POINT ,
+            CREATE_TIME ,
+            FENXIAO_USER_ID 
+        ) values (
+            #{userId},
+            #{point},
+            #{fenxiaoPoint},
+            #{status},
+            #{zuhePoint},
+            #{pointNum},
+            #{getPoint},
+            #{xhibitPoint},
+            #{createTime},
+            #{fenxiaoUserId}
+        )
+    ]]>  
+    </insert>
+
+    <update id="update" parameterType="com.ffcs.icity.mvc.backstage.fenxiao.entity.UserFenxiaoLog">
+    <![CDATA[
+        update USER_FENXIAO_LOG set 
+           USER_ID = #{userId},
+           POINT = #{point},
+           FENXIAO_POINT = #{fenxiaoPoint},
+           STATUS = #{status},
+           ZUHE_POINT = #{zuhePoint},
+           POINT_NUM = #{pointNum},
+           GET_POINT = #{getPoint},
+           XHIBIT_POINT = #{xhibitPoint},
+           CREATE_TIME = #{createTime},
+           FENXIAO_USER_ID = #{fenxiaoUserId}
+        where  ID = #{id}
+     ]]>
+    </update>
+    
+    <update id="updateStatus" parameterType="map">
+    <![CDATA[
+        update USER_FENXIAO_LOG set 
+           STATUS = #{status}
+        where  ID = #{id}
+     ]]>
+    </update>
+    
+    <update id="batchUpdateStatus" >
+        update USER_FENXIAO_LOG set 
+           STATUS = #{status}
+        where  ID in 
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+    </update>
+    
+    
+    <delete id="delete" parameterType="int">
+        delete from USER_FENXIAO_LOG where ID = #{id}
+    </delete>
+    
+    <delete id="deletes">
+        delete from USER_FENXIAO_LOG where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+    
+</mapper> 

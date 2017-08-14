@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<import resource="classpath:applicationContext-profile.xml" />
+
+	<!-- 自动扫描且只扫描@Controller -->
+	<context:component-scan base-package="com.ffcs.icity"
+		use-default-filters="false">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="webBindingInitializer">
+			<bean class="com.ffcs.icity.mvc.support.freemarker.BindingInitializer" />
+		</property>
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+			</list>
+		</property>
+		<property name="customArgumentResolvers">
+			<list>
+				<bean class="com.ffcs.icity.mvc.support.freemarker.PageArgumentResolver" />
+			</list>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref bean="requestContextHolder" />
+				<ref bean="dumpRequestInterceptor" /> 
+				<ref bean="loginInterceptor" /> 
+			</list>
+		</property>
+	</bean>
+
+	<bean name="loginInterceptor" class="com.ffcs.icity.mvc.backstage.login.controller.LoginInterceptor" />
+	
+	<bean name="requestContextHolder" class="com.ffcs.icity.mvc.support.RequestContextInterceptor" />
+
+	<bean name="dumpRequestInterceptor" class="com.ffcs.icity.mvc.support.DumpRequestInterceptor" />
+	
+
+	<bean class="com.ffcs.icity.mvc.support.SingleFileUploadBeanPostProcessor" />
+
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView" value="error/error"></property>
+		<property name="exceptionAttribute" value="throwable"></property>
+	</bean>
+
+	<!-- 将无法mapping到Controller的path交给default servlet handler处理,主要用于处理静态资源（如图片等）的请求 -->
+	<mvc:default-servlet-handler />
+
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- one of the properties available; the maximum file size in bytes -->
+		<property name="maxUploadSize" value="104857600" /> <!-- 最大限制100M -->
+		<!--   <property name="resolveLazily" value="true"/>  延迟处理文件 -->
+	</bean>
+	
+	<bean id="freemarkerViewResolver"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="attributesMap" ref="staticModels" />
+		<property name="prefix" value="/views/" />
+		<property name="suffix" value=".ftl" />
+		<property name="contentType" value="text/html; charset=UTF-8" />
+	</bean>
+
+	<bean id="staticModels" class="com.ffcs.icity.mvc.support.freemarker.StaticModels">
+		<property name="classes">
+			<map>
+				<entry key="BeanUtils" value="com.ffcs.icity.mvc.utils.BeanUtils" />
+				<entry key="ExceptionUtils" value="org.apache.commons.lang3.exception.ExceptionUtils" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="freemarkerConfig"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/WEB-INF" />
+		<property name="freemarkerSettings">
+			<props>
+				<!-- 模板更新间隔 -->
+				<prop key="template_update_delay">1</prop>
+				<prop key="defaultEncoding">UTF-8</prop>
+				<prop key="url_escaping_charset">UTF-8</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="boolean_format">true,false</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+				<prop key="time_format">HH:mm:ss</prop>
+				<prop key="number_format">0.######</prop>
+				<prop key="whitespace_stripping">true</prop>
+				<!-- <prop key="auto_import">/views/common/commons.ftl as c</prop> -->
+			</props>
+		</property>
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="full_path" value-ref="fullPathDirective" />
+				<entry key="page_navigator" value-ref="pageNavigatorDirective" />
+				<entry key="bean_property" value-ref="beanPropertyDirective" />
+			</map>
+		</property>
+	</bean>
+
+	<bean name="pageNavigatorDirective"
+		class="com.ffcs.icity.mvc.support.freemarker.PageNavigatorDirective" />
+
+	<bean name="beanPropertyDirective"
+		class="com.ffcs.icity.mvc.support.freemarker.BeanPropertyDirective" />
+
+	<bean name="fullPathDirective"
+		class="com.ffcs.icity.mvc.support.freemarker.FullPathDirective" />
+
+</beans>

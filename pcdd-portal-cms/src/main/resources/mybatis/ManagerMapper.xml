@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.manager.dao.ManagerDao">
+
+   <resultMap id="managerResultMap" type="com.ffcs.icity.mvc.backstage.manager.entity.Manager">
+          <result property="id" column="ID"/>
+          <result property="name" column="NAME"/>
+          <result property="passwd" column="PASSWD"/>
+          <result property="type" column="TYPE"/>
+          <result property="status" column="STATUS"/>
+          <result property="createTime" column="CREATE_TIME"/>
+          <result property="updateTime" column="UPDATE_TIME"/>
+          <result property="loginTime" column="LOGIN_TIME"/>
+          <result property="menuIds" column="MENU_IDS"/>
+          <result property="parentId" column="PARENT_ID"/>
+   </resultMap>
+   
+   	<sql id="managerColumns">
+	    <![CDATA[
+		ID,NAME,PASSWD,TYPE,STATUS,CREATE_TIME,UPDATE_TIME,LOGIN_TIME,PARENT_ID
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="managerResultMap">
+		select m.ID,m.PARENT_ID,m.NAME,m.PASSWD,m.TYPE,m.STATUS,m.CREATE_TIME,m.UPDATE_TIME,m.LOGIN_TIME,bm.MENU_IDS
+        from MANAGER m, (SELECT MANAGER_ID,GROUP_CONCAT(BACKSTAGE_MENU_ID) AS MENU_IDS FROM MANAGER_MENU mm GROUP BY MANAGER_ID) bm 
+		WHERE bm.MANAGER_ID=m.ID
+			<if test="@Ognl@isNotEmpty(name)">
+				and m.name like concat('%',#{name},'%')
+			</if>
+			<if test="@Ognl@isNotEmpty(id)">
+			   and m.ID != #{id}
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+			   and m.STATUS = #{status}
+			</if>
+			<if test="@Ognl@isNotEmpty(parentId)">
+			   and m.PARENT_ID = #{parentId}
+			</if>
+		order by m.ID desc
+	</select>
+	
+	<select id="getManagerNameCount"  parameterType="map"  resultType="int">
+		select COUNT(*)
+        from MANAGER
+		<where>
+			and STATUS = 1
+			<if test="@Ognl@isNotEmpty(id)">
+			  and ID != #{id}
+			</if>
+			<if test="@Ognl@isNotEmpty(name)">
+			  and name = #{name}
+			</if>
+		</where>
+		order by ID desc
+	</select>
+	
+	<select id="getManagerByNameAndPwd"  parameterType="map"  resultMap="managerResultMap">
+		select <include refid="managerColumns" />
+        from MANAGER
+		<where>
+		   name = #{name}
+		   <if test="@Ognl@isNotEmpty(passwd)">
+		      and passwd = #{password}
+		   </if>
+		</where>
+	</select>
+
+	<select id="get" parameterType="long" resultMap="managerResultMap">		
+		select <include refid="managerColumns" />
+	    <![CDATA[
+		    from MANAGER where id = #{id} 
+	    ]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.manager.entity.Manager" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  MANAGER (
+        	NAME ,
+        	PASSWD ,
+        	TYPE ,
+        	STATUS ,
+        	create_time,
+        	update_time,
+        	PARENT_ID
+        ) values (
+        	#{name},
+        	#{passwd},
+        	'normal',
+        	1,
+        	now(),
+        	now(),
+        	#{parentId}
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.manager.entity.Manager">
+	<![CDATA[
+		update MANAGER set 
+	       name = #{name},
+	       passwd = #{passwd},
+	       status = #{status},
+	       update_time = now(),
+	       PARENT_ID = #{parentId}
+		where  id = #{id}
+	 ]]>
+	</update>
+
+	<update id="updateStatus" parameterType="map">
+		update MANAGER set 
+	       STATUS = #{status}
+		where  id = #{id}
+	</update>
+	
+	<update id="updateLoginTime" parameterType="com.ffcs.icity.mvc.backstage.manager.entity.Manager">
+		update MANAGER set 
+	       LOGIN_TIME = now()
+		where  id = #{id}
+	</update>
+
+	
+	<delete id="delete" parameterType="int">
+		delete from MANAGER  where id = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from MANAGER  where id in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 
+

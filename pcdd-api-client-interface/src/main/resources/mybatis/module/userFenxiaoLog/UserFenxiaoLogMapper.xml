@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.userFenxiaoLog.dao.IUserFenxiaoLogDao">
+
+    <resultMap id="UserFenxiaoLogRM" type="com.ffcs.icity.api.module.userFenxiaoLog.entity.UserFenxiaoLog">
+        <result property="id" column="ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="point" column="POINT"/>
+        <result property="fenxiaoPoint" column="FENXIAO_POINT"/>
+        <result property="status" column="STATUS"/>
+        <result property="zuhePoint" column="ZUHE_POINT"/>
+        <result property="pointNum" column="POINT_NUM"/>
+        <result property="getPoint" column="GET_POINT"/>
+        <result property="xhibitPoint" column="XHIBIT_POINT"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="nickName" column="nickName"/>
+        <result property="fenxiaoUserId" column="FENXIAO_USER_ID"/>
+        
+        
+    </resultMap>
+    
+    <resultMap id="TuiJianVoRM" type="com.ffcs.icity.api.module.userHuiShuiLog.entity.TuiJianVoLog">
+        <result property="userId" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="point" column="point"/>
+        <result property="zuhePoint" column="zuhe_point"/>
+        <result property="pointNum" column="point_num"/>
+        <result property="getPoint" column="get_point"/>
+        <result property="addPoint" column="add_point"/>
+        
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        USER_FENXIAO_LOG.ID  ,USER_FENXIAO_LOG.USER_ID  ,USER_FENXIAO_LOG.POINT  ,USER_FENXIAO_LOG.FENXIAO_POINT  ,USER_FENXIAO_LOG.STATUS  
+        ,USER_FENXIAO_LOG.ZUHE_POINT  ,USER_FENXIAO_LOG.POINT_NUM  ,USER_FENXIAO_LOG.GET_POINT  ,USER_FENXIAO_LOG.XHIBIT_POINT  ,USER_FENXIAO_LOG.CREATE_TIME 
+        ,(SELECT USER_INFO.NICK_NAME FROM USER_INFO WHERE USER_INFO.ID=USER_FENXIAO_LOG.FENXIAO_USER_ID)nickName   ,USER_FENXIAO_LOG.FENXIAO_USER_ID
+	</sql>
+    <insert id="insertUserFenxiaoLog" parameterType="com.ffcs.icity.api.module.userFenxiaoLog.entity.UserFenxiaoLog" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO USER_FENXIAO_LOG (
+        	ID  
+        	 <if test="userId !=null">,USER_ID  </if>
+        	 <if test="point !=null">,POINT  </if>
+        	 <if test="fenxiaoPoint !=null">,FENXIAO_POINT  </if>
+        	 <if test="status !=null">,STATUS  </if>
+        	 <if test="zuhePoint !=null">,ZUHE_POINT  </if>
+        	 <if test="pointNum !=null">,POINT_NUM  </if>
+        	 <if test="getPoint !=null">,GET_POINT  </if>
+        	 <if test="xhibitPoint !=null">,XHIBIT_POINT  </if>
+        	 <if test="fenxiaoUserId !=null">,FENXIAO_USER_ID  </if>
+        ) VALUES (
+        	null  
+        	 <if test="userId !=null">,#{userId}  </if>
+        	 <if test="point !=null">,#{point}  </if>
+        	 <if test="fenxiaoPoint !=null">,#{fenxiaoPoint}  </if>
+        	 <if test="status !=null">,#{status}  </if>
+        	 <if test="zuhePoint !=null">,#{zuhePoint}  </if>
+        	 <if test="pointNum !=null">,#{pointNum}  </if>
+        	 <if test="getPoint !=null">,#{getPoint}  </if>
+        	 <if test="xhibitPoint !=null">,#{xhibitPoint}  </if>
+        	 <if test="fenxiaoUserId !=null">,#{fenxiaoUserId}  </if>
+        )
+        
+    </insert>
+
+    <update id="updateUserFenxiaoLog"  parameterType="com.ffcs.icity.api.module.userFenxiaoLog.entity.UserFenxiaoLog">
+        UPDATE USER_FENXIAO_LOG SET
+	        ID =  #{id} 
+	      	  <if test="userId !=null">,USER_ID = #{userId} </if>
+	      	  <if test="point !=null">,POINT = #{point} </if>
+	      	  <if test="fenxiaoPoint !=null">,FENXIAO_POINT = #{fenxiaoPoint} </if>
+	      	  <if test="status !=null">,STATUS = #{status} </if>
+	      	  <if test="zuhePoint !=null">,ZUHE_POINT = #{zuhePoint} </if>
+	      	  <if test="pointNum !=null">,POINT_NUM = #{pointNum} </if>
+	      	  <if test="getPoint !=null">,GET_POINT = #{getPoint} </if>
+	      	  <if test="xhibitPoint !=null">,XHIBIT_POINT = #{xhibitPoint} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteUserFenxiaoLog" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM USER_FENXIAO_LOG WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getUserFenxiaoLogById" resultMap="UserFenxiaoLogRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM USER_FENXIAO_LOG 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+		         <if test="userId !=null">
+		            and <![CDATA[ USER_ID = #{userId}  ]]>
+		         </if>
+		         <if test="point !=null">
+		            and <![CDATA[ POINT = #{point}  ]]>
+		         </if>
+		         <if test="fenxiaoPoint !=null">
+		            and <![CDATA[ FENXIAO_POINT = #{fenxiaoPoint}  ]]>
+		         </if>
+		         <if test="status !=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+		         <if test="zuhePoint !=null">
+		            and <![CDATA[ ZUHE_POINT = #{zuhePoint}  ]]>
+		         </if>
+		         <if test="pointNum !=null">
+		            and <![CDATA[ POINT_NUM = #{pointNum}  ]]>
+		         </if>
+		         <if test="getPoint !=null">
+		            and <![CDATA[ GET_POINT = #{getPoint}  ]]>
+		         </if>
+		         <if test="xhibitPoint !=null">
+		            and <![CDATA[ XHIBIT_POINT = #{xhibitPoint}  ]]>
+		         </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM USER_FENXIAO_LOG <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="UserFenxiaoLogRM">
+    	 SELECT <include refid="allFields"/> FROM USER_FENXIAO_LOG	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="UserFenxiaoLogRM">
+    	SELECT <include refid="allFields"/> FROM USER_FENXIAO_LOG 
+		<include refid="findPage"/>	
+		 ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	<select id="getFenxiaoCount" resultType="int">
+    	SELECT COUNT(1) 
+		FROM USER_FENXIAO_LOG
+		WHERE   DATE_FORMAT( USER_FENXIAO_LOG.`CREATE_TIME`,'%Y-%m-%d')= CURDATE()
+		  
+    </select>
+    
+    
+    <select id="getAllUserListByCode" resultMap="TuiJianVoRM">
+    	 
+		SELECT
+		  USER_INFO.`ID`
+		  ,USER_INFO.`CODE`
+		  ,(SELECT COUNT(1) FROM USER_CHOICE_LOG WHERE USER_CHOICE_LOG.`USER_ID`= USER_INFO.`ID` AND  DATE_FORMAT( USER_CHOICE_LOG.`CREATE_TIME`,'%Y-%m-%d')= DATE_SUB(CURDATE(),INTERVAL 1 DAY) ) AS point_num
+		  ,(SELECT IFNULL(SUM(USER_CHOICE_LOG.`POINT`),0) FROM USER_CHOICE_LOG WHERE USER_CHOICE_LOG.`USER_ID`= USER_INFO.`ID` AND  DATE_FORMAT( USER_CHOICE_LOG.`CREATE_TIME`,'%Y-%m-%d')= DATE_SUB(CURDATE(),INTERVAL 1 DAY) ) AS add_point
+		  ,0 get_point
+		FROM USER_INFO 
+		 WHERE USER_INFO.`CODE` =#{code}
+		 ORDER BY add_point DESC
+    </select>	
+</mapper>
+

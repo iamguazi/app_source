@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.other.dao.OtherParamsDao">
+
+   <resultMap id="otherParamsResultMap" type="com.ffcs.icity.mvc.backstage.other.entity.OtherParams">
+          <result property="id" column="ID"/>
+          <result property="paramsKey" column="PARAMS_KEY"/>
+          <result property="paramsValue" column="PARAMS_VALUE"/>
+          <result property="paramsGroup" column="PARAMS_GROUP"/>
+          <result property="paramsRemarks" column="PARAMS_REMARKS"/>
+   </resultMap>
+   
+    <sql id="otherParamsColumns">
+        <![CDATA[
+        ID,PARAMS_KEY,PARAMS_VALUE,PARAMS_GROUP,PARAMS_REMARKS
+        ]]>
+    </sql>
+    
+    <select id="query"  parameterType="map"  resultMap="otherParamsResultMap">
+        select <include refid="otherParamsColumns" />
+        from OTHER_PARAMS
+        <where>
+                  <if test="@Ognl@isNotEmpty(id)">
+                  and ID = #{id}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(paramsKey)">
+                  and PARAMS_KEY = #{paramsKey}
+                  </if>
+        </where>
+        order by ID desc
+    </select>
+
+    <select id="get" parameterType="long" resultMap="otherParamsResultMap">     
+        select <include refid="otherParamsColumns" />
+        <![CDATA[
+            from OTHER_PARAMS where ID = #{id} 
+        ]]>
+    </select>
+    
+    <insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.other.entity.OtherParams" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  OTHER_PARAMS (
+            PARAMS_KEY ,
+            PARAMS_VALUE ,
+            PARAMS_GROUP ,
+            PARAMS_REMARKS 
+        ) values (
+            #{paramsKey},
+            #{paramsValue},
+            #{paramsGroup},
+            #{paramsRemarks}
+        )
+    ]]>  
+    </insert>
+
+    <update id="update" parameterType="com.ffcs.icity.mvc.backstage.other.entity.OtherParams">
+    <![CDATA[
+        update OTHER_PARAMS set 
+           PARAMS_KEY = #{paramsKey},
+           PARAMS_VALUE = #{paramsValue},
+           PARAMS_GROUP = #{paramsGroup},
+           PARAMS_REMARKS = #{paramsRemarks}
+        where  ID = #{id}
+     ]]>
+    </update>
+    
+    <delete id="delete" parameterType="int">
+        delete from OTHER_PARAMS where ID = #{id}
+    </delete>
+    
+    <delete id="deletes">
+        delete from OTHER_PARAMS where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+    
+</mapper> 

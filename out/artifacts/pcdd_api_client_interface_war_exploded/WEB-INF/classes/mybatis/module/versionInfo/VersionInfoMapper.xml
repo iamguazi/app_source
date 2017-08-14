@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.versionInfo.dao.IVersionInfoDao">
+
+    <resultMap id="VersionInfoRM" type="com.ffcs.icity.api.module.versionInfo.entity.VersionInfo">
+        <result property="id" column="ID"/>
+        <result property="versionNo" column="VERSION_NO"/>
+        <result property="updateVersionNo" column="UPDATE_VERSION_NO"/>
+        <result property="updateContent" column="UPDATE_CONTENT"/>
+        <result property="versionUrl" column="VERSION_URL"/>
+        <result property="status" column="STATUS"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="versionCode" column="VERSION_CODE"/>
+        <result property="client" column="CLIENT"/>
+        
+        
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        ID  ,VERSION_CODE,VERSION_NO  ,UPDATE_VERSION_NO  ,UPDATE_CONTENT  ,VERSION_URL  ,STATUS  ,CREATE_TIME,CLIENT  
+	</sql>
+    <insert id="insertVersionInfo" parameterType="com.ffcs.icity.api.module.versionInfo.entity.VersionInfo" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO VERSION_INFO (
+        	ID  
+        	 <if test="versionNo!=null">,VERSION_NO  </if>
+        	 <if test="updateVersionNo!=null">,UPDATE_VERSION_NO  </if>
+        	 <if test="updateContent!=null">,UPDATE_CONTENT  </if>
+        	 <if test="versionUrl!=null">,VERSION_URL  </if>
+        	 <if test="status!=null">,STATUS  </if>
+        	,CREATE_TIME
+        ) VALUES (
+        	null  
+        	 <if test="versionNo!=null">,#{versionNo}  </if>
+        	 <if test="updateVersionNo!=null">,#{updateVersionNo}  </if>
+        	 <if test="updateContent!=null">,#{updateContent}  </if>
+        	 <if test="versionUrl!=null">,#{versionUrl}  </if>
+        	 <if test="status!=null">,#{status}  </if>
+        	 , sysdate()
+        )
+        
+    </insert>
+
+    <update id="updateVersionInfo"  parameterType="com.ffcs.icity.api.module.versionInfo.entity.VersionInfo">
+        UPDATE VERSION_INFO SET
+	        ID =  #{id} 
+	      	  <if test="versionNo!=null">,VERSION_NO = #{versionNo} </if>
+	      	  <if test="updateVersionNo!=null">,UPDATE_VERSION_NO = #{updateVersionNo} </if>
+	      	  <if test="updateContent!=null">,UPDATE_CONTENT = #{updateContent} </if>
+	      	  <if test="versionUrl!=null">,VERSION_URL = #{versionUrl} </if>
+	      	  <if test="status!=null">,STATUS = #{status} </if>
+	      	  <if test="createTime!=null">,CREATE_TIME = #{createTime} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deleteVersionInfo" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM VERSION_INFO WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getVersionInfoById" resultMap="VersionInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM VERSION_INFO 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+    
+     <select id="getVersionInfoByNew" resultMap="VersionInfoRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM VERSION_INFO 
+	        WHERE CLIENT= #{client}
+	       ORDER BY CREATE_TIME DESC
+	       LIMIT 0,1
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id!=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="versionNo!=null">
+			     	and	<![CDATA[ VERSION_NO =#{versionNo} ]]>	
+			     </if>
+			     <if test="updateVersionNo!=null">
+			     	and	<![CDATA[ UPDATE_VERSION_NO =#{updateVersionNo} ]]>	
+			     </if>
+			     <if test="updateContent!=null">
+			     	and	<![CDATA[ UPDATE_CONTENT =#{updateContent} ]]>	
+			     </if>
+			     <if test="versionUrl!=null">
+			     	and	<![CDATA[ VERSION_URL =#{versionUrl} ]]>	
+			     </if>
+		         <if test="status!=null">
+		            and <![CDATA[ STATUS = #{status}  ]]>
+		         </if>
+		         
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM VERSION_INFO <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="VersionInfoRM">
+    	 SELECT <include refid="allFields"/> FROM VERSION_INFO	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="VersionInfoRM">
+    	SELECT <include refid="allFields"/> FROM VERSION_INFO 
+		<include refid="findPage"/>		
+    </select>
+    
+ 
+	
+</mapper>
+

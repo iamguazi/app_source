@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须是Dao接口的全限定名 -->
+<mapper namespace="com.ffcs.icity.api.module.payParams.dao.IPayParamsDao">
+
+    <resultMap id="PayParamsRM" type="com.ffcs.icity.api.module.payParams.entity.PayParams">
+        <result property="id" column="ID"/>
+        <result property="mchId" column="MCH_ID"/>
+        <result property="mchKey" column="MCH_KEY"/>
+        <result property="noticeUrl" column="NOTICE_URL"/>
+        <result property="callbackUrl" column="CALLBACK_URL"/>
+        <result property="mchType" column="MCH_TYPE"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="allFields">
+        PAY_PARAMS.ID  ,PAY_PARAMS.MCH_ID  ,PAY_PARAMS.MCH_KEY  ,PAY_PARAMS.NOTICE_URL  ,PAY_PARAMS.CALLBACK_URL  ,PAY_PARAMS.MCH_TYPE  
+	</sql>
+    <insert id="insertPayParams" parameterType="com.ffcs.icity.api.module.payParams.entity.PayParams" useGeneratedKeys="true" keyProperty="id">
+	   INSERT INTO PAY_PARAMS (
+        	ID  
+        	 <if test="mchId !=null">,MCH_ID  </if>
+        	 <if test="mchKey !=null">,MCH_KEY  </if>
+        	 <if test="noticeUrl !=null">,NOTICE_URL  </if>
+        	 <if test="callbackUrl !=null">,CALLBACK_URL  </if>
+        	 <if test="mchType !=null">,MCH_TYPE  </if>
+        ) VALUES (
+        	null  
+        	 <if test="mchId !=null">,#{mchId}  </if>
+        	 <if test="mchKey !=null">,#{mchKey}  </if>
+        	 <if test="noticeUrl !=null">,#{noticeUrl}  </if>
+        	 <if test="callbackUrl !=null">,#{callbackUrl}  </if>
+        	 <if test="mchType !=null">,#{mchType}  </if>
+        )
+        
+    </insert>
+
+    <update id="updatePayParams"  parameterType="com.ffcs.icity.api.module.payParams.entity.PayParams">
+        UPDATE PAY_PARAMS SET
+	        ID =  #{id} 
+	      	  <if test="mchId !=null">,MCH_ID = #{mchId} </if>
+	      	  <if test="mchKey !=null">,MCH_KEY = #{mchKey} </if>
+	      	  <if test="noticeUrl !=null">,NOTICE_URL = #{noticeUrl} </if>
+	      	  <if test="callbackUrl !=null">,CALLBACK_URL = #{callbackUrl} </if>
+	      	  <if test="mchType !=null">,MCH_TYPE = #{mchType} </if>
+        WHERE 
+	     	   ID = #{id}
+    </update>
+
+    <delete id="deletePayParams" parameterType="java.lang.Long">
+    <![CDATA[
+        DELETE FROM PAY_PARAMS WHERE
+        ID = #{id}
+    ]]>
+    </delete>
+    
+    <select id="getPayParamsById" resultMap="PayParamsRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM PAY_PARAMS 
+	        WHERE 
+		        ID =  #{id} 
+	    ]]>
+    </select>
+    
+    <select id="getPayParamsByType" resultMap="PayParamsRM">
+	    SELECT <include refid="allFields"/>
+	    <![CDATA[
+	        FROM PAY_PARAMS 
+	        WHERE 
+		       MCH_TYPE =#{mchType}
+	    ]]>
+    </select>
+	
+	<sql id="findPage">
+		where
+	    	1=1
+		         <if test="id !=null">
+		            and <![CDATA[ ID = #{id}  ]]>
+		         </if>
+			     <if test="mchId !=null">
+			     	and	<![CDATA[ MCH_ID =#{mchId} ]]>	
+			     </if>
+			     <if test="mchKey !=null">
+			     	and	<![CDATA[ MCH_KEY =#{mchKey} ]]>	
+			     </if>
+			     <if test="noticeUrl !=null">
+			     	and	<![CDATA[ NOTICE_URL =#{noticeUrl} ]]>	
+			     </if>
+			     <if test="callbackUrl !=null">
+			     	and	<![CDATA[ CALLBACK_URL =#{callbackUrl} ]]>	
+			     </if>
+			     <if test="mchType !=null">
+			     	and	<![CDATA[ MCH_TYPE =#{mchType} ]]>	
+			     </if>
+	</sql>
+	
+    <select id="count" resultType="long">
+        SELECT count(*) FROM PAY_PARAMS <include refid="findPage"/> 
+    </select>
+    
+    
+    <select id="findAll" resultMap="PayParamsRM">
+    	 SELECT <include refid="allFields"/> FROM PAY_PARAMS	
+    </select>
+
+	
+	<select id="findByCondition" resultMap="PayParamsRM">
+    	SELECT <include refid="allFields"/> FROM PAY_PARAMS 
+		<include refid="findPage"/>	
+		 ORDER BY ID DESC	
+		  <if test="start !=null and pageSize !=null">
+			 LIMIT #{start},#{pageSize}	
+		 </if>
+    </select>
+    
+ 
+	
+</mapper>
+

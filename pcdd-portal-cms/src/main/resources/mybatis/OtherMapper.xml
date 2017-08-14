@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.other.dao.OtherInfoDao">
+
+   <resultMap id="otherInfoResultMap" type="com.ffcs.icity.mvc.backstage.other.entity.OtherInfo">
+          <result property="id" column="ID"/>
+          <result property="otherKey" column="OTHER_KEY"/>
+          <result property="otherValue" column="OTHER_VALUE"/>
+          <result property="beizhu" column="BEIZHU"/>
+   </resultMap>
+   
+   	<sql id="otherInfoColumns">
+	    <![CDATA[
+		ID,OTHER_KEY,OTHER_VALUE,BEIZHU
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="otherInfoResultMap">
+		select <include refid="otherInfoColumns" />
+        from OTHER_INFO
+		<where>
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(otherKey)">
+				  and OTHER_KEY = #{otherKey}
+			      </if>
+		</where>
+		order by ID desc
+	</select>
+
+	<select id="getByKey" parameterType="string" resultMap="otherInfoResultMap">
+		SELECT    <include refid="otherInfoColumns"/>
+		FROM      OTHER_INFO
+		WHERE	
+	     	   OTHER_KEY = #{otherKey}
+	    LIMIT 1
+	</select>
+	
+	<select id="get" parameterType="long" resultMap="otherInfoResultMap">		
+		select <include refid="otherInfoColumns" />
+	    <![CDATA[
+		    from OTHER_INFO where ID = #{id} 
+	    ]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.other.entity.OtherInfo" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  OTHER_INFO (
+        	OTHER_KEY ,
+        	OTHER_VALUE ,
+        	BEIZHU 
+        ) values (
+        	#{otherKey},
+        	#{otherValue},
+        	#{beizhu}
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.other.entity.OtherInfo">
+	<![CDATA[
+		update OTHER_INFO set 
+	       OTHER_KEY = #{otherKey},
+	       OTHER_VALUE = #{otherValue},
+	       BEIZHU = #{beizhu}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from OTHER_INFO where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from OTHER_INFO where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

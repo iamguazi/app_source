@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.gamearea.dao.GameAreaDao">
+
+   <resultMap id="gameAreaResultMap" type="com.ffcs.icity.mvc.backstage.gamearea.entity.GameArea">
+          <result property="id" column="ID"/>
+          <result property="gameType" column="GAME_TYPE"/>
+          <result property="areaType" column="AREA_TYPE"/>
+          <result property="areaName" column="AREA_NAME"/>
+          <result property="areaPhoto" column="AREA_PHOTO"/>
+          <result property="feedbackDesc" column="FEEDBACK_DESC"/>
+          <result property="minPoint" column="MIN_POINT"/>
+          <result property="status" column="STATUS"/>
+          <result property="createTime" column="CREATE_TIME"/>
+   </resultMap>
+   
+   	<sql id="gameAreaColumns">
+	    <![CDATA[
+		ID,GAME_TYPE,AREA_TYPE,AREA_NAME,AREA_PHOTO,FEEDBACK_DESC,MIN_POINT,STATUS,CREATE_TIME
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="gameAreaResultMap">
+		select <include refid="gameAreaColumns" />
+        from GAME_AREA
+		<where>
+			      <if test="@Ognl@isNotEmpty(id)">
+				  and ID = #{id}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(gameType)">
+				  and GAME_TYPE = #{gameType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(areaType)">
+				  and AREA_TYPE = #{areaType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(status)">
+				  and STATUS = #{status}
+			      </if>
+		</where>
+		order by ID desc
+	</select>
+
+	<select id="get" parameterType="long" resultMap="gameAreaResultMap">		
+		select <include refid="gameAreaColumns" />
+	    <![CDATA[
+		    from GAME_AREA where ID = #{id} 
+	    ]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.gamearea.entity.GameArea" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  GAME_AREA (
+        	GAME_TYPE ,
+        	AREA_TYPE ,
+        	AREA_NAME ,
+        	AREA_PHOTO ,
+        	FEEDBACK_DESC ,
+        	MIN_POINT ,
+        	STATUS ,
+        	CREATE_TIME 
+        ) values (
+        	#{gameType},
+        	#{areaType},
+        	#{areaName},
+        	#{areaPhoto},
+        	#{feedbackDesc},
+        	#{minPoint},
+        	#{status},
+        	#{createTime}
+        )
+    ]]>  
+	</insert>
+
+    <update id="update" parameterType="com.ffcs.icity.mvc.backstage.gamearea.entity.GameArea">
+    <![CDATA[
+        update GAME_AREA set 
+           GAME_TYPE = #{gameType},
+           AREA_TYPE = #{areaType},
+           AREA_NAME = #{areaName},
+           AREA_PHOTO = NULL,
+           FEEDBACK_DESC = #{feedbackDesc},
+           MIN_POINT = #{minPoint},
+           STATUS = #{status}
+        where  ID = #{id}
+     ]]>
+    </update>
+	
+	<delete id="delete" parameterType="int">
+		delete from GAME_AREA where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from GAME_AREA where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.gameopen.dao.GameOpenLogDao">
+
+   <resultMap id="gameOpenLogResultMap" type="com.ffcs.icity.mvc.backstage.gameopen.entity.GameOpenLog">
+          <result property="id" column="ID"/>
+          <result property="userId" column="USER_ID"/>
+          <result property="gameType" column="GAME_TYPE"/>
+          <result property="openTime" column="OPEN_TIME"/>
+          <result property="gameNum" column="GAME_NUM"/>
+          <result property="gameResult" column="GAME_RESULT"/>
+          <result property="gameResultDesc" column="GAME_RESULT_DESC"/>
+          <result property="resultType" column="RESULT_TYPE"/>
+          <result property="xhibitPoint" column="XHIBIT_POINT"/>
+          <result property="totalPoint" column="TOTAL_POINT"/>
+          <result property="isBaozi" column="IS_BAOZI"/>
+          <result property="isGive" column="IS_GIVE"/>
+          <result property="givePoint" column="GIVE_POINT"/>
+          <result property="color" column="COLOR"/>
+          <result property="source" column="SOURCE"/>
+   </resultMap>
+   
+   	<sql id="gameOpenLogColumns">
+	    <![CDATA[
+		ID,USER_ID,GAME_TYPE,OPEN_TIME,GAME_NUM,GAME_RESULT,GAME_RESULT_DESC,
+		RESULT_TYPE,XHIBIT_POINT,TOTAL_POINT,IS_BAOZI,IS_GIVE,GIVE_POINT,COLOR,SOURCE
+	    ]]>
+	</sql>
+	
+	<select id="query"  parameterType="map"  resultMap="gameOpenLogResultMap">
+		select <include refid="gameOpenLogColumns" />
+        from GAME_OPEN_LOG
+		<where>
+			      <if test="@Ognl@isNotEmpty(gameNum)">
+				  and GAME_NUM = #{gameNum}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(source)">
+				  and SOURCE = #{source}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(isGive)">
+				  and IS_GIVE = #{isGive}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(gameType)">
+				  and GAME_TYPE = #{gameType}
+			      </if>
+			      <if test="@Ognl@isNotEmpty(openTimeBegin)">
+				  and OPEN_TIME >= str_to_date(#{openTimeBegin},'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(openTimeEnd)">
+				  and OPEN_TIME <![CDATA[<]]> str_to_date(DATE_ADD(#{openTimeEnd},INTERVAL 1 DAY),'%Y-%m-%d')
+			      </if>
+			      <if test="@Ognl@isNotEmpty(resultType)">
+				  and RESULT_TYPE like concat('%',#{resultType},'%')
+			      </if>
+		</where>
+		order by ID desc
+	</select>
+
+	<select id="get" parameterType="long" resultMap="gameOpenLogResultMap">		
+		select <include refid="gameOpenLogColumns" />
+	    <![CDATA[
+		    from GAME_OPEN_LOG where ID = #{id} 
+	    ]]>
+	</select>
+
+	<select id="checkGameNum" parameterType="map" resultType="int">		
+		select count(*)
+		    from GAME_OPEN_LOG 
+		    <where> 
+			    <if test="gameType != null">
+			      AND GAME_TYPE = #{gameType}
+			    </if>
+			    <if test="gameNum != null">
+			      AND GAME_NUM = #{gameNum}
+			    </if>
+			    <if test="id != null">
+			      AND ID != #{id} 
+			    </if>
+			    
+		    </where>
+	</select>
+	
+	<insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.gameopen.entity.GameOpenLog" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  GAME_OPEN_LOG (
+        	USER_ID ,
+        	GAME_TYPE ,
+        	OPEN_TIME ,
+        	GAME_NUM ,
+        	GAME_RESULT ,
+        	GAME_RESULT_DESC ,
+        	RESULT_TYPE ,
+        	IS_BAOZI,
+        	XHIBIT_POINT ,
+        	TOTAL_POINT ,
+        	IS_GIVE,
+        	GIVE_POINT,
+        	COLOR,
+        	SOURCE
+        ) values (
+        	#{userId},
+        	#{gameType},
+        	#{openTime},
+        	#{gameNum},
+        	#{gameResult},
+        	#{gameResultDesc},
+        	#{resultType},
+        	#{isBaozi},
+        	#{xhibitPoint},
+        	#{totalPoint},
+        	#{isGive},
+            #{givePoint},
+            #{color},
+            #{source}
+        )
+    ]]>  
+	</insert>
+
+	<update id="update" parameterType="com.ffcs.icity.mvc.backstage.gameopen.entity.GameOpenLog">
+	<![CDATA[
+		update GAME_OPEN_LOG set 
+	       USER_ID = #{userId},
+	       GAME_TYPE = #{gameType},
+	       GAME_NUM = #{gameNum},
+	       GAME_RESULT = #{gameResult},
+	       GAME_RESULT_DESC = #{gameResultDesc},
+	       RESULT_TYPE = #{resultType},
+	       IS_BAOZI = #{isBaozi},
+	       XHIBIT_POINT = #{xhibitPoint},
+	       TOTAL_POINT = #{totalPoint},
+	       IS_GIVE = #{isGive},
+           GIVE_POINT = #{givePoint},
+            COLOR = #{color},
+            SOURCE = #{source},
+            OPEN_TIME = #{openTime}
+		where  ID = #{id}
+	 ]]>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from GAME_OPEN_LOG where ID = #{id}
+	</delete>
+	
+	<delete id="deletes">
+		delete from GAME_OPEN_LOG where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+	
+</mapper> 

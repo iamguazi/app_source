@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"
+	default-lazy-init="true">
+
+	<description>框架模块配置</description>
+
+	<!-- Mybatis配置 开始 -->
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 显式指定Mapper文件位置 -->
+		<property name="mapperLocations" value="classpath*:/mybatis/**/*Mapper.xml" />
+		<!-- 显式配置文件位置 -->
+		<property name="configLocation" value="classpath:/mybatis-config.xml" />
+	</bean>
+	
+	<!-- 扫描basePackage下所有的接口-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+        <property name="basePackage" value="com.ffcs.icity.api.**.dao" />
+        <property name="annotationClass" value="com.ffcs.icity.common.mybatis.MyBatisRepository"/>
+	</bean>
+	
+	<!-- Mybatis配置 结束 -->
+
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes -->
+        <property name="maxUploadSize" value="104857600" /> <!-- 最大限制100M -->
+        <!--   <property name="resolveLazily" value="true"/>  延迟处理文件 -->
+    </bean>
+
+</beans>

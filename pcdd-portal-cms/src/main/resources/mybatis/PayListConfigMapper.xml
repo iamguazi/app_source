@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ffcs.icity.mvc.backstage.payconfig.dao.PayListConfigDao">
+
+   <resultMap id="payListConfigResultMap" type="com.ffcs.icity.mvc.backstage.payconfig.entity.PayListConfig">
+          <result property="id" column="ID"/>
+          <result property="name" column="NAME"/>
+          <result property="remarks" column="REMARKS"/>
+          <result property="type" column="TYPE"/>
+          <result property="status" column="STATUS"/>
+          <result property="payOrder" column="PAY_ORDER"/>
+          <result property="createTime" column="CREATE_TIME"/>
+   </resultMap>
+   
+    <sql id="payListConfigColumns">
+        <![CDATA[
+        ID,NAME,REMARKS,TYPE,STATUS,PAY_ORDER,CREATE_TIME
+        ]]>
+    </sql>
+    
+    <select id="query"  parameterType="map"  resultMap="payListConfigResultMap">
+        select <include refid="payListConfigColumns" />
+        from PAY_LIST_CONFIG
+        <where>
+                  <if test="@Ognl@isNotEmpty(id)">
+                  and ID = #{id}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(name)">
+                  and NAME like concat('%',#{name},'%')
+                  </if>
+                  <if test="@Ognl@isNotEmpty(type)">
+                  and TYPE = #{type}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(status)">
+                  and STATUS = #{status}
+                  </if>
+                  <if test="@Ognl@isNotEmpty(createTimeBegin) and @Ognl@isNotEmpty(createTimeEnd)">
+                  and CREATE_TIME between str_to_date(#{createTimeBegin},'%Y-%m-%d %H:%i:%s') and str_to_date(#{createTimeEnd},'%Y-%m-%d %H:%i:%s')
+                  </if>
+        </where>
+        order by ID desc
+    </select>
+
+    <select id="get" parameterType="long" resultMap="payListConfigResultMap">       
+        select <include refid="payListConfigColumns" />
+        <![CDATA[
+            from PAY_LIST_CONFIG where ID = #{id} 
+        ]]>
+    </select>
+    
+    <insert id="insert" parameterType="com.ffcs.icity.mvc.backstage.payconfig.entity.PayListConfig" useGeneratedKeys="true" keyProperty="id">        
+    <![CDATA[
+        insert into  PAY_LIST_CONFIG (
+            NAME ,
+            REMARKS ,
+            TYPE ,
+            STATUS ,
+            PAY_ORDER ,
+            CREATE_TIME 
+        ) values (
+            #{name},
+            #{remarks},
+            #{type},
+            #{status},
+            #{payOrder},
+            now()
+        )
+    ]]>  
+    </insert>
+
+    <update id="update" parameterType="com.ffcs.icity.mvc.backstage.payconfig.entity.PayListConfig">
+    <![CDATA[
+        update PAY_LIST_CONFIG set 
+           NAME = #{name},
+           REMARKS = #{remarks},
+           TYPE = #{type},
+           STATUS = #{status},
+           PAY_ORDER = #{payOrder}
+        where  ID = #{id}
+     ]]>
+    </update>
+    
+    <delete id="delete" parameterType="int">
+        delete from PAY_LIST_CONFIG where ID = #{id}
+    </delete>
+    
+    <delete id="deletes">
+        delete from PAY_LIST_CONFIG where ID in 
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+    
+</mapper> 
