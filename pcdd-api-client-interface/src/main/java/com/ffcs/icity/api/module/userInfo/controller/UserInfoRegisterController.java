@@ -88,7 +88,7 @@ public class UserInfoRegisterController extends NoValidController {
             createNewIMUserService.createIMUser("u_" + userInfoModel.getId(), Constants.DEFAULT_PASSWORD, null);
             userInfoModel.setImAccount("u_" + userInfoModel.getId());
             userInfoDao.updateUserInfo(userInfoModel);
-            LOGGER.info("user register.use {} ms", (System.currentTimeMillis() - t1));
+            LOGGER.info("huanxin user register.use {} ms", (System.currentTimeMillis() - t1));
             return userInfoModel;
         }
     }

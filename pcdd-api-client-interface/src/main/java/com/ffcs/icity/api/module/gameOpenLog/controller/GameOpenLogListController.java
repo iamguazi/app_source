@@ -93,8 +93,8 @@ public class GameOpenLogListController  extends NoValidController {
 		}else{
 			result.put("status",status );
 		}
-		
-		
+
+
 		//开奖期数
 		if(list!=null&&list.size()>0){
 			result.put("game_num",Long.parseLong(openLog.getGameNum())+1);

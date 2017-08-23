@@ -1,16 +1,8 @@
 package com.ffcs.icity.api.module.IM.httpclient.apidemo;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.glassfish.jersey.client.JerseyWebTarget;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ffcs.icity.api.module.IM.comm.Constants;
 import com.ffcs.icity.api.module.IM.comm.HTTPMethod;
 import com.ffcs.icity.api.module.IM.comm.Roles;
@@ -18,11 +10,12 @@ import com.ffcs.icity.api.module.IM.httpclient.utils.JerseyUtils;
 import com.ffcs.icity.api.module.IM.httpclient.vo.ClientSecretCredential;
 import com.ffcs.icity.api.module.IM.httpclient.vo.Credential;
 import com.ffcs.icity.api.module.IM.httpclient.vo.EndPoints;
- 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.lang3.StringUtils;
+import org.glassfish.jersey.client.JerseyWebTarget;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 /**
  * REST API Demo: 发送消息 REST API Jersey2.9实现

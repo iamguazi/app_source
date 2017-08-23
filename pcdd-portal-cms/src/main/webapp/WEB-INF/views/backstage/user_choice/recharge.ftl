@@ -37,14 +37,14 @@
 		      <div class="col-sm-7">
 			    <input type="text" required maxLength="10" class="form-control" id="rechargePoint" name = "rechargePoint" data-bind="textinput:model.recharge.rechargePoint"
 			       placeholder="请输入充值金额">
-			       <span class="help-block">单位：元</span>
+			       <span class="help-block">单位：元宝</span>
 			  </div>
 		  </div>
 
 		  <div class="form-group">
 		    <label  class="col-sm-3 control-label">备注:</label>
 		      <div class="col-sm-7">
-			    <input type="text" required maxLength="100" class="form-control" id="remark" name = "remark" data-bind="textinput:model.recharge.remark"
+			    <input type="text" required maxLength="100" class="form-control" id="remark" conname = "remark" data-bind="textinput:model.recharge.remark"
 			       placeholder="扣款可输入备注">
 			  </div>
 		  </div>

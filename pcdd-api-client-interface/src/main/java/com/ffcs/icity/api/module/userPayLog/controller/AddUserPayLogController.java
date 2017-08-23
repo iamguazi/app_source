@@ -1,19 +1,21 @@
 package com.ffcs.icity.api.module.userPayLog.controller;
 
 
-import static com.ffcs.icity.api.util.RequestArgumentAssert.assertNotEmpty;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.ffcs.icity.api.baseModule.NoValidController;
 import com.ffcs.icity.api.core.exception.ApiException;
 import com.ffcs.icity.api.core.exception.InvalidRequestArgumentException;
 import com.ffcs.icity.api.module.otherInfo.dao.IOtherInfoDao;
-import com.ffcs.icity.api.module.userPayLog.entity.*;
-import com.ffcs.icity.api.module.userPayLog.dao.*;
+import com.ffcs.icity.api.module.userPayLog.dao.IUserPayLogDao;
+import com.ffcs.icity.api.module.userPayLog.entity.UserPayLog;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import static com.ffcs.icity.api.util.RequestArgumentAssert.assertNotEmpty;
 
 
 
@@ -66,9 +68,8 @@ public class AddUserPayLogController  extends NoValidController {
 		//支付方式 1 余额 2微信 3 支付宝
 		if(payType!=null){
 			userPayLog.setPayType(Integer.parseInt(payType.toString()));
-			
 		}else{
-			userPayLog.setPayType(2);
+			userPayLog.setPayType(3);
 		}
 		//1付款 2充值 
 		userPayLog.setOrderType(2);
